@@ -4,7 +4,6 @@ import com.banking.sathi.enums.Role;
 import com.banking.sathi.enums.UserStatus;
 import com.banking.sathi.model.User;
 import com.banking.sathi.service.AuthService;
-import com.banking.sathi.utils.DbConnection;
 
 import java.sql.SQLException;
 
@@ -12,7 +11,7 @@ public class UserDaoTest {
 
 
     public static void main(String[] args) throws SQLException {
-        UserDao userDao = new UserDao(DbConnection.getConnection());
+        UserDao userDao = new UserDao();
         AuthService authService = new AuthService();
         User user = new User(
                 "Dikshya Acharya",

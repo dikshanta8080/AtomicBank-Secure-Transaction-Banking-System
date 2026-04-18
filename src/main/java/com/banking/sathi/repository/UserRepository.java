@@ -2,10 +2,15 @@ package com.banking.sathi.repository;
 
 import com.banking.sathi.model.User;
 
-public interface UserRepository {
-    int saveUser(User user);
+import java.sql.Connection;
+import java.util.Optional;
 
-    boolean existsByEmail(String email);
+public interface UserRepository {
+    int saveUser(User user, Connection con);
+
+    boolean existsByEmail(String email, Connection connection);
+
+    Optional<User> findByEmail(String email);
 
 
 }

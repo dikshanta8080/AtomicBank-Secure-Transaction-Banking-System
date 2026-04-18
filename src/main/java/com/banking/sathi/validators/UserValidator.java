@@ -13,23 +13,29 @@ public class UserValidator {
         if (user == null) {
             throw new IllegalArgumentException("User can not be null");
         }
-        if (user.getEmail() == null || user.getEmail().isEmpty()) {
+        if (user.getName() == null || user.getName().isEmpty()) {
             throw new IllegalArgumentException("Name is required");
         }
-        if (!user.getEmail().matches(EMAIL_REGEX)) {
+        validateEmailAndPassword(user.getEmail(), user.getPassword());
+    }
+
+    public static void validateCredentialsForLogin(String email, String password) {
+        validateEmailAndPassword(email, password);
+    }
+
+    private static void validateEmailAndPassword(String email, String password) {
+        if (email == null || email.isEmpty()) {
+            throw new IllegalArgumentException("Name is required");
+        }
+        if (!email.matches(EMAIL_REGEX)) {
             throw new IllegalArgumentException("Invalid email format");
         }
 
-        if (user.getPassword() == null || user.getPassword().length() < 6) {
+        if (password == null || password.length() < 6) {
             throw new IllegalArgumentException("Password must be at least 6 characters");
         }
-        if (!user.getPassword().matches(PASSWORD_REGEX)) {
+        if (!password.matches(PASSWORD_REGEX)) {
             throw new IllegalArgumentException("Invalid password format");
         }
-
-        if (user.getAddress() == null || user.getAddress().isEmpty()) {
-            throw new IllegalArgumentException("Address is required");
-        }
-
     }
 }

@@ -1,26 +1,25 @@
 package com.banking.sathi.dao;
 
+import com.banking.sathi.enums.Role;
+import com.banking.sathi.enums.UserStatus;
 import com.banking.sathi.model.User;
 import com.banking.sathi.repository.UserRepository;
+import com.banking.sathi.utils.DbConnection;
 import com.banking.sathi.utils.QueryUtil;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class UserDao implements UserRepository {
     private static final Logger logger = Logger.getLogger(UserDao.class.getName());
-    private final Connection con;
-
-    public UserDao(Connection con) {
-        this.con = con;
-    }
 
     @Override
-    public int saveUser(User user) {
+    public int saveUser(User user, Connection con) {
         try (
                 PreparedStatement ps = con.prepareStatement(QueryUtil.INSERT_USER_QUERY);
         ) {
@@ -40,9 +39,9 @@ public class UserDao implements UserRepository {
     }
 
     @Override
-    public boolean existsByEmail(String email) {
+    public boolean existsByEmail(String email, Connection con) {
         try (
-                PreparedStatement ps = con.prepareStatement(QueryUtil.EXISTS_BY_EMAIL_QUERY);
+                PreparedStatement ps = con.prepareStatement(QueryUtil.SELECT_USER_BY_EMAIL_QUERY);
 
         ) {
             ps.setString(1, email);
@@ -53,5 +52,31 @@ public class UserDao implements UserRepository {
 
         }
         return false;
+    }
+
+    @Override
+    public Optional<User> findByEmail(String email) {
+        User user;
+        try (
+                Connection con = DbConnection.getConnection();
+                PreparedStatement ps = con.prepareStatement(QueryUtil.SELECT_USER_BY_EMAIL_QUERY);
+
+        ) {
+            ps.setString(1, email);
+            ResultSet rs = ps.executeQuery();
+            user = new User(
+                    rs.getLong("id"),
+                    rs.getString("name"),
+                    rs.getString("email"),
+                    rs.getString("password"),
+                    rs.getString("address"),
+                    Role.valueOf(rs.getString("role")),
+                    UserStatus.valueOf(rs.getString("user_status"))
+            );
+            return Optional.of(user);
+        } catch (SQLException e) {
+            logger.log(Level.SEVERE, "Failed to execute the query {e}, ", e);
+        }
+        return Optional.empty();
     }
 }
