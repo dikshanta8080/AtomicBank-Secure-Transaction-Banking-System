@@ -3,21 +3,29 @@ package com.banking.sathi.dao;
 import com.banking.sathi.enums.Role;
 import com.banking.sathi.enums.UserStatus;
 import com.banking.sathi.model.User;
+import com.banking.sathi.service.AuthService;
+
+import java.sql.SQLException;
 
 public class UserDaoTest {
 
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws SQLException {
         UserDao userDao = new UserDao();
+        AuthService authService = new AuthService();
         User user = new User(
-                "Dikshanta Acharya",
-                "dikshanta04@gmail.com",
-                "root",
-                "Itahari",
+                "Dikshya Acharya",
+                "dikshya04@gmail.com",
+                "Root@123456789",
+                "California",
                 Role.USER,
                 UserStatus.ACTIVE
         );
-        boolean isSaved = userDao.saveUser(user);
-        System.out.println(isSaved);
+        try {
+            boolean b = authService.registerUser(user);
+            System.out.println(b);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
     }
 }
