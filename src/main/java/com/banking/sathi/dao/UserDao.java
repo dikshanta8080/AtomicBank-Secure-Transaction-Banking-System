@@ -11,6 +11,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -26,9 +27,8 @@ public class UserDao implements UserRepository {
             ps.setString(1, user.getName());
             ps.setString(2, user.getEmail());
             ps.setString(3, user.getPassword());
-            ps.setString(4, user.getAddress());
-            ps.setString(5, user.getRole().name());
-            ps.setString(6, user.getUserStatus().name());
+            ps.setString(4, user.getRole().name());
+            ps.setString(5, user.getUserStatus().name());
             return ps.executeUpdate();
 
 
@@ -69,14 +69,42 @@ public class UserDao implements UserRepository {
                     rs.getString("name"),
                     rs.getString("email"),
                     rs.getString("password"),
-                    rs.getString("address"),
                     Role.valueOf(rs.getString("role")),
-                    UserStatus.valueOf(rs.getString("user_status"))
+                    UserStatus.valueOf(rs.getString("user_status")),
+                    rs.getObject("created", LocalDateTime.class),
+                    rs.getObject("updated", LocalDateTime.class)
             );
             return Optional.of(user);
         } catch (SQLException e) {
             logger.log(Level.SEVERE, "Failed to execute the query {e}, ", e);
         }
         return Optional.empty();
+    }
+
+    @Override
+    public User findById(Long id) {
+        User user;
+        try (Connection con = DbConnection.getConnection();
+             PreparedStatement ps = con.prepareStatement(QueryUtil.FIND_USER_BY_ID_QUERY);
+        ) {
+            ps.setLong(1, id);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                user = new User(
+                        rs.getLong("id"),
+                        rs.getString("name"),
+                        rs.getString("email"),
+                        rs.getString("password"),
+                        Role.valueOf(rs.getString("role")),
+                        UserStatus.valueOf(rs.getString("user_status")),
+                        rs.getObject("created", LocalDateTime.class),
+                        rs.getObject("updated", LocalDateTime.class)
+                );
+                return user;
+            }
+        } catch (SQLException e) {
+            logger.log(Level.SEVERE, "Failed to execute the query {e}, ", e);
+        }
+        return null;
     }
 }

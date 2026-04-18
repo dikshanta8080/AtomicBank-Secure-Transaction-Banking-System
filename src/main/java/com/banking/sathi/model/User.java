@@ -3,39 +3,65 @@ package com.banking.sathi.model;
 import com.banking.sathi.enums.Role;
 import com.banking.sathi.enums.UserStatus;
 
+import java.time.LocalDateTime;
+
 public class User {
     private Long id;
     private String name;
     private String email;
     private String password;
-    private String address;
     private Role role;
     private UserStatus userStatus;
+    private LocalDateTime created;
+    private LocalDateTime updated;
 
-    public User(Long id, String name, String email, String password, String address, Role role, UserStatus userStatus) {
+    public User(String name, String email, String password, Role role, UserStatus userStatus) {
+        this.name = name;
+        this.email = email;
+        this.password = password;
+        this.role = role;
+        this.userStatus = userStatus;
+    }
+
+    public User(Long id, String name, String email, String password, Role role, UserStatus userStatus, LocalDateTime created, LocalDateTime updated) {
         this.id = id;
         this.name = name;
         this.email = email;
         this.password = password;
-        this.address = address;
         this.role = role;
         this.userStatus = userStatus;
+        this.created = created;
+        this.updated = updated;
     }
 
-    public User(String name, String email, String password, String address, Role role, UserStatus userStatus) {
+    public User(String name, String email, String password) {
         this.name = name;
         this.email = email;
         this.password = password;
-        this.address = address;
-        this.role = role;
-        this.userStatus = userStatus;
     }
 
-    public User(String name, String password, String email, String address) {
+    public User(String name, String email, String password, Role role, UserStatus userStatus, LocalDateTime created, LocalDateTime updated) {
         this.name = name;
-        this.password = password;
         this.email = email;
-        this.address = address;
+        this.password = password;
+        this.role = role;
+        this.userStatus = userStatus;
+        this.created = created;
+        this.updated = updated;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                ", role=" + role +
+                ", userStatus=" + userStatus +
+                ", created=" + created +
+                ", updated=" + updated +
+                '}';
     }
 
     public Long getId() {
@@ -70,14 +96,6 @@ public class User {
         this.password = password;
     }
 
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
     public Role getRole() {
         return role;
     }
@@ -92,5 +110,21 @@ public class User {
 
     public void setUserStatus(UserStatus userStatus) {
         this.userStatus = userStatus;
+    }
+
+    public LocalDateTime getCreated() {
+        return created;
+    }
+
+    public void setCreated(LocalDateTime created) {
+        this.created = created;
+    }
+
+    public LocalDateTime getUpdated() {
+        return updated;
+    }
+
+    public void setUpdated(LocalDateTime updated) {
+        this.updated = updated;
     }
 }
