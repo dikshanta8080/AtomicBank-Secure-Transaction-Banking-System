@@ -3,6 +3,7 @@ package com.banking.sathi.utils;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class DbConnection {
@@ -14,8 +15,11 @@ public class DbConnection {
     static {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
+
+            logger.log(Level.INFO, "Driver class loaded successfully");
+
         } catch (ClassNotFoundException e) {
-            logger.severe(e.getMessage());
+            logger.log(Level.SEVERE, "Failed to load the Driver class, {e}", e);
         }
     }
 
