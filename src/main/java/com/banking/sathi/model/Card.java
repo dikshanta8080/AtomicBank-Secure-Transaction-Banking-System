@@ -1,5 +1,6 @@
 package com.banking.sathi.model;
 
+import com.banking.sathi.enums.CardStatus;
 import com.banking.sathi.enums.CardType;
 
 import java.time.LocalDate;
