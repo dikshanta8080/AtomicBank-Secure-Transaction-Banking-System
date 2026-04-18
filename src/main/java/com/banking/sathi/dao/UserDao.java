@@ -12,6 +12,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -106,5 +109,48 @@ public class UserDao implements UserRepository {
             logger.log(Level.SEVERE, "Failed to execute the query {e}, ", e);
         }
         return null;
+    }
+
+    @Override
+    public List<User> findAllUsers() {
+        User user;
+        List<User> users = new ArrayList<>();
+        try (
+                Connection con = DbConnection.getConnection();
+                PreparedStatement ps = con.prepareStatement(QueryUtil.FIND_ALL_USERS_QUERY);
+        ) {
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                user = new User(
+                        rs.getLong("id"),
+                        rs.getString("name"),
+                        rs.getString("email"),
+                        rs.getString("password"),
+                        Role.valueOf(rs.getString("role")),
+                        UserStatus.valueOf(rs.getString("user_status")),
+                        rs.getObject("created", LocalDateTime.class),
+                        rs.getObject("updated", LocalDateTime.class)
+                );
+                users.add(user);
+            }
+            return users;
+        } catch (SQLException e) {
+            logger.log(Level.SEVERE, "Failed to execute the query {e}, ", e);
+        }
+        return Collections.emptyList();
+    }
+
+    @Override
+    public int deleteUserById(Long id) {
+        try (
+                Connection con = DbConnection.getConnection();
+                PreparedStatement ps = con.prepareStatement(QueryUtil.DELETE_USER_BY_ID_QUERY);
+        ) {
+            ps.setLong(1, id);
+            return ps.executeUpdate();
+        } catch (SQLException e) {
+            logger.log(Level.SEVERE, "Failed to execute the query {e}, ", e);
+        }
+        return 0;
     }
 }

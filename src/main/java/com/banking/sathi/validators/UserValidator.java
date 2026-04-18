@@ -24,9 +24,6 @@ public class UserValidator {
     }
 
     private static void validateEmailAndPassword(String email, String password) {
-        if (email == null || email.isEmpty()) {
-            throw new IllegalArgumentException("Name is required");
-        }
         if (!email.matches(EMAIL_REGEX)) {
             throw new IllegalArgumentException("Invalid email format");
         }

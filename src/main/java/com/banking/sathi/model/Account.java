@@ -1,9 +1,25 @@
 package com.banking.sathi.model;
 
-public abstract class Account {
-    private Long id;
-    private String accountNumber;
-    private String createdDate;
-    private String totalBalance;
+import com.banking.sathi.enums.AccountStatus;
+import com.banking.sathi.enums.AccountType;
 
+import java.time.LocalDateTime;
+
+public class Account {
+
+    private Long id;
+
+    private Long userId;
+
+    private String accountNumber;
+
+    private String transactionPin;
+
+    private AccountType type;
+
+    private double balance;
+
+    private AccountStatus status;
+
+    private LocalDateTime created;
 }
