@@ -1,7 +1,7 @@
 package com.banking.sathi.validators;
 
 import com.banking.sathi.model.User;
-
+// something
 public class UserValidator {
     private static final String EMAIL_REGEX =
             "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$";
