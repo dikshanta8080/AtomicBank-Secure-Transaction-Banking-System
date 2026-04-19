@@ -1,75 +1,67 @@
 package com.banking.sathi.controller;
 
+import com.banking.sathi.exceptions.UserAlreadyExistsException;
 import com.banking.sathi.model.User;
 import com.banking.sathi.service.AuthService;
+import com.banking.sathi.validators.UserValidator;
+import jakarta.servlet.ServletConfig;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+
 import java.io.IOException;
 
 @WebServlet(name = "RegisterServlet", value = "/register")
 public class RegisterServlet extends HttpServlet {
 
-    //this handles get req when user opens regis pg//
+    private AuthService authService;
+
+    @Override
+    public void init(ServletConfig config) throws ServletException {
+        super.init(config);
+        this.authService = new AuthService();
+    }
+
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
-        req.getRequestDispatcher("pages/register.jsp").forward(req, resp);}
 
-    //this handles post req when user submits the regisr form//
+        req.getRequestDispatcher("pages/register.jsp").forward(req, resp);
+    }
+
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
 
-//get form data frm th req//
         String name = req.getParameter("name");
         String email = req.getParameter("email");
         String password = req.getParameter("password");
-        String address = req.getParameter("address");
 
-//checkimg if any field is emty//
-        if(name == null || name.isEmpty() ||
-                email == null || email.isEmpty() ||
-                password == null || password.isEmpty() ||
-                address == null || address.isEmpty()){
-            req.setAttribute("error", "please fill all the fields");
-            req.getRequestDispatcher("pages/register.jsp").forward(req, resp);
-            return; }
+        try {
+            User user = new User(name, email, password);
 
-//create user obj with the form data//
-        User user = new User(name, password, email, address);
+            UserValidator.validateCredentialsForRegistration(user);
 
-//create authservice obj to cal regis method//
-        AuthService authService = new AuthService();
-
-        try{
-//call regisrUser method frm authservice//
             boolean isRegistered = authService.registerUser(user);
 
-            if(isRegistered){
-
-//storimg sucess msg in session n go to login page//
+            if (isRegistered) {
                 HttpSession session = req.getSession();
-                session.setAttribute("success", "account created successfully please log in");
-                resp.sendRedirect("login");}
-            else{
+                session.setAttribute("success", "Account created successfully. Please log in.");
 
-//something went wrong store eror in req n forward bck//
-                req.setAttribute("error", "registration failed please try again");
-                req.getRequestDispatcher("pages/register.jsp").forward(req, resp);}}
+                String contextPath = req.getContextPath();
+                resp.sendRedirect(contextPath + "/login");
 
-        catch(Exception e){
-//store eror msg in req and forward back to regist pg//
+            } else {
+                req.setAttribute("error", "Registration failed. Please try again.");
+                req.getRequestDispatcher("pages/register.jsp").forward(req, resp);
+            }
+
+        } catch (IllegalArgumentException | UserAlreadyExistsException e) {
             req.setAttribute("error", e.getMessage());
-            req.getRequestDispatcher("pages/register.jsp").forward(req, resp);}}}
-
-
-
-
-
-
-
-
+            req.getRequestDispatcher("pages/register.jsp").forward(req, resp);
+        }
+    }
+}

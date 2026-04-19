@@ -1,8 +1,10 @@
 package com.banking.sathi.validators;
 
 import com.banking.sathi.model.User;
-// something
+
+
 public class UserValidator {
+
     private static final String EMAIL_REGEX =
             "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$";
 
@@ -11,28 +13,42 @@ public class UserValidator {
 
     public static void validateCredentialsForRegistration(User user) {
         if (user == null) {
-            throw new IllegalArgumentException("User can not be null");
+            throw new IllegalArgumentException("User cannot be null");
         }
-        if (user.getName() == null || user.getName().isEmpty()) {
+
+        if (user.getName() == null || user.getName().isBlank()) {
             throw new IllegalArgumentException("Name is required");
         }
-        validateEmailAndPassword(user.getEmail(), user.getPassword());
+
+        validateEmail(user.getEmail());
+        validatePassword(user.getPassword());
     }
 
     public static void validateCredentialsForLogin(String email, String password) {
-        validateEmailAndPassword(email, password);
+        if (email == null || email.isBlank()) {
+            throw new IllegalArgumentException("Email is required");
+        }
+
+        if (password == null || password.isBlank()) {
+            throw new IllegalArgumentException("Password is required");
+        }
     }
 
-    private static void validateEmailAndPassword(String email, String password) {
-        if (!email.matches(EMAIL_REGEX)) {
+    private static void validateEmail(String email) {
+        if (email == null || !email.matches(EMAIL_REGEX)) {
             throw new IllegalArgumentException("Invalid email format");
         }
+    }
 
-        if (password == null || password.length() < 6) {
-            throw new IllegalArgumentException("Password must be at least 6 characters");
+    private static void validatePassword(String password) {
+        if (password == null) {
+            throw new IllegalArgumentException("Password is required");
         }
+
         if (!password.matches(PASSWORD_REGEX)) {
-            throw new IllegalArgumentException("Invalid password format");
+            throw new IllegalArgumentException(
+                    "Password must be 8-20 chars, including uppercase, lowercase, number, and special character"
+            );
         }
     }
 }

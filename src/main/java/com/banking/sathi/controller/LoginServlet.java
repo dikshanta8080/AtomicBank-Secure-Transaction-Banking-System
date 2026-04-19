@@ -1,50 +1,72 @@
 package com.banking.sathi.controller;
 
 import com.banking.sathi.enums.Role;
+import com.banking.sathi.exceptions.UserDoesnotExistsException;
 import com.banking.sathi.model.User;
 import com.banking.sathi.service.AuthService;
+import com.banking.sathi.validators.UserValidator;
+import jakarta.servlet.ServletConfig;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+
 import java.io.IOException;
 
 @WebServlet(name = "LoginServlet", value = "/login")
 public class LoginServlet extends HttpServlet {
 
-    //this handles get request when user opens login page//
+    private AuthService authService;
+
+    @Override
+    public void init(ServletConfig config) throws ServletException {
+        super.init(config);
+        this.authService = new AuthService();
+    }
+
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
-        req.getRequestDispatcher("pages/login.jsp").forward(req, resp);}
+        req.getRequestDispatcher("views/login.jsp").forward(req, resp);
+    }
 
-    //this handles post req when user submits the login form//
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
 
-//get email and pasword frm th form//
         String email = req.getParameter("email");
         String password = req.getParameter("password");
 
-//create authservice obj to cal login method//
-        AuthService authService = new AuthService();
-        try{
-//cal login method frm authservice//
-            User obj = authService.login(email, password);
+        try {
+            UserValidator.validateCredentialsForLogin(email, password);
 
-//store user in sesion//
-            HttpSession session = req.getSession();
-            session.setAttribute("user", obj);
+            User user = authService.login(email, password);
 
-//chck rol and redirct to corect dashboard//
-            if (obj.getRole() == Role.ADMIN) {
-                resp.sendRedirect("admin/dashboard");}
-            else {resp.sendRedirect("user/dashboard");}}
+            if (user == null) {
+                throw new UserDoesnotExistsException("Invalid email or password");
+            }
 
-        catch (Exception e){
-//store eror message in request n frwrd bck to login pg//
+            HttpSession oldSession = req.getSession(false);
+            if (oldSession != null) {
+                oldSession.invalidate();
+            }
+
+            HttpSession newSession = req.getSession(true);
+            newSession.setAttribute("user", user);
+
+            String contextPath = req.getContextPath();
+
+            if (user.getRole() == Role.ADMIN) {
+                resp.sendRedirect(contextPath + "/admin/dashboard");
+            } else {
+                resp.sendRedirect(contextPath + "/user/dashboard");
+            }
+
+        } catch (IllegalArgumentException | UserDoesnotExistsException e) {
             req.setAttribute("error", e.getMessage());
-            req.getRequestDispatcher("pages/login.jsp").forward(req, resp);}}}
+            req.getRequestDispatcher("views/login.jsp").forward(req, resp);
+        }
+    }
+}
