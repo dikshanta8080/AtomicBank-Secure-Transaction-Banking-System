@@ -6,5 +6,7 @@ public class QueryUtil {
     public static final String FIND_USER_BY_ID_QUERY = "SELECT * FROM users WHERE id=?";
     public static final String FIND_ALL_USERS_QUERY = "SELECT * FROM users";
     public static final String DELETE_USER_BY_ID_QUERY = "DELETE FROM users WHERE id=?";
+    public static final String INSERT_FAMILY_QUERY = "INSERT INTO family (user_id,father,mother) VALUES (?,?,?)";
+
 
 }

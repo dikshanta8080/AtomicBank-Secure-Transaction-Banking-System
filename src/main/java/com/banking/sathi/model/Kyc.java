@@ -29,6 +29,17 @@ public class Kyc {
     public Kyc() {
     }
 
+    public Kyc(LocalDate dob, Gender gender, String citizenship, LocalDate issue, String district, String phone, String occupation, Double income) {
+        this.dob = dob;
+        this.gender = gender;
+        this.citizenship = citizenship;
+        this.issue = issue;
+        this.district = district;
+        this.phone = phone;
+        this.occupation = occupation;
+        this.income = income;
+    }
+
     public Kyc(Long userId, LocalDate dob, Gender gender, String citizenship, LocalDate issue, String district, String phone, String occupation, Double income, String status, String reason) {
         this.userId = userId;
         this.dob = dob;

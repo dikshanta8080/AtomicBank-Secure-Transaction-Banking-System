@@ -1,6 +1,7 @@
 package com.banking.sathi.controller;
 
 import com.banking.sathi.enums.Role;
+import com.banking.sathi.exceptions.AuthenticationFailedException;
 import com.banking.sathi.exceptions.UserDoesnotExistsException;
 import com.banking.sathi.model.User;
 import com.banking.sathi.service.AuthService;
@@ -64,7 +65,7 @@ public class LoginServlet extends HttpServlet {
                 resp.sendRedirect(contextPath + "/user/dashboard");
             }
 
-        } catch (IllegalArgumentException | UserDoesnotExistsException e) {
+        } catch (IllegalArgumentException | UserDoesnotExistsException | AuthenticationFailedException e) {
             req.setAttribute("error", e.getMessage());
             req.getRequestDispatcher("views/login.jsp").forward(req, resp);
         }

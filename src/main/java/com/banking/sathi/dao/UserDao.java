@@ -67,17 +67,19 @@ public class UserDao implements UserRepository {
         ) {
             ps.setString(1, email);
             ResultSet rs = ps.executeQuery();
-            user = new User(
-                    rs.getLong("id"),
-                    rs.getString("name"),
-                    rs.getString("email"),
-                    rs.getString("password"),
-                    Role.valueOf(rs.getString("role")),
-                    UserStatus.valueOf(rs.getString("user_status")),
-                    rs.getObject("created", LocalDateTime.class),
-                    rs.getObject("updated", LocalDateTime.class)
-            );
-            return Optional.of(user);
+            if (rs.next()) {
+                user = new User(
+                        rs.getLong("id"),
+                        rs.getString("name"),
+                        rs.getString("email"),
+                        rs.getString("password"),
+                        Role.valueOf(rs.getString("role")),
+                        UserStatus.valueOf(rs.getString("user_status")),
+                        rs.getObject("created", LocalDateTime.class),
+                        rs.getObject("updated", LocalDateTime.class)
+                );
+                return Optional.of(user);
+            }
         } catch (SQLException e) {
             logger.log(Level.SEVERE, "Failed to execute the query {e}, ", e);
         }

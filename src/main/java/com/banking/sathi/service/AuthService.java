@@ -8,7 +8,6 @@ import com.banking.sathi.exceptions.UserAlreadyExistsException;
 import com.banking.sathi.exceptions.UserDoesnotExistsException;
 import com.banking.sathi.model.User;
 import com.banking.sathi.utils.DbConnection;
-import com.banking.sathi.validators.UserValidator;
 import org.mindrot.jbcrypt.BCrypt;
 
 import java.sql.Connection;
@@ -25,7 +24,6 @@ public class AuthService {
         try {
             con = DbConnection.getConnection();
             con.setAutoCommit(false);
-            UserValidator.validateCredentialsForRegistration(user);
 
             if (userDao.existsByEmail(user.getEmail(), con)) {
                 throw new UserAlreadyExistsException("User with this email already exists");
@@ -61,8 +59,9 @@ public class AuthService {
     }
 
     public User login(String email, String password) {
-        UserValidator.validateCredentialsForLogin(email, password);
-        User existingUser = userDao.findByEmail(email).orElseThrow(() -> new UserDoesnotExistsException("User with the provided email does not exists"));
+
+        User existingUser = userDao.findByEmail(email).orElseThrow(() -> new UserDoesnotExistsException("Please provide valid credentials!"));
+        logger.log(Level.WARNING, existingUser.getName());
         boolean isValid = BCrypt.checkpw(password, existingUser.getPassword());
         if (!isValid) throw new AuthenticationFailedException("Invalid credentials provided");
         existingUser.setPassword(null);

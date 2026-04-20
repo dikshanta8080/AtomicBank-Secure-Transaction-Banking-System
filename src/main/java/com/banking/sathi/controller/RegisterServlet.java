@@ -29,7 +29,7 @@ public class RegisterServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
 
-        req.getRequestDispatcher("pages/register.jsp").forward(req, resp);
+        req.getRequestDispatcher("views/register.jsp").forward(req, resp);
     }
 
     @Override
@@ -56,12 +56,12 @@ public class RegisterServlet extends HttpServlet {
 
             } else {
                 req.setAttribute("error", "Registration failed. Please try again.");
-                req.getRequestDispatcher("pages/register.jsp").forward(req, resp);
+                req.getRequestDispatcher("views/register.jsp").forward(req, resp);
             }
 
         } catch (IllegalArgumentException | UserAlreadyExistsException e) {
             req.setAttribute("error", e.getMessage());
-            req.getRequestDispatcher("pages/register.jsp").forward(req, resp);
+            req.getRequestDispatcher("views/register.jsp").forward(req, resp);
         }
     }
 }
