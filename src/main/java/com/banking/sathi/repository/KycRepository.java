@@ -5,7 +5,7 @@ import com.banking.sathi.model.Kyc;
 import java.sql.Connection;
 
 public interface KycRepository {
-    boolean saveKyc(Kyc kyc, Connection con);
+    int saveKyc(Kyc kyc, Connection con);
 
     Kyc findById(Long id, Connection con);
 

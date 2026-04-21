@@ -1,6 +1,7 @@
 package com.banking.sathi.model;
 
 import com.banking.sathi.enums.Gender;
+import com.banking.sathi.enums.KycStatus;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -13,14 +14,14 @@ public class Kyc {
     private Gender gender;
 
     private String citizenship;
-    private LocalDate issue;
+    private LocalDate issueDate;
     private String district;
 
     private String phone;
     private String occupation;
     private Double income;
 
-    private String status;
+    private KycStatus status;
     private String reason;
 
     private LocalDateTime created;
@@ -33,19 +34,19 @@ public class Kyc {
         this.dob = dob;
         this.gender = gender;
         this.citizenship = citizenship;
-        this.issue = issue;
+        this.issueDate = issue;
         this.district = district;
         this.phone = phone;
         this.occupation = occupation;
         this.income = income;
     }
 
-    public Kyc(Long userId, LocalDate dob, Gender gender, String citizenship, LocalDate issue, String district, String phone, String occupation, Double income, String status, String reason) {
+    public Kyc(Long userId, LocalDate dob, Gender gender, String citizenship, LocalDate issue, String district, String phone, String occupation, Double income, KycStatus status, String reason) {
         this.userId = userId;
         this.dob = dob;
         this.gender = gender;
         this.citizenship = citizenship;
-        this.issue = issue;
+        this.issueDate = issue;
         this.district = district;
         this.phone = phone;
         this.occupation = occupation;
@@ -54,12 +55,12 @@ public class Kyc {
         this.reason = reason;
     }
 
-    public Kyc(Long userId, LocalDate dob, Gender gender, String citizenship, LocalDate issue, String district, String phone, String occupation, Double income, String status, String reason, LocalDateTime created, LocalDateTime updated) {
+    public Kyc(Long userId, LocalDate dob, Gender gender, String citizenship, LocalDate issue, String district, String phone, String occupation, Double income, KycStatus status, String reason, LocalDateTime created, LocalDateTime updated) {
         this.userId = userId;
         this.dob = dob;
         this.gender = gender;
         this.citizenship = citizenship;
-        this.issue = issue;
+        this.issueDate = issue;
         this.district = district;
         this.phone = phone;
         this.occupation = occupation;
@@ -70,13 +71,13 @@ public class Kyc {
         this.updated = updated;
     }
 
-    public Kyc(Long id, Long userId, LocalDate dob, Gender gender, String citizenship, LocalDate issue, String district, String phone, String occupation, Double income, String status, String reason, LocalDateTime created, LocalDateTime updated) {
+    public Kyc(Long id, Long userId, LocalDate dob, Gender gender, String citizenship, LocalDate issue, String district, String phone, String occupation, Double income, KycStatus status, String reason, LocalDateTime created, LocalDateTime updated) {
         this.id = id;
         this.userId = userId;
         this.dob = dob;
         this.gender = gender;
         this.citizenship = citizenship;
-        this.issue = issue;
+        this.issueDate = issue;
         this.district = district;
         this.phone = phone;
         this.occupation = occupation;
@@ -128,11 +129,11 @@ public class Kyc {
     }
 
     public LocalDate getIssue() {
-        return issue;
+        return issueDate;
     }
 
     public void setIssue(LocalDate issue) {
-        this.issue = issue;
+        this.issueDate = issue;
     }
 
     public String getDistrict() {
@@ -167,11 +168,11 @@ public class Kyc {
         this.income = income;
     }
 
-    public String getStatus() {
+    public KycStatus getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(KycStatus status) {
         this.status = status;
     }
 

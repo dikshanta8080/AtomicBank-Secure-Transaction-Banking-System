@@ -13,6 +13,15 @@ public class Address {
     private String tole;
     private LocalDateTime created;
 
+    public Address(Long userId, String province, String district, String city, Integer ward, String tole) {
+        this.userId = userId;
+        this.province = province;
+        this.district = district;
+        this.city = city;
+        this.ward = ward;
+        this.tole = tole;
+    }
+
     public Address(Long id, Long userId, String province, String district, String city, Integer ward, String tole, LocalDateTime created) {
         this.id = id;
         this.userId = userId;

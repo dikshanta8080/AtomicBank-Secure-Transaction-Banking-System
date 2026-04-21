@@ -1,4 +1,4 @@
-package com.banking.sathi.dao;
+package com.banking.sathi.dao.dao;
 
 import com.banking.sathi.enums.Role;
 import com.banking.sathi.enums.UserStatus;

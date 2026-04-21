@@ -1,5 +1,6 @@
-package com.banking.sathi.dao;
+package com.banking.sathi.dao.dao;
 
+import com.banking.sathi.dao.FamilyDao;
 import com.banking.sathi.model.Family;
 import com.banking.sathi.utils.DbConnection;
 

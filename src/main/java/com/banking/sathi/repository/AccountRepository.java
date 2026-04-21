@@ -5,7 +5,7 @@ import com.banking.sathi.model.Account;
 import java.sql.Connection;
 
 public interface AccountRepository {
-    boolean saveAccount(Account account, Connection con);
+    int saveAccount(Account account, Connection con);
 
-    boolean findById(Long id, Connection con);
+    Account findById(Long id, Connection con);
 }
