@@ -6,7 +6,6 @@ import java.time.LocalDate;
 
 public class AccountCreationRequest {
     private AccountType accountType;
-    private String transactionPin;
 
     // KYC
     private LocalDate dob;
@@ -30,9 +29,8 @@ public class AccountCreationRequest {
     private String fatherName;
     private String motherName;
 
-    public AccountCreationRequest(AccountType accountType, String transactionPin, LocalDate dob, String gender, String citizenship, LocalDate citizenshipIssueDate, String citizenshipDistrict, String phone, String occupation, Double income, String province, String district, String city, Integer ward, String tole, String fatherName, String motherName) {
+    public AccountCreationRequest(AccountType accountType,  LocalDate dob, String gender, String citizenship, LocalDate citizenshipIssueDate, String citizenshipDistrict, String phone, String occupation, Double income, String province, String district, String city, Integer ward, String tole, String fatherName, String motherName) {
         this.accountType = accountType;
-        this.transactionPin = transactionPin;
         this.dob = dob;
         this.gender = gender;
         this.citizenship = citizenship;
@@ -58,13 +56,9 @@ public class AccountCreationRequest {
         this.accountType = accountType;
     }
 
-    public String getTransactionPin() {
-        return transactionPin;
-    }
 
-    public void setTransactionPin(String transactionPin) {
-        this.transactionPin = transactionPin;
-    }
+
+
 
     public LocalDate getDob() {
         return dob;

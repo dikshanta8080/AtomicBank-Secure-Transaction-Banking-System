@@ -1,7 +1,7 @@
 package com.banking.sathi.enums;
 
 public enum AccountType {
-    SAVING,
+    SAVINGS,
     CURRENT,
     FROZEN,
     CLOSED;
