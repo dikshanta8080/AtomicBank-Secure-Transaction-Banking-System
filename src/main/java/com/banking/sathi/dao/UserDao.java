@@ -87,10 +87,10 @@ public class UserDao implements UserRepository {
     }
 
     @Override
-    public User findById(Long id) {
+    public Optional<User> findById(Long id, Connection con) {
         User user;
-        try (Connection con = DbConnection.getConnection();
-             PreparedStatement ps = con.prepareStatement(QueryUtil.FIND_USER_BY_ID_QUERY);
+        try (
+                PreparedStatement ps = con.prepareStatement(QueryUtil.FIND_USER_BY_ID_QUERY);
         ) {
             ps.setLong(1, id);
             ResultSet rs = ps.executeQuery();
@@ -105,12 +105,12 @@ public class UserDao implements UserRepository {
                         rs.getObject("created", LocalDateTime.class),
                         rs.getObject("updated", LocalDateTime.class)
                 );
-                return user;
+                return Optional.of(user);
             }
         } catch (SQLException e) {
             logger.log(Level.SEVERE, "Failed to execute the query {e}, ", e);
         }
-        return null;
+        return Optional.empty();
     }
 
     @Override

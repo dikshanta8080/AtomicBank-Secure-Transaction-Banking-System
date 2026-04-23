@@ -3,8 +3,8 @@ package com.banking.sathi.service;
 import com.banking.sathi.dao.*;
 import com.banking.sathi.dto.request.AccountCreationRequest;
 import com.banking.sathi.dto.response.AccountCreationResponseDto;
+import com.banking.sathi.exceptions.AccountCreationFailedException;
 import com.banking.sathi.exceptions.KycAlreadyExistsException;
-import com.banking.sathi.exceptions.UnauthorizedAccessException;
 import com.banking.sathi.exceptions.UserDoesnotExistsException;
 import com.banking.sathi.mapper.request.AddressMapper;
 import com.banking.sathi.mapper.request.FamilyMapper;
@@ -17,7 +17,6 @@ import com.banking.sathi.utils.TransactionPinGenerator;
 
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -52,21 +51,23 @@ public class AccountService {
         Kyc kyc = kycMapper.apply(request);
 
         try {
-            User user = userRepository.findById(userId);
-            if (user == null) throw new UserDoesnotExistsException("User does not exists");
-            if (!Objects.equals(user.getId(), userId))
-                throw new UnauthorizedAccessException("You are not authorized to perform");
-
             con = DbConnection.getConnection();
             con.setAutoCommit(false);
+
+            User user = userRepository.findById(userId, con)
+                    .orElseThrow(() -> new UserDoesnotExistsException(
+                            "You are not authorized to perform this operation"
+                    ));
+
             if (kycRepository.existsByCitizenship(request.getCitizenship(), con)) {
-                throw new KycAlreadyExistsException("Kyc with the provided details already exists");
+                throw new KycAlreadyExistsException(
+                        "KYC with the provided details already exists"
+                );
             }
+
             Account account = new Account();
-            String accountNumber = AccountNumberGenerator.generateUniqueAccountNumber();
-            String transactionPin = TransactionPinGenerator.generateTransactionPin();
-            account.setAccountNumber(accountNumber);
-            account.setTransactionPin(transactionPin);
+            account.setAccountNumber(AccountNumberGenerator.generateUniqueAccountNumber());
+            account.setTransactionPin(TransactionPinGenerator.generateTransactionPin());
             account.setType(request.getAccountType());
             account.setBalance(openingBalance);
 
@@ -80,6 +81,13 @@ public class AccountService {
             int saveKyc = kycRepository.saveKyc(kyc, con);
             int saveAccount = accountRepository.saveAccount(account, con);
 
+            if (saveFamily <= 0 || saveAddress <= 0 || saveKyc <= 0 || saveAccount <= 0) {
+                throw new AccountCreationFailedException(
+                        "Failed to create account due to database error"
+                );
+            }
+            con.commit();
+
             return new AccountCreationResponseDto(
                     user.getName(),
                     account.getAccountNumber(),
@@ -87,25 +95,28 @@ public class AccountService {
                     "Please change the transaction pin ASAP!"
             );
 
-        } catch (SQLException e) {
+        } catch (Exception e) {
+
             if (con != null) {
                 try {
                     con.rollback();
-                    logger.info("Transactions rolled back");
+                    logger.info("Transaction rolled back");
                 } catch (SQLException ex) {
-                    logger.log(Level.SEVERE, "Failed to roll back");
-                    throw new RuntimeException(ex);
-
-
+                    logger.log(Level.SEVERE, "Rollback failed", ex);
                 }
             }
-            throw new RuntimeException(e);
+
+            throw new AccountCreationFailedException(
+                    "Account creation failed"
+
+            );
+
         } finally {
             if (con != null) {
                 try {
                     con.close();
                 } catch (SQLException e) {
-                    throw new RuntimeException(e);
+                    logger.log(Level.SEVERE, "Failed to close connection", e);
                 }
             }
         }
