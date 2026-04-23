@@ -18,10 +18,13 @@ import com.banking.sathi.utils.TransactionPinGenerator;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Objects;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class AccountService {
 
     private static final Double openingBalance = 1000d;
+    private static final Logger logger = Logger.getLogger(AccountService.class.getName());
     private final KycRepository kycRepository;
     private final FamilyRepository familyRepository;
     private final AccountRepository accountRepository;
@@ -77,10 +80,34 @@ public class AccountService {
             int saveKyc = kycRepository.saveKyc(kyc, con);
             int saveAccount = accountRepository.saveAccount(account, con);
 
+            return new AccountCreationResponseDto(
+                    user.getName(),
+                    account.getAccountNumber(),
+                    account.getTransactionPin(),
+                    "Please change the transaction pin ASAP!"
+            );
 
         } catch (SQLException e) {
+            if (con != null) {
+                try {
+                    con.rollback();
+                    logger.info("Transactions rolled back");
+                } catch (SQLException ex) {
+                    logger.log(Level.SEVERE, "Failed to roll back");
+                    throw new RuntimeException(ex);
+
+
+                }
+            }
             throw new RuntimeException(e);
+        } finally {
+            if (con != null) {
+                try {
+                    con.close();
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
+            }
         }
-        return null;
     }
 }
