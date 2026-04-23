@@ -61,6 +61,10 @@ public class AuthService {
     public User login(String email, String password) {
 
         User existingUser = userDao.findByEmail(email).orElseThrow(() -> new UserDoesnotExistsException("Please provide valid credentials!"));
+        if (existingUser.getUserStatus() == UserStatus.BLOCKED)
+            throw new AuthenticationFailedException("Account is blocked");
+
+
         logger.log(Level.WARNING, existingUser.getName());
         boolean isValid = BCrypt.checkpw(password, existingUser.getPassword());
         if (!isValid) throw new AuthenticationFailedException("Invalid credentials provided");

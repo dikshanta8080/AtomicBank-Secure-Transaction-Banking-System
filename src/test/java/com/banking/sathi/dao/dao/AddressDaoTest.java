@@ -10,7 +10,7 @@ public class AddressDaoTest {
     public static void main(String[] args) throws SQLException {
         AddressDao addressDao = new AddressDao();
         Address address = new Address(
-                2L,
+                1L,
                 "Bagmati",
                 "Kathmandu",
                 "Kathmandu",

@@ -9,5 +9,7 @@ public interface KycRepository {
 
     Kyc findById(Long id, Connection con);
 
+    boolean existsByCitizenship(String citizenshipNumber, Connection con);
+
 
 }

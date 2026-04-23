@@ -23,6 +23,18 @@ public class Account {
 
     private LocalDateTime created;
 
+    public Account(Long userId, String accountNumber, String transactionPin, AccountType type, double balance, AccountStatus status) {
+        this.userId = userId;
+        this.accountNumber = accountNumber;
+        this.transactionPin = transactionPin;
+        this.type = type;
+        this.balance = balance;
+        this.status = status;
+    }
+
+    public Account() {
+    }
+
     public Account(Long id, Long userId, String accountNumber, String transactionPin, AccountType type, double balance, AccountStatus status, LocalDateTime created) {
         this.id = id;
         this.userId = userId;
