@@ -53,4 +53,9 @@ public class KycDao implements KycRepository {
         }
         return false;
     }
+
+    @Override
+    public boolean existsByUserId(Long userId, Connection con) {
+        return false;
+    }
 }

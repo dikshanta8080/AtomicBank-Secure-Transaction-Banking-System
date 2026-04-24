@@ -8,4 +8,6 @@ public interface AddressRepository {
     int saveAddress(Address address, Connection con);
 
     boolean findById(Long id, Connection con);
+
+    boolean existsByUserId(Long userId, Connection con);
 }

@@ -3,6 +3,8 @@ package com.banking.sathi.service;
 import com.banking.sathi.dao.*;
 import com.banking.sathi.dto.request.AccountCreationRequest;
 import com.banking.sathi.dto.response.AccountCreationResponseDto;
+import com.banking.sathi.enums.AccountStatus;
+import com.banking.sathi.enums.KycStatus;
 import com.banking.sathi.exceptions.AccountCreationFailedException;
 import com.banking.sathi.exceptions.KycAlreadyExistsException;
 import com.banking.sathi.exceptions.UserDoesnotExistsException;
@@ -33,22 +35,25 @@ public class AccountService {
     private final AddressMapper addressMapper;
     private final FamilyMapper familyMapper;
 
-    public AccountService(KycRepository kycRepository, FamilyRepository familyRepository, AccountRepository accountRepository, AddressRepository addressRepository, KycMapper kycMapper, AddressMapper addressMapper, FamilyMapper familyMapper) {
+    public AccountService() {
         this.kycRepository = new KycDao();
         this.familyRepository = new FamilyDao();
         this.accountRepository = new AccountDao();
         this.addressRepository = new AddressDao();
         this.userRepository = new UserDao();
-        this.kycMapper = kycMapper;
-        this.addressMapper = addressMapper;
-        this.familyMapper = familyMapper;
+
+        this.kycMapper = new KycMapper();
+        this.addressMapper = new AddressMapper();
+        this.familyMapper = new FamilyMapper();
     }
+
 
     public AccountCreationResponseDto createAccount(AccountCreationRequest request, Long userId) {
         Connection con = null;
         Family family = familyMapper.apply(request);
         Address address = addressMapper.apply(request);
         Kyc kyc = kycMapper.apply(request);
+        kyc.setStatus(KycStatus.PENDING);
 
         try {
             con = DbConnection.getConnection();
@@ -64,12 +69,16 @@ public class AccountService {
                         "KYC with the provided details already exists"
                 );
             }
-
+            /*
+            Ya validation garna baki xa.if kycRepo.existsByUserId-> throw exception called
+             details already exists could not create account,something like that
+             */
             Account account = new Account();
             account.setAccountNumber(AccountNumberGenerator.generateUniqueAccountNumber());
             account.setTransactionPin(TransactionPinGenerator.generateTransactionPin());
             account.setType(request.getAccountType());
             account.setBalance(openingBalance);
+            account.setStatus(AccountStatus.INACTIVE);
 
             family.setUserId(userId);
             address.setUserId(userId);
@@ -96,7 +105,7 @@ public class AccountService {
             );
 
         } catch (Exception e) {
-
+            logger.log(Level.SEVERE, "Exception occurred", e);
             if (con != null) {
                 try {
                     con.rollback();

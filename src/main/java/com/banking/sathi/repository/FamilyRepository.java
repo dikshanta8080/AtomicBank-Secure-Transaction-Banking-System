@@ -9,4 +9,6 @@ public interface FamilyRepository {
 
     Family findById(Long id, Connection con);
 
+    boolean existsByUserId(Long userId, Connection con);
+
 }

@@ -35,4 +35,9 @@ public class AccountDao implements AccountRepository {
     public Account findById(Long id, Connection con) {
         return null;
     }
+
+    @Override
+    public boolean existsByUserId(Long userId, Connection con) {
+        return false;
+    }
 }
