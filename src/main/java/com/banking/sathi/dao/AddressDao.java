@@ -36,4 +36,9 @@ public class AddressDao implements AddressRepository {
     public boolean findById(Long id, Connection con) {
         return false;
     }
+
+    @Override
+    public boolean existsByUserId(Long userId, Connection con) {
+        return false;
+    }
 }

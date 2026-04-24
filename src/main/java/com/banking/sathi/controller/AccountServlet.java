@@ -19,6 +19,7 @@ public class AccountServlet extends HttpServlet {
             throws ServletException, IOException {
 
         HttpSession session = request.getSession(false);
+
         User user = (session != null) ? (User) session.getAttribute("user") : null;
 
         if (user == null || user.getRole() == Role.ADMIN) {
@@ -40,7 +41,7 @@ public class AccountServlet extends HttpServlet {
             request.setAttribute("accountId", accountId);
 
             request.getRequestDispatcher("/WEB-INF/jsp/user/account.jsp")
-                   .forward(request, response);
+                    .forward(request, response);
 
         } catch (NumberFormatException e) {
             request.getSession().setAttribute("error", "Invalid account id format");

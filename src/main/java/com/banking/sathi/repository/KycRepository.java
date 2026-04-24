@@ -11,5 +11,7 @@ public interface KycRepository {
 
     boolean existsByCitizenship(String citizenshipNumber, Connection con);
 
+    boolean existsByUserId(Long userId, Connection con);
+
 
 }

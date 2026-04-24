@@ -13,6 +13,16 @@ public class AccountCreationResponseDto {
         this.message = message;
     }
 
+    @Override
+    public String toString() {
+        return "AccountCreationResponseDto{" +
+                "userName='" + userName + '\'' +
+                ", accountNumber='" + accountNumber + '\'' +
+                ", transactionPin='" + transactionPin + '\'' +
+                ", message='" + message + '\'' +
+                '}';
+    }
+
     public String getUserName() {
         return userName;
     }

@@ -29,7 +29,7 @@ public class AccountCreationRequest {
     private String fatherName;
     private String motherName;
 
-    public AccountCreationRequest(AccountType accountType,  LocalDate dob, String gender, String citizenship, LocalDate citizenshipIssueDate, String citizenshipDistrict, String phone, String occupation, Double income, String province, String district, String city, Integer ward, String tole, String fatherName, String motherName) {
+    public AccountCreationRequest(AccountType accountType, LocalDate dob, String gender, String citizenship, LocalDate citizenshipIssueDate, String citizenshipDistrict, String phone, String occupation, Double income, String province, String district, String city, Integer ward, String tole, String fatherName, String motherName) {
         this.accountType = accountType;
         this.dob = dob;
         this.gender = gender;
@@ -55,10 +55,6 @@ public class AccountCreationRequest {
     public void setAccountType(AccountType accountType) {
         this.accountType = accountType;
     }
-
-
-
-
 
     public LocalDate getDob() {
         return dob;

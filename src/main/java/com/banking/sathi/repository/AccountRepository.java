@@ -8,4 +8,6 @@ public interface AccountRepository {
     int saveAccount(Account account, Connection con);
 
     Account findById(Long id, Connection con);
+
+    boolean existsByUserId(Long userId, Connection con);
 }

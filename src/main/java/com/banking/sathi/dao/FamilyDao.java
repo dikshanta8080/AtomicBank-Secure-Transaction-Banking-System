@@ -33,4 +33,9 @@ public class FamilyDao implements FamilyRepository {
     public Family findById(Long id, Connection con) {
         return null;
     }
+
+    @Override
+    public boolean existsByUserId(Long userId, Connection con) {
+        return false;
+    }
 }
