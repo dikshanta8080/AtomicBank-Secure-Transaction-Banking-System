@@ -30,7 +30,7 @@ public class LoginServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
-        req.getRequestDispatcher("views/login.jsp").forward(req, resp);
+        req.getRequestDispatcher("views/auth/login.jsp").forward(req, resp);
     }
 
     @Override
@@ -67,7 +67,7 @@ public class LoginServlet extends HttpServlet {
 
         } catch (IllegalArgumentException | UserDoesnotExistsException | AuthenticationFailedException e) {
             req.setAttribute("error", e.getMessage());
-            req.getRequestDispatcher("views/login.jsp").forward(req, resp);
+            req.getRequestDispatcher("views/auth/login.jsp").forward(req, resp);
         }
     }
 }

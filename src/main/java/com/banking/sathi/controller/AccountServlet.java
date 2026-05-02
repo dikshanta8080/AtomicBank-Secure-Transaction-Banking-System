@@ -1,7 +1,13 @@
 package com.banking.sathi.controller;
 
-import com.banking.sathi.enums.Role;
+import com.banking.sathi.dto.request.AccountCreationRequest;
+import com.banking.sathi.dto.response.AccountCreationResponseDto;
+import com.banking.sathi.enums.AccountType;
+import com.banking.sathi.exceptions.*;
 import com.banking.sathi.model.User;
+import com.banking.sathi.service.AccountService;
+import com.banking.sathi.validators.AccountValidator;
+import jakarta.servlet.ServletConfig;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -10,45 +16,94 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
+import java.time.LocalDate;
 
-@WebServlet("/user/account")
+@WebServlet(name = "AccountServlet", value = "/account")
 public class AccountServlet extends HttpServlet {
+    private AccountService accountService;
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+    public void init(ServletConfig config) throws ServletException {
+        super.init(config);
+        AccountService accountService = new AccountService();
+    }
 
-        HttpSession session = request.getSession(false);
+    @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        req.getRequestDispatcher("views/account.jsp").forward(req, resp);
+    }
 
-        User user = (session != null) ? (User) session.getAttribute("user") : null;
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
-        if (user == null || user.getRole() == Role.ADMIN) {
-            response.sendRedirect(request.getContextPath() + "/login");
+        HttpSession session = req.getSession(false);
+
+        if (session == null) {
+            resp.sendRedirect("login.jsp");
             return;
         }
 
-        String idParam = request.getParameter("id");
-        if (idParam == null || idParam.isBlank()) {
-            request.getSession().setAttribute("error", "Invalid account id");
-            response.sendRedirect(request.getContextPath() + "/user/dashboard");
+        User user = (User) session.getAttribute("user");
+
+        if (user == null) {
+            resp.sendRedirect("login.jsp?error=unauthorized");
             return;
         }
 
         try {
-            Long accountId = Long.valueOf(idParam);
+            AccountType accountType = AccountType.valueOf(req.getParameter("accountType").toUpperCase());
 
-            // TODO: replace with real account lookup once Account DAO/Service exists.
-            request.setAttribute("accountId", accountId);
+            LocalDate dob = LocalDate.parse(req.getParameter("dob"));
+            String gender = req.getParameter("gender");
+            String citizenship = req.getParameter("citizenship");
+            LocalDate citizenshipIssueDate = LocalDate.parse(req.getParameter("citizenshipIssueDate"));
+            String citizenshipDistrict = req.getParameter("citizenshipDistrict");
+            String phone = req.getParameter("phone");
+            String occupation = req.getParameter("occupation");
+            Double income = Double.parseDouble(req.getParameter("income"));
 
-            request.getRequestDispatcher("/WEB-INF/jsp/user/account.jsp")
-                    .forward(request, response);
+            String province = req.getParameter("province");
+            String district = req.getParameter("district");
+            String city = req.getParameter("city");
+            Integer ward = Integer.parseInt(req.getParameter("ward"));
+            String tole = req.getParameter("tole");
 
-        } catch (NumberFormatException e) {
-            request.getSession().setAttribute("error", "Invalid account id format");
-            response.sendRedirect(request.getContextPath() + "/user/dashboard");
+            String fatherName = req.getParameter("fatherName");
+            String motherName = req.getParameter("motherName");
+
+            AccountCreationRequest request = new AccountCreationRequest(
+                    accountType, dob, gender, citizenship, citizenshipIssueDate,
+                    citizenshipDistrict, phone, occupation, income,
+                    province, district, city, ward, tole,
+                    fatherName, motherName
+            );
+
+            AccountValidator.validateAccountCredentials(request);
+
+            AccountCreationResponseDto responseDto =
+                    accountService.createAccount(request, user.getId());
+
+            session.setAttribute("accountResponse", responseDto);
+
+            resp.sendRedirect("account?success=true");
+
+        } catch (AccountAlreadyExistsException |
+                 KycAlreadyExistsException |
+                 UnauthorizedAccessException |
+                 UserDoesnotExistsException e) {
+
+            req.setAttribute("error", e.getMessage());
+            req.getRequestDispatcher("views/account.jsp").forward(req, resp);
+        } catch (IllegalArgumentException e) {
+            req.setAttribute("error", "Invalid input data");
+            req.getRequestDispatcher("views/account.jsp").forward(req, resp);
+        } catch (AccountCreationFailedException e) {
+            req.setAttribute("error", "Something went wrong. Please try again.");
+            req.getRequestDispatcher("views/account.jsp").forward(req, resp);
         } catch (Exception e) {
-            request.getSession().setAttribute("error", "Unable to load account");
-            response.sendRedirect(request.getContextPath() + "/user/dashboard");
+            e.printStackTrace();
+            req.setAttribute("error", "Unexpected error occurred");
+            req.getRequestDispatcher("views/account.jsp").forward(req, resp);
         }
     }
 }
