@@ -4,7 +4,7 @@ import com.banking.sathi.enums.AccountStatus;
 import com.banking.sathi.enums.AccountType;
 import com.banking.sathi.enums.KycStatus;
 
-public class PendingAccountApprovalListDTO {
+public class AccountListDTO {
     private Long userId;
     private String name;
     private String email;
@@ -13,7 +13,7 @@ public class PendingAccountApprovalListDTO {
     private AccountType accountType;
     private AccountStatus accountStatus;
 
-    public PendingAccountApprovalListDTO(Long userId, String name, String email, String phone, KycStatus kycStatus, AccountType accountType, AccountStatus accountStatus) {
+    public AccountListDTO(Long userId, String name, String email, String phone, KycStatus kycStatus, AccountType accountType, AccountStatus accountStatus) {
         this.userId = userId;
         this.name = name;
         this.email = email;
@@ -23,7 +23,7 @@ public class PendingAccountApprovalListDTO {
         this.accountStatus = accountStatus;
     }
 
-    public PendingAccountApprovalListDTO() {
+    public AccountListDTO() {
     }
 
     public Long getUserId() {

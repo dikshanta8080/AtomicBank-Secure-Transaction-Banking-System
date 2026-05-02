@@ -1,7 +1,7 @@
 package com.banking.sathi.repository;
 
-import com.banking.sathi.dto.response.PendingAccountApprovalDetailDTO;
-import com.banking.sathi.dto.response.PendingAccountApprovalListDTO;
+import com.banking.sathi.dto.response.AccountDetailDTO;
+import com.banking.sathi.dto.response.AccountListDTO;
 import com.banking.sathi.model.Account;
 
 import java.sql.Connection;
@@ -21,7 +21,7 @@ public interface AccountRepository {
 
     Optional<Account> findByUserId(Long userId, Connection con);
 
-    List<PendingAccountApprovalListDTO> getPendingAccounts();
+    List<AccountListDTO> getPendingAccounts();
 
-    PendingAccountApprovalDetailDTO getDetailedPendingApproval(Long userId);
+    AccountDetailDTO getDetailedPendingApproval(Long userId);
 }

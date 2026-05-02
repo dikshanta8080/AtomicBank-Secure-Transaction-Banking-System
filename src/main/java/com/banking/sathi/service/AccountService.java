@@ -3,6 +3,8 @@ package com.banking.sathi.service;
 import com.banking.sathi.dao.*;
 import com.banking.sathi.dto.request.AccountCreationRequest;
 import com.banking.sathi.dto.response.AccountCreationResponseDto;
+import com.banking.sathi.dto.response.AccountDetailDTO;
+import com.banking.sathi.dto.response.AccountListDTO;
 import com.banking.sathi.enums.AccountStatus;
 import com.banking.sathi.enums.KycStatus;
 import com.banking.sathi.enums.Role;
@@ -20,6 +22,7 @@ import org.mindrot.jbcrypt.BCrypt;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -185,5 +188,13 @@ public class AccountService {
                 }
             }
         }
+    }
+
+    public List<AccountListDTO> getPendingApprovalAccounts() {
+        return accountRepository.getPendingAccounts();
+    }
+
+    public AccountDetailDTO getPendingApprovalAccountDetails(Long userId) {
+        return accountRepository.getDetailedPendingApproval(userId);
     }
 }

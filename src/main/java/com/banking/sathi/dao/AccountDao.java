@@ -1,7 +1,7 @@
 package com.banking.sathi.dao;
 
-import com.banking.sathi.dto.response.PendingAccountApprovalDetailDTO;
-import com.banking.sathi.dto.response.PendingAccountApprovalListDTO;
+import com.banking.sathi.dto.response.AccountDetailDTO;
+import com.banking.sathi.dto.response.AccountListDTO;
 import com.banking.sathi.enums.AccountStatus;
 import com.banking.sathi.enums.AccountType;
 import com.banking.sathi.enums.KycStatus;
@@ -112,9 +112,9 @@ public class AccountDao implements AccountRepository {
     }
 
     @Override
-    public List<PendingAccountApprovalListDTO> getPendingAccounts() {
+    public List<AccountListDTO> getPendingAccounts() {
 
-        List<PendingAccountApprovalListDTO> list = new ArrayList<>();
+        List<AccountListDTO> list = new ArrayList<>();
 
         try (
                 Connection con = DbConnection.getConnection();
@@ -125,7 +125,7 @@ public class AccountDao implements AccountRepository {
 
             while (rs.next()) {
 
-                PendingAccountApprovalListDTO dto = new PendingAccountApprovalListDTO();
+                AccountListDTO dto = new AccountListDTO();
 
                 dto.setUserId(rs.getLong("userId"));
                 dto.setName(rs.getString("name"));
@@ -159,9 +159,9 @@ public class AccountDao implements AccountRepository {
     }
 
     @Override
-    public PendingAccountApprovalDetailDTO getDetailedPendingApproval(Long userId) {
+    public AccountDetailDTO getDetailedPendingApproval(Long userId) {
 
-        PendingAccountApprovalDetailDTO dto = null;
+        AccountDetailDTO dto = null;
 
         try (
                 Connection con = DbConnection.getConnection();
@@ -173,7 +173,7 @@ public class AccountDao implements AccountRepository {
             ResultSet rs = ps.executeQuery();
 
             if (rs.next()) {
-                dto = new PendingAccountApprovalDetailDTO();
+                dto = new AccountDetailDTO();
 
                 dto.setUserId(rs.getLong("userId"));
                 dto.setName(rs.getString("name"));
