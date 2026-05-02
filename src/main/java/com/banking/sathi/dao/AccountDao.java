@@ -1,7 +1,10 @@
 package com.banking.sathi.dao;
 
+import com.banking.sathi.dto.response.PendingAccountApprovalDetailDTO;
+import com.banking.sathi.dto.response.PendingAccountApprovalListDTO;
 import com.banking.sathi.enums.AccountStatus;
 import com.banking.sathi.enums.AccountType;
+import com.banking.sathi.enums.KycStatus;
 import com.banking.sathi.model.Account;
 import com.banking.sathi.repository.AccountRepository;
 import com.banking.sathi.utils.DbConnection;
@@ -11,6 +14,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -104,5 +109,114 @@ public class AccountDao implements AccountRepository {
             logger.log(Level.SEVERE, "failed to execute query {e}, ", e);
         }
         return Optional.empty();
+    }
+
+    @Override
+    public List<PendingAccountApprovalListDTO> getPendingAccounts() {
+
+        List<PendingAccountApprovalListDTO> list = new ArrayList<>();
+
+        try (
+                Connection con = DbConnection.getConnection();
+                PreparedStatement ps = con.prepareStatement(QueryUtil.SELECT_PENDING_ACCOUNT_APPROVALS);
+        ) {
+
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+
+                PendingAccountApprovalListDTO dto = new PendingAccountApprovalListDTO();
+
+                dto.setUserId(rs.getLong("userId"));
+                dto.setName(rs.getString("name"));
+                dto.setEmail(rs.getString("email"));
+                dto.setPhone(rs.getString("phone"));
+
+                String kycStatusStr = rs.getString("kycStatus");
+                if (kycStatusStr != null) {
+                    dto.setKycStatus(KycStatus.valueOf(kycStatusStr.toUpperCase()));
+                }
+
+                String accountTypeStr = rs.getString("accountType");
+                if (accountTypeStr != null) {
+                    dto.setAccountType(AccountType.valueOf(accountTypeStr.toUpperCase()));
+                }
+
+                String accountStatusStr = rs.getString("accountStatus");
+                if (accountStatusStr != null) {
+                    dto.setAccountStatus(AccountStatus.valueOf(accountStatusStr.toUpperCase()));
+                }
+
+                list.add(dto);
+            }
+
+        } catch (SQLException e) {
+            logger.log(Level.SEVERE, "failed to execute query", e);
+            throw new RuntimeException("Failed to fetch pending accounts", e);
+        }
+
+        return list;
+    }
+
+    @Override
+    public PendingAccountApprovalDetailDTO getDetailedPendingApproval(Long userId) {
+
+        PendingAccountApprovalDetailDTO dto = null;
+
+        try (
+                Connection con = DbConnection.getConnection();
+                PreparedStatement ps = con.prepareStatement(QueryUtil.SELECT_PENDING_ACCOUNT_DETAILS);
+        ) {
+
+            ps.setLong(1, userId);
+
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                dto = new PendingAccountApprovalDetailDTO();
+
+                dto.setUserId(rs.getLong("userId"));
+                dto.setName(rs.getString("name"));
+                dto.setEmail(rs.getString("email"));
+
+                dto.setDob(rs.getString("dob"));
+                dto.setGender(rs.getString("gender"));
+                dto.setCitizenship(rs.getString("citizenship"));
+                dto.setPhone(rs.getString("phone"));
+                dto.setOccupation(rs.getString("occupation"));
+
+                String kycStatus = rs.getString("kycStatus");
+                if (kycStatus != null) {
+                    dto.setKycStatus(KycStatus.valueOf(kycStatus.toUpperCase()));
+                }
+
+                dto.setAccountNumber(rs.getString("accountNumber"));
+
+                String accountType = rs.getString("accountType");
+                if (accountType != null) {
+                    dto.setAccountType(AccountType.valueOf(accountType.toUpperCase()));
+                }
+
+                String accountStatus = rs.getString("accountStatus");
+                if (accountStatus != null) {
+                    dto.setAccountStatus(AccountStatus.valueOf(accountStatus.toUpperCase()));
+                }
+
+                dto.setProvince(rs.getString("province"));
+                dto.setDistrict(rs.getString("district"));
+                dto.setCity(rs.getString("city"));
+                dto.setWard(rs.getInt("ward"));
+                dto.setTole(rs.getString("tole"));
+
+                dto.setFatherName(rs.getString("fatherName"));
+                dto.setMotherName(rs.getString("motherName"));
+            }
+
+        } catch (SQLException e) {
+            logger.log(Level.SEVERE, "failed to fetch detailed pending approval", e);
+            throw new RuntimeException("Failed to fetch approval details", e);
+        }
+
+        return dto;
     }
 }
