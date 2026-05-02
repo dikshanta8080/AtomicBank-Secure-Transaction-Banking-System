@@ -112,7 +112,7 @@ public class AccountService {
             return new AccountCreationResponseDto(
                     user.getName(),
                     account.getAccountNumber(),
-                    account.getTransactionPin(),
+                    transactionPin,
                     "Please change the transaction pin ASAP!"
             );
 
