@@ -28,5 +28,50 @@ public class QueryUtil {
     public static final String DELETE_ACCOUNT_QUERY = "DELETE FROM accounts WHERE id=?";
     public static final String VERIFY_ACCOUNT_QUERY = "UPDATE accounts SET account_status='ACTIVE' WHERE id=? ";
     public static final String FIND_BY_USERID_QUERY = "SELECT * FROM accounts WHERE user_id=? ";
-
+    public static final String SELECT_PENDING_ACCOUNT_APPROVALS = "SELECT \n" +
+            "    u.id AS userId,\n" +
+            "    u.name AS name,\n" +
+            "    u.email AS email,\n" +
+            "    k.phone AS phone,\n" +
+            "    k.status AS kycStatus,\n" +
+            "    a.account_type AS accountType,\n" +
+            "    a.account_status AS accountStatus\n" +
+            "FROM users u\n" +
+            "LEFT JOIN kyc k ON u.id = k.user_id\n" +
+            "LEFT JOIN accounts a ON u.id = a.user_id\n" +
+            "WHERE k.status = 'PENDING';";
+    public static final String SELECT_PENDING_ACCOUNT_DETAILS = "SELECT \n" +
+            "    u.id AS userId,\n" +
+            "    u.name AS name,\n" +
+            "    u.email AS email,\n" +
+            "\n" +
+            "    k.dob AS dob,\n" +
+            "    k.gender AS gender,\n" +
+            "    k.citizenship AS citizenship,\n" +
+            "    k.issue_date AS citizenshipIssueDate,\n" +
+            "    k.district AS citizenshipDistrict,\n" +
+            "    k.phone AS phone,\n" +
+            "    k.occupation AS occupation,\n" +
+            "    k.income AS income,\n" +
+            "    k.status AS kycStatus,\n" +
+            "\n" +
+            "    a.account_number AS accountNumber,\n" +
+            "    a.account_type AS accountType,\n" +
+            "    a.account_status AS accountStatus,\n" +
+            "\n" +
+            "    ad.province AS province,\n" +
+            "    ad.district AS district,\n" +
+            "    ad.city AS city,\n" +
+            "    ad.ward AS ward,\n" +
+            "    ad.tole AS tole,\n" +
+            "\n" +
+            "    f.father AS fatherName,\n" +
+            "    f.mother AS motherName\n" +
+            "\n" +
+            "FROM users u\n" +
+            "LEFT JOIN kyc k ON u.id = k.user_id\n" +
+            "LEFT JOIN accounts a ON u.id = a.user_id\n" +
+            "LEFT JOIN addresses ad ON u.id = ad.user_id\n" +
+            "LEFT JOIN family f ON u.id = f.user_id\n" +
+            "WHERE u.id = ?;";
 }

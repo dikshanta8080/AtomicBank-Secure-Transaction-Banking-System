@@ -1,8 +1,11 @@
 package com.banking.sathi.repository;
 
+import com.banking.sathi.dto.response.AccountDetailDTO;
+import com.banking.sathi.dto.response.AccountListDTO;
 import com.banking.sathi.model.Account;
 
 import java.sql.Connection;
+import java.util.List;
 import java.util.Optional;
 
 public interface AccountRepository {
@@ -17,4 +20,8 @@ public interface AccountRepository {
     boolean verifyAccount(Long accountId, Connection con);
 
     Optional<Account> findByUserId(Long userId, Connection con);
+
+    List<AccountListDTO> getPendingAccounts();
+
+    AccountDetailDTO getDetailedPendingApproval(Long userId);
 }
