@@ -39,6 +39,14 @@ public class AddressDao implements AddressRepository {
 
     @Override
     public boolean existsByUserId(Long userId, Connection con) {
+        try (
+                PreparedStatement ps = con.prepareStatement(QueryUtil.SELECT_ADDRESS_BY_USERID);
+        ) {
+            ps.setLong(1, userId);
+            return ps.executeQuery().next();
+        } catch (SQLException e) {
+            logger.log(Level.SEVERE, "failed to execute query {e}, ", e);
+        }
         return false;
     }
 }

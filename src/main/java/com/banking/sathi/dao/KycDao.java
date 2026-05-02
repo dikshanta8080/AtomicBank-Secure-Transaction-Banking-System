@@ -5,6 +5,7 @@ import com.banking.sathi.repository.KycRepository;
 import com.banking.sathi.utils.QueryUtil;
 
 import java.sql.*;
+import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -56,6 +57,44 @@ public class KycDao implements KycRepository {
 
     @Override
     public boolean existsByUserId(Long userId, Connection con) {
+        try (
+                PreparedStatement ps = con.prepareStatement(QueryUtil.SELECT_KYC_BY_USERID);
+        ) {
+            ps.setLong(1, userId);
+            return ps.executeQuery().next();
+        } catch (SQLException e) {
+            logger.log(Level.SEVERE, "failed to execute query {e}, ", e);
+        }
+        return false;
+    }
+
+    public Optional<Kyc> findByUserId(Long userId, Connection con) {
+        Kyc kyc;
+        try (
+                PreparedStatement ps = con.prepareStatement(QueryUtil.SELECT_KYC_BY_USERID);
+
+        ) {
+            ps.setLong(1, userId);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+
+            }
+        } catch (SQLException e) {
+            logger.log(Level.SEVERE, "failed to execute query {e}, ", e);
+        }
+        return Optional.empty();
+    }
+
+    @Override
+    public boolean verifyKyc(Long kycId, Connection con) {
+        try (
+                PreparedStatement ps = con.prepareStatement(QueryUtil.VERIFY_KYC_QUERY);
+        ) {
+            ps.setLong(1, kycId);
+            return ps.executeUpdate() > 0;
+        } catch (SQLException e) {
+            logger.log(Level.SEVERE, "failed to execute query {e}, ", e);
+        }
         return false;
     }
 }

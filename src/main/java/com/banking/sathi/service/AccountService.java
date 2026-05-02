@@ -5,9 +5,9 @@ import com.banking.sathi.dto.request.AccountCreationRequest;
 import com.banking.sathi.dto.response.AccountCreationResponseDto;
 import com.banking.sathi.enums.AccountStatus;
 import com.banking.sathi.enums.KycStatus;
-import com.banking.sathi.exceptions.AccountCreationFailedException;
-import com.banking.sathi.exceptions.KycAlreadyExistsException;
-import com.banking.sathi.exceptions.UserDoesnotExistsException;
+import com.banking.sathi.enums.Role;
+import com.banking.sathi.enums.UserStatus;
+import com.banking.sathi.exceptions.*;
 import com.banking.sathi.mapper.request.AddressMapper;
 import com.banking.sathi.mapper.request.FamilyMapper;
 import com.banking.sathi.mapper.request.KycMapper;
@@ -16,6 +16,7 @@ import com.banking.sathi.repository.*;
 import com.banking.sathi.utils.AccountNumberGenerator;
 import com.banking.sathi.utils.DbConnection;
 import com.banking.sathi.utils.TransactionPinGenerator;
+import org.mindrot.jbcrypt.BCrypt;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -47,7 +48,6 @@ public class AccountService {
         this.familyMapper = new FamilyMapper();
     }
 
-
     public AccountCreationResponseDto createAccount(AccountCreationRequest request, Long userId) {
         Connection con = null;
         Family family = familyMapper.apply(request);
@@ -63,19 +63,31 @@ public class AccountService {
                     .orElseThrow(() -> new UserDoesnotExistsException(
                             "You are not authorized to perform this operation"
                     ));
-
+            if (user.getRole() != Role.USER) {
+                throw new UnauthorizedAccessException("Admin can not create account");
+            }
+            if (user.getUserStatus() == UserStatus.BLOCKED) {
+                throw new AccountCreationFailedException("Failed to create account");
+            }
             if (kycRepository.existsByCitizenship(request.getCitizenship(), con)) {
                 throw new KycAlreadyExistsException(
                         "KYC with the provided details already exists"
                 );
             }
-            /*
-            Ya validation garna baki xa.if kycRepo.existsByUserId-> throw exception called
-             details already exists could not create account,something like that
-             */
+
+            if (accountRepository.existsByUserId(userId, con)
+                    || addressRepository.existsByUserId(userId, con)
+                    || familyRepository.existsByUserId(userId, con)
+                    || kycRepository.existsByUserId(userId, con)) {
+                throw new AccountAlreadyExistsException("Account with this details already exists");
+            }
+
+            String transactionPin = TransactionPinGenerator.generateTransactionPin();
+            String accountNumber = AccountNumberGenerator.generateUniqueAccountNumber();
+            String hashedTransactionPin = BCrypt.hashpw(transactionPin, BCrypt.gensalt(11));
             Account account = new Account();
-            account.setAccountNumber(AccountNumberGenerator.generateUniqueAccountNumber());
-            account.setTransactionPin(TransactionPinGenerator.generateTransactionPin());
+            account.setAccountNumber(accountNumber);
+            account.setTransactionPin(hashedTransactionPin);
             account.setType(request.getAccountType());
             account.setBalance(openingBalance);
             account.setStatus(AccountStatus.INACTIVE);
@@ -104,7 +116,7 @@ public class AccountService {
                     "Please change the transaction pin ASAP!"
             );
 
-        } catch (Exception e) {
+        } catch (SQLException e) {
             logger.log(Level.SEVERE, "Exception occurred", e);
             if (con != null) {
                 try {
@@ -114,12 +126,56 @@ public class AccountService {
                     logger.log(Level.SEVERE, "Rollback failed", ex);
                 }
             }
-
             throw new AccountCreationFailedException(
-                    "Account creation failed"
+                    "Database error occurred!"
 
             );
 
+        } finally {
+            if (con != null) {
+                try {
+                    con.close();
+                } catch (SQLException e) {
+                    logger.log(Level.SEVERE, "Failed to close connection", e);
+                }
+            }
+        }
+    }
+
+    public boolean deleteAccount(Long id) {
+        return accountRepository.deleteAccountById(id) > 0;
+    }
+
+    public boolean verifyAccount(Long userId) {
+        Connection con = null;
+        try {
+            con = DbConnection.getConnection();
+            Account account = accountRepository.findByUserId(userId, con).orElseThrow(() ->
+                    new AccountVerificationFailedException("Account does not exists exception"));
+            Kyc kyc = kycRepository.findByUserId(userId, con).orElseThrow(() ->
+                    new AccountVerificationFailedException("Kyc does not exists exception"));
+
+            boolean isKycVerified = kycRepository.verifyKyc(kyc.getId(), con);
+            boolean isAccountVerified = accountRepository.verifyAccount(account.getId(), con);
+            if (!isKycVerified || !isAccountVerified) {
+                throw new AccountVerificationFailedException("Failed to verify the Details");
+            }
+            con.commit();
+            return true;
+
+        } catch (SQLException e) {
+            if (con != null) {
+                try {
+                    con.rollback();
+                    logger.info("Transaction rolled back");
+                } catch (SQLException ex) {
+                    logger.log(Level.SEVERE, "Rollback failed", ex);
+                }
+            }
+            throw new AccountCreationFailedException(
+                    "Database error occurred!"
+
+            );
         } finally {
             if (con != null) {
                 try {

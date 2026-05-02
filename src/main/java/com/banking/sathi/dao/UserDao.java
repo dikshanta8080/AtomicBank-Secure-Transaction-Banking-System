@@ -127,7 +127,7 @@ public class UserDao implements UserRepository {
                         rs.getLong("id"),
                         rs.getString("name"),
                         rs.getString("email"),
-                        rs.getString("password"),
+                        null,
                         Role.valueOf(rs.getString("role")),
                         UserStatus.valueOf(rs.getString("user_status")),
                         rs.getObject("created", LocalDateTime.class),
