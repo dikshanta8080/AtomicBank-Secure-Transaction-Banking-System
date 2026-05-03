@@ -19,5 +19,7 @@ public interface UserRepository {
 
     int deleteUserById(Long id);
 
+    boolean existsByRoleAdmin();
+
 
 }

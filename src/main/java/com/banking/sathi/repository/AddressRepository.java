@@ -10,4 +10,6 @@ public interface AddressRepository {
     boolean findById(Long id, Connection con);
 
     boolean existsByUserId(Long userId, Connection con);
+
+    boolean deleteByUserId(Long userId, Connection con);
 }

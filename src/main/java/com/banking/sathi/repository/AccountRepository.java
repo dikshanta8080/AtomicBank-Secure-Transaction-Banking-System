@@ -26,4 +26,6 @@ public interface AccountRepository {
     AccountDetailDTO getDetailedPendingApproval(Long userId);
 
     boolean existsByUserId(Long userId);
+
+    boolean deleteByUserId(Long userId, Connection con);
 }

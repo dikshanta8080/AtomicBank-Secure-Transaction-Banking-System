@@ -11,6 +11,6 @@
     <title>Admin Dashboard</title>
 </head>
 <body>
-
+<h1>I am admin Dashboard</h1>
 </body>
 </html>

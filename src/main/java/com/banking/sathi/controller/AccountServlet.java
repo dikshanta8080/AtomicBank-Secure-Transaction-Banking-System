@@ -85,21 +85,20 @@ public class AccountServlet extends HttpServlet {
 
             AccountCreationResponseDto responseDto =
                     accountService.createAccount(request, user.getId());
+            if (responseDto != null) {
+                session.setAttribute("accountResponse", responseDto);
 
-            session.setAttribute("accountResponse", responseDto);
+                resp.sendRedirect(req.getContextPath() + "/PendingApproval");
+            }
 
-            resp.sendRedirect(req.getContextPath() + "/user/dashboard");
 
-        } catch (IllegalArgumentException e) {
-            req.setAttribute("error", "Invalid input data");
-            req.getRequestDispatcher("/views/account/account.jsp").forward(req, resp);
-
-        } catch (AccountCreationFailedException e) {
+        } catch (IllegalArgumentException | AccountCreationFailedException e) {
+            // ya logger halna baki xa sabbai exception ma
             req.setAttribute("error", e.getMessage());
             req.getRequestDispatcher("/views/account/account.jsp").forward(req, resp);
 
         } catch (Exception e) {
-            e.printStackTrace();
+            // ya logger halna baki xa sabbai exception ma
             req.setAttribute("error", "Unexpected error occurred");
             req.getRequestDispatcher("/views/account/account.jsp").forward(req, resp);
         }

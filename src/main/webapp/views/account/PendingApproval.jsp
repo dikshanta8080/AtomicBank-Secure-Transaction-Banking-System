@@ -1,16 +1,16 @@
 <%--
   Created by IntelliJ IDEA.
   User: diksh
-  Date: 4/20/2026
-  Time: 7:11 PM
+  Date: 5/3/2026
+  Time: 12:52 PM
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
-    <title>User Dashboard</title>
+    <title>Title</title>
 </head>
 <body>
-<h1>I am User Dashboard</h1>
+<h1>Pending Approval</h1>
 </body>
 </html>
