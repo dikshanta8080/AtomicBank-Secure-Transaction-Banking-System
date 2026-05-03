@@ -1,12 +1,9 @@
 package com.banking.sathi.controller;
 
-import com.banking.sathi.dao.AccountDao;
 import com.banking.sathi.dao.UserDao;
-import com.banking.sathi.enums.Role;
 import com.banking.sathi.exceptions.AuthenticationFailedException;
 import com.banking.sathi.exceptions.UserDoesnotExistsException;
 import com.banking.sathi.model.User;
-import com.banking.sathi.repository.AccountRepository;
 import com.banking.sathi.repository.UserRepository;
 import com.banking.sathi.service.AuthService;
 import com.banking.sathi.validators.UserValidator;
@@ -24,14 +21,12 @@ import java.io.IOException;
 public class LoginServlet extends HttpServlet {
 
     private AuthService authService;
-    private AccountRepository accountRepository;
     private UserRepository userRepository;
 
     @Override
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
         this.authService = new AuthService();
-        this.accountRepository = new AccountDao();
         this.userRepository = new UserDao();
     }
 
@@ -65,20 +60,13 @@ public class LoginServlet extends HttpServlet {
             HttpSession newSession = req.getSession(true);
             newSession.setAttribute("user", user);
 
-            String contextPath = req.getContextPath();
-            
 
-            if (user.getRole() == Role.ADMIN) {
-                resp.sendRedirect(contextPath + "/AdminDashboard");
-            } else {
-                if (accountRepository.existsByUserId(user.getId())) {
-                    resp.sendRedirect(contextPath + "/UserDashboard");
-                } else {
-                    resp.sendRedirect(contextPath + "/account");
-                }
-            }
+            resp.sendRedirect(req.getContextPath() + "/UserDashboard");
 
-        } catch (IllegalArgumentException | UserDoesnotExistsException | AuthenticationFailedException e) {
+        } catch (IllegalArgumentException |
+                 UserDoesnotExistsException |
+                 AuthenticationFailedException e) {
+
             req.setAttribute("error", e.getMessage());
             req.getRequestDispatcher("views/auth/login.jsp").forward(req, resp);
         }

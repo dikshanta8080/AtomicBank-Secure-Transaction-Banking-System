@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Create Account — Atomic Bank</title>
-    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap"
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@400;500;600&display=swap"
           rel="stylesheet">
     <style>
         * {
@@ -16,10 +16,9 @@
 
         body {
             font-family: 'DM Sans', sans-serif;
-            background: #0c0f1a;
-            min-height: 100vh;
-            padding: 48px 16px 80px;
-            color: #f1f5f9;
+            background: #f1f5f9;
+            padding: 48px 20px 80px;
+            color: #0f172a;
         }
 
         .page {
@@ -27,12 +26,11 @@
             margin: 0 auto;
         }
 
-        /* Top bar */
         .topbar {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            margin-bottom: 40px;
+            margin-bottom: 48px;
         }
 
         .logo {
@@ -43,102 +41,99 @@
         }
 
         .logo-mark {
-            width: 36px;
-            height: 36px;
-            border-radius: 9px;
-            background: #2563eb;
+            width: 38px;
+            height: 38px;
+            border-radius: 10px;
+            background: #1d4ed8;
             color: #fff;
             font-family: 'DM Serif Display', serif;
-            font-size: 18px;
+            font-size: 20px;
             display: flex;
             align-items: center;
             justify-content: center;
         }
 
         .logo-name {
-            font-size: 16px;
+            font-size: 17px;
             font-weight: 600;
-            color: #f1f5f9;
+            color: #0f172a;
         }
 
         .logo-name span {
-            color: #f0b429;
+            color: #b45309;
         }
 
         .back-link {
-            font-size: 13px;
-            color: #64748b;
+            font-size: 14px;
+            font-weight: 500;
+            color: #94a3b8;
             text-decoration: none;
         }
 
         .back-link:hover {
-            color: #94a3b8;
+            color: #1d4ed8;
         }
 
-        /* Hero */
         .hero {
-            margin-bottom: 36px;
+            margin-bottom: 40px;
         }
 
         .hero-tag {
-            font-size: 11px;
+            font-size: 12px;
             font-weight: 600;
             letter-spacing: 1.5px;
             text-transform: uppercase;
-            color: #3b82f6;
+            color: #1d4ed8;
             margin-bottom: 10px;
         }
 
         .hero h1 {
             font-family: 'DM Serif Display', serif;
-            font-size: 34px;
-            line-height: 1.2;
-            color: #f1f5f9;
+            font-size: 44px;
+            line-height: 1.15;
+            color: #0f172a;
             margin-bottom: 8px;
         }
 
         .hero h1 em {
             font-style: italic;
-            color: #f0b429;
+            color: #b45309;
         }
 
         .hero p {
-            font-size: 14px;
+            font-size: 16px;
             color: #64748b;
         }
 
-        /* Error alert */
         .alert {
-            background: rgba(239, 68, 68, 0.1);
+            background: #fef2f2;
             border-left: 3px solid #ef4444;
-            color: #fca5a5;
-            padding: 12px 16px;
-            border-radius: 8px;
-            font-size: 13.5px;
+            color: #b91c1c;
+            padding: 13px 16px;
+            border-radius: 10px;
+            font-size: 14px;
             margin-bottom: 20px;
         }
 
-        /* Section */
         .section {
-            background: #111827;
-            border: 1px solid #1e293b;
+            background: #fff;
+            border: 1.5px solid #e2e8f0;
             border-radius: 14px;
-            padding: 26px 28px;
+            padding: 28px 30px;
             margin-bottom: 14px;
         }
 
         .section-title {
-            font-size: 13px;
+            font-size: 11px;
             font-weight: 600;
-            color: #475569;
-            letter-spacing: .8px;
+            letter-spacing: 1.3px;
             text-transform: uppercase;
+            color: #94a3b8;
             padding-bottom: 14px;
-            border-bottom: 1px solid #1e293b;
+            border-bottom: 1px solid #f1f5f9;
             margin-bottom: 20px;
         }
 
-        /* Grid */
         .grid-2 {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -155,7 +150,6 @@
             grid-column: span 2;
         }
 
-        /* Field */
         .field {
             display: flex;
             flex-direction: column;
@@ -163,34 +157,34 @@
         }
 
         label {
-            font-size: 12.5px;
+            font-size: 14px;
             font-weight: 500;
-            color: #94a3b8;
+            color: #334155;
         }
 
         input, select {
             width: 100%;
-            padding: 10px 13px;
+            padding: 12px 14px;
             font-family: 'DM Sans', sans-serif;
-            font-size: 14px;
-            color: #f1f5f9;
-            background: #0d1117;
-            border: 1.5px solid #1e293b;
-            border-radius: 8px;
+            font-size: 15px;
+            color: #0f172a;
+            background: #f8fafc;
+            border: 1.5px solid #e2e8f0;
+            border-radius: 10px;
             outline: none;
-            transition: border-color .15s;
             appearance: none;
+            transition: border-color .15s;
         }
 
         input::placeholder {
-            color: #334155;
+            color: #cbd5e1;
         }
 
         input:focus, select:focus {
-            border-color: #2563eb;
+            border-color: #1d4ed8;
+            background: #fff;
         }
 
-        /* Select arrow */
         .sel {
             position: relative;
         }
@@ -198,12 +192,12 @@
         .sel::after {
             content: '';
             position: absolute;
-            right: 13px;
+            right: 14px;
             top: 50%;
             transform: translateY(-50%);
             border-left: 4px solid transparent;
             border-right: 4px solid transparent;
-            border-top: 5px solid #475569;
+            border-top: 5px solid #94a3b8;
             pointer-events: none;
         }
 
@@ -212,11 +206,6 @@
             cursor: pointer;
         }
 
-        .sel select option {
-            background: #1e293b;
-        }
-
-        /* Account type cards */
         .type-row {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -232,76 +221,75 @@
         }
 
         .type-card-body {
-            border: 1.5px solid #1e293b;
-            border-radius: 10px;
-            padding: 16px;
-            background: #0d1117;
-            transition: border-color .15s;
+            border: 1.5px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 20px;
+            background: #f8fafc;
+            transition: border-color .15s, background .15s;
         }
 
         .type-card input:checked + .type-card-body {
-            border-color: #2563eb;
-            background: rgba(37, 99, 235, 0.06);
+            border-color: #1d4ed8;
+            background: #eff6ff;
         }
 
         .type-card-body:hover {
-            border-color: #334155;
+            border-color: #93c5fd;
         }
 
         .type-icon {
-            font-size: 22px;
-            margin-bottom: 8px;
+            font-size: 26px;
+            margin-bottom: 10px;
         }
 
         .type-name {
-            font-size: 14px;
+            font-size: 16px;
             font-weight: 600;
-            color: #f1f5f9;
+            color: #0f172a;
             margin-bottom: 3px;
         }
 
         .type-desc {
-            font-size: 12px;
-            color: #475569;
+            font-size: 13px;
+            color: #64748b;
         }
 
-        /* Submit */
         .submit-btn {
             width: 100%;
-            margin-top: 8px;
-            padding: 14px;
-            background: #2563eb;
+            margin-top: 6px;
+            padding: 16px;
+            background: #1d4ed8;
             color: #fff;
             font-family: 'DM Sans', sans-serif;
-            font-size: 15px;
+            font-size: 16px;
             font-weight: 600;
             border: none;
-            border-radius: 10px;
+            border-radius: 12px;
             cursor: pointer;
             transition: background .15s;
         }
 
         .submit-btn:hover {
-            background: #1d4ed8;
+            background: #1e40af;
         }
 
         .footer-note {
             text-align: center;
-            font-size: 12px;
-            color: #334155;
+            font-size: 13px;
+            color: #94a3b8;
             margin-top: 16px;
         }
 
         .footer-note a {
-            color: #475569;
+            color: #64748b;
             text-decoration: none;
         }
 
         .footer-note a:hover {
-            color: #64748b;
+            color: #1d4ed8;
         }
 
-        @media (max-width: 560px) {
+        @media (max-width: 540px) {
             .grid-2, .grid-3, .type-row {
                 grid-template-columns: 1fr;
             }
@@ -311,7 +299,7 @@
             }
 
             .hero h1 {
-                font-size: 26px;
+                font-size: 32px;
             }
 
             .section {
@@ -334,7 +322,7 @@
     <div class="hero">
         <div class="hero-tag">New Account</div>
         <h1>Open your account<br>with <em>Atomic.</em></h1>
-        <p>Fill in your details below. It only takes a few minutes.</p>
+        <p>Fill in your details. It only takes a few minutes.</p>
     </div>
 
     <% if (request.getAttribute("error") != null) { %>
@@ -344,7 +332,6 @@
 
     <form action="<%=request.getContextPath()%>/account" method="post">
 
-        <!-- Account Type -->
         <div class="section">
             <div class="section-title">Account Type</div>
             <div class="type-row">
@@ -367,7 +354,6 @@
             </div>
         </div>
 
-        <!-- KYC -->
         <div class="section">
             <div class="section-title">KYC Details</div>
             <div class="grid-2">
@@ -413,7 +399,6 @@
             </div>
         </div>
 
-        <!-- Address -->
         <div class="section">
             <div class="section-title">Address</div>
             <div class="grid-3">
@@ -440,7 +425,6 @@
             </div>
         </div>
 
-        <!-- Family -->
         <div class="section">
             <div class="section-title">Family Details</div>
             <div class="grid-2">

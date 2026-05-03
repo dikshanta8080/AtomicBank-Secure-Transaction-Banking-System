@@ -28,4 +28,6 @@ public interface AccountRepository {
     boolean existsByUserId(Long userId);
 
     boolean deleteByUserId(Long userId, Connection con);
+    
+    Optional<Account> findByUserId(Long userId);
 }
