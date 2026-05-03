@@ -1,6 +1,9 @@
 package com.banking.sathi.dao.dao;
 
+import com.banking.sathi.dto.response.AccountListDTO;
 import com.banking.sathi.service.AccountService;
+
+import java.util.List;
 
 public class AccountServiceTest {
 
@@ -25,12 +28,13 @@ public class AccountServiceTest {
 //                "Ram Acharya",                     // fatherName
 //                "Sita Acharya"                     // motherName
 //        );
-        try {
-            boolean b = accountService.deleteAccount(1L);
-            System.out.println(b);
+//        AccountDetailDTO pendingApprovalAccountDetails = accountService.getPendingApprovalAccountDetails(1L);
+//        System.out.println(pendingApprovalAccountDetails);
+//        boolean verified = accountService.verifyAccount(1L);
+//        System.out.println(verified);
+        List<AccountListDTO> pendingApprovalAccounts = accountService.getPendingApprovalAccounts();
+        pendingApprovalAccounts.forEach(System.out::println);
 
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
+
     }
 }

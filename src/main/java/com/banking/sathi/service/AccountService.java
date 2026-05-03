@@ -5,10 +5,7 @@ import com.banking.sathi.dto.request.AccountCreationRequest;
 import com.banking.sathi.dto.response.AccountCreationResponseDto;
 import com.banking.sathi.dto.response.AccountDetailDTO;
 import com.banking.sathi.dto.response.AccountListDTO;
-import com.banking.sathi.enums.AccountStatus;
-import com.banking.sathi.enums.KycStatus;
-import com.banking.sathi.enums.Role;
-import com.banking.sathi.enums.UserStatus;
+import com.banking.sathi.enums.*;
 import com.banking.sathi.exceptions.*;
 import com.banking.sathi.mapper.request.AddressMapper;
 import com.banking.sathi.mapper.request.FamilyMapper;
@@ -28,7 +25,8 @@ import java.util.logging.Logger;
 
 public class AccountService {
 
-    private static final Double openingBalance = 1000d;
+    private static final Double SAVINGS_OPENING_BALANCE = 2000d;
+    private static final Double CURRENT_OPENING_BALANCE = 1000d;
     private static final Logger logger = Logger.getLogger(AccountService.class.getName());
     private final KycRepository kycRepository;
     private final FamilyRepository familyRepository;
@@ -88,6 +86,7 @@ public class AccountService {
             String transactionPin = TransactionPinGenerator.generateTransactionPin();
             String accountNumber = AccountNumberGenerator.generateUniqueAccountNumber();
             String hashedTransactionPin = BCrypt.hashpw(transactionPin, BCrypt.gensalt(11));
+            Double openingBalance = request.getAccountType().equals(AccountType.SAVINGS) ? SAVINGS_OPENING_BALANCE : CURRENT_OPENING_BALANCE;
             Account account = new Account();
             account.setAccountNumber(accountNumber);
             account.setTransactionPin(hashedTransactionPin);
@@ -153,6 +152,7 @@ public class AccountService {
         Connection con = null;
         try {
             con = DbConnection.getConnection();
+            con.setAutoCommit(false);
             Account account = accountRepository.findByUserId(userId, con).orElseThrow(() ->
                     new AccountVerificationFailedException("Account does not exists exception"));
             Kyc kyc = kycRepository.findByUserId(userId, con).orElseThrow(() ->

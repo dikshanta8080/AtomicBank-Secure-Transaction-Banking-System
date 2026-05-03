@@ -24,4 +24,6 @@ public interface AccountRepository {
     List<AccountListDTO> getPendingAccounts();
 
     AccountDetailDTO getDetailedPendingApproval(Long userId);
+
+    boolean existsByUserId(Long userId);
 }
