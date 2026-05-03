@@ -90,20 +90,22 @@ public class AccountDao implements AccountRepository {
 
     @Override
     public Optional<Account> findByUserId(Long userId, Connection con) {
-        Account account;
+        Account account = null;
         try (
                 PreparedStatement ps = con.prepareStatement(QueryUtil.FIND_BY_USERID_QUERY);
         ) {
             ps.setLong(1, userId);
             ResultSet rs = ps.executeQuery();
-            account = new Account();
-            account.setId(rs.getLong("id"));
-            account.setUserId(rs.getLong("user_id"));
-            account.setType(AccountType.valueOf(rs.getString("account_type").toUpperCase()));
-            account.setStatus(AccountStatus.valueOf(rs.getString("status").toUpperCase()));
-            account.setAccountNumber(rs.getString("account_number"));
-            account.setTransactionPin(rs.getString("transaction_pin"));
-            account.setBalance(rs.getDouble("balance"));
+            if (rs.next()) {
+                account = new Account();
+                account.setId(rs.getLong("id"));
+                account.setUserId(rs.getLong("user_id"));
+                account.setType(AccountType.valueOf(rs.getString("account_type").toUpperCase()));
+                account.setStatus(AccountStatus.valueOf(rs.getString("account_status").toUpperCase()));
+                account.setAccountNumber(rs.getString("account_number"));
+                account.setTransactionPin(rs.getString("transaction_pin"));
+                account.setBalance(rs.getDouble("balance"));
+            }
             return Optional.of(account);
         } catch (SQLException e) {
             logger.log(Level.SEVERE, "failed to execute query {e}, ", e);
@@ -218,5 +220,19 @@ public class AccountDao implements AccountRepository {
         }
 
         return dto;
+    }
+
+    @Override
+    public boolean existsByUserId(Long userId) {
+        try (
+                Connection con = DbConnection.getConnection();
+                PreparedStatement ps = con.prepareStatement(QueryUtil.SELECT_FAMILY_BY_USERID);
+        ) {
+            ps.setLong(1, userId);
+            return ps.executeQuery().next();
+        } catch (SQLException e) {
+            logger.log(Level.SEVERE, "failed to execute query {e}, ", e);
+        }
+        return false;
     }
 }

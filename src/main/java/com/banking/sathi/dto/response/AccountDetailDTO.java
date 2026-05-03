@@ -210,4 +210,29 @@ public class AccountDetailDTO {
     public void setMotherName(String motherName) {
         this.motherName = motherName;
     }
+
+    @Override
+    public String toString() {
+        return "AccountDetailDTO{" +
+                "userId=" + userId +
+                ", name='" + name + '\'' +
+                ", email='" + email + '\'' +
+                ", dob='" + dob + '\'' +
+                ", gender='" + gender + '\'' +
+                ", citizenship='" + citizenship + '\'' +
+                ", phone='" + phone + '\'' +
+                ", occupation='" + occupation + '\'' +
+                ", kycStatus=" + kycStatus +
+                ", accountNumber='" + accountNumber + '\'' +
+                ", accountType=" + accountType +
+                ", accountStatus=" + accountStatus +
+                ", province='" + province + '\'' +
+                ", district='" + district + '\'' +
+                ", city='" + city + '\'' +
+                ", ward=" + ward +
+                ", tole='" + tole + '\'' +
+                ", fatherName='" + fatherName + '\'' +
+                ", motherName='" + motherName + '\'' +
+                '}';
+    }
 }

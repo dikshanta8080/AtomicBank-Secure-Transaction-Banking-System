@@ -1,10 +1,12 @@
 package com.banking.sathi.dao;
 
+import com.banking.sathi.enums.Gender;
 import com.banking.sathi.model.Kyc;
 import com.banking.sathi.repository.KycRepository;
 import com.banking.sathi.utils.QueryUtil;
 
 import java.sql.*;
+import java.time.LocalDate;
 import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -69,19 +71,38 @@ public class KycDao implements KycRepository {
     }
 
     public Optional<Kyc> findByUserId(Long userId, Connection con) {
-        Kyc kyc;
-        try (
-                PreparedStatement ps = con.prepareStatement(QueryUtil.SELECT_KYC_BY_USERID);
 
-        ) {
+        try (PreparedStatement ps = con.prepareStatement(QueryUtil.SELECT_KYC_BY_USERID)) {
+
             ps.setLong(1, userId);
-            ResultSet rs = ps.executeQuery();
-            if (rs.next()) {
 
+            try (ResultSet rs = ps.executeQuery()) {
+
+                if (rs.next()) {
+
+                    Kyc kyc = new Kyc();
+
+                    kyc.setId(rs.getLong("id"));
+                    kyc.setUserId(rs.getLong("user_id"));
+                    kyc.setDob(rs.getDate("dob") != null ? rs.getDate("dob").toLocalDate() : null);
+                    kyc.setGender(Gender.valueOf(rs.getString("gender").toUpperCase()));
+                    kyc.setIncome(rs.getDouble("income"));
+                    kyc.setIssue(rs.getObject("issue_date", LocalDate.class));
+                    kyc.setCitizenship(rs.getString("citizenship"));
+                    kyc.setDistrict(rs.getString("district"));
+                    kyc.setPhone(rs.getString("phone"));
+                    kyc.setOccupation(rs.getString("occupation"));
+                    kyc.setReason(rs.getString("reason"));
+
+
+                    return Optional.of(kyc);
+                }
             }
+
         } catch (SQLException e) {
-            logger.log(Level.SEVERE, "failed to execute query {e}, ", e);
+            logger.log(Level.SEVERE, "failed to execute query", e);
         }
+
         return Optional.empty();
     }
 

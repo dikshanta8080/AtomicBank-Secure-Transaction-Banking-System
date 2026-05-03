@@ -1,9 +1,11 @@
 package com.banking.sathi.controller;
 
+import com.banking.sathi.dao.AccountDao;
 import com.banking.sathi.enums.Role;
 import com.banking.sathi.exceptions.AuthenticationFailedException;
 import com.banking.sathi.exceptions.UserDoesnotExistsException;
 import com.banking.sathi.model.User;
+import com.banking.sathi.repository.AccountRepository;
 import com.banking.sathi.service.AuthService;
 import com.banking.sathi.validators.UserValidator;
 import jakarta.servlet.ServletConfig;
@@ -20,11 +22,13 @@ import java.io.IOException;
 public class LoginServlet extends HttpServlet {
 
     private AuthService authService;
+    private AccountRepository accountRepository;
 
     @Override
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
         this.authService = new AuthService();
+        this.accountRepository = new AccountDao();
     }
 
     @Override
@@ -62,7 +66,11 @@ public class LoginServlet extends HttpServlet {
             if (user.getRole() == Role.ADMIN) {
                 resp.sendRedirect(contextPath + "/admin/dashboard");
             } else {
-                resp.sendRedirect(contextPath + "/user/dashboard");
+                if (accountRepository.existsByUserId(user.getId())) {
+                    resp.sendRedirect(contextPath + "/user/dashboard");
+                } else {
+                    resp.sendRedirect(contextPath + "/account");
+                }
             }
 
         } catch (IllegalArgumentException | UserDoesnotExistsException | AuthenticationFailedException e) {

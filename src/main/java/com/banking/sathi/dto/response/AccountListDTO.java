@@ -81,4 +81,17 @@ public class AccountListDTO {
     public void setAccountStatus(AccountStatus accountStatus) {
         this.accountStatus = accountStatus;
     }
+
+    @Override
+    public String toString() {
+        return "AccountListDTO{" +
+                "userId=" + userId +
+                ", name='" + name + '\'' +
+                ", email='" + email + '\'' +
+                ", phone='" + phone + '\'' +
+                ", kycStatus=" + kycStatus +
+                ", accountType=" + accountType +
+                ", accountStatus=" + accountStatus +
+                '}';
+    }
 }
