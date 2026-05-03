@@ -66,6 +66,7 @@ public class LoginServlet extends HttpServlet {
             newSession.setAttribute("user", user);
 
             String contextPath = req.getContextPath();
+            
 
             if (user.getRole() == Role.ADMIN) {
                 resp.sendRedirect(contextPath + "/AdminDashboard");

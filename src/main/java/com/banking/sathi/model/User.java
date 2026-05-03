@@ -23,6 +23,9 @@ public class User {
         this.userStatus = userStatus;
     }
 
+    public User() {
+    }
+
     public User(Long id, String name, String email, String password, Role role, UserStatus userStatus, LocalDateTime created, LocalDateTime updated) {
         this.id = id;
         this.name = name;
