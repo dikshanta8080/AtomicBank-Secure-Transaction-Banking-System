@@ -155,4 +155,18 @@ public class UserDao implements UserRepository {
         }
         return 0;
     }
+
+    @Override
+    public boolean existsByRoleAdmin() {
+        try (
+                Connection con = DbConnection.getConnection();
+                PreparedStatement ps = con.prepareStatement(QueryUtil.FIND_USER_BY_ROLE);
+        ) {
+            ResultSet rs = ps.executeQuery();
+            return rs.next();
+        } catch (SQLException e) {
+            logger.log(Level.SEVERE, "Failed to execute the query {e}, ", e);
+        }
+        return false;
+    }
 }

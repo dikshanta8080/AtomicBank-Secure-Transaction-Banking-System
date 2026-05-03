@@ -86,13 +86,18 @@
         <input type="text" name="citizenshipDistrict" placeholder="District" required>
         <input type="text" name="phone" placeholder="Phone" required>
         <input type="text" name="occupation" placeholder="Occupation">
-        <input type="number" name="income" placeholder="Income">
+
+
+        <input type="number" name="income" placeholder="Income" step="0.01" min="0">
 
         <h3>Address</h3>
         <input type="text" name="province" placeholder="Province">
         <input type="text" name="district" placeholder="District">
         <input type="text" name="city" placeholder="City">
-        <input type="number" name="ward" placeholder="Ward">
+
+
+        <input type="number" name="ward" placeholder="Ward" min="1" max="32" step="1">
+
         <input type="text" name="tole" placeholder="Tole">
 
         <h3>Family</h3>

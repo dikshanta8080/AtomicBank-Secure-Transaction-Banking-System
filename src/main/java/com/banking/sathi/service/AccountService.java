@@ -197,4 +197,24 @@ public class AccountService {
     public AccountDetailDTO getPendingApprovalAccountDetails(Long userId) {
         return accountRepository.getDetailedPendingApproval(userId);
     }
+
+    public boolean deleteAccountByUserId(Long userId) {
+        Connection con = null;
+        try {
+            con = DbConnection.getConnection();
+            con.setAutoCommit(false);
+
+            boolean isKycDeleted = kycRepository.deleteByUserId(userId, con);
+            boolean isAddressDeleted = addressRepository.deleteByUserId(userId, con);
+            boolean isFamilyDeleted = familyRepository.deleteByUserId(userId, con);
+            boolean isAccountDeleted = accountRepository.deleteByUserId(userId, con);
+            if (!(isAccountDeleted || isFamilyDeleted || isAddressDeleted || isKycDeleted)) {
+                throw new AccountDeletionFailedException("Failed to delete the Account");
+            }
+            return true;
+        } catch (SQLException e) {
+            logger.log(Level.SEVERE, "Failed to close connection", e);
+        }
+        return false;
+    }
 }

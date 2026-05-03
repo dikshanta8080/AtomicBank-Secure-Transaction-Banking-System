@@ -18,5 +18,7 @@ public interface KycRepository {
 
     Optional<Kyc> findByUserId(Long userId, Connection con);
 
+    boolean deleteByUserId(Long userId, Connection con);
+
 
 }

@@ -49,4 +49,20 @@ public class AddressDao implements AddressRepository {
         }
         return false;
     }
+
+    @Override
+    public boolean deleteByUserId(Long userId, Connection con) {
+
+        try (PreparedStatement ps = con.prepareStatement(QueryUtil.DELETE_ADDRESS_BY_USERID)) {
+            ps.setLong(1, userId);
+
+            int rowsAffected = ps.executeUpdate();
+            return rowsAffected > 0;
+
+        } catch (SQLException e) {
+            logger.log(Level.SEVERE, "failed to execute query {e}, ", e);
+
+        }
+        return false;
+    }
 }
