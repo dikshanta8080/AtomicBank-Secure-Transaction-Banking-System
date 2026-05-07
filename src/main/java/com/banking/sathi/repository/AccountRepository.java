@@ -32,4 +32,12 @@ public interface AccountRepository {
     Optional<Account> findByUserId(Long userId);
 
     boolean freezeAccount(Long userId);
+
+    int getNumberOfPendingApprovals();
+
+    int getTotalNumberOfAccounts();
+
+    double getTotalDeposits();
+
+    double getBalanceByUserId(Long userId);
 }
