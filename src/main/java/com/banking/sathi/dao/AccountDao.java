@@ -140,6 +140,20 @@ public class AccountDao implements AccountRepository {
     }
 
     @Override
+    public boolean freezeAccount(Long userId) {
+        try (
+                Connection con = DbConnection.getConnection();
+                PreparedStatement ps = con.prepareStatement(QueryUtil.FREEZE_ACCOUNT);
+        ) {
+            ps.setLong(1, userId);
+            return ps.executeUpdate() > 0;
+        } catch (SQLException e) {
+            logger.log(Level.SEVERE, "failed to execute query {e}, ", e);
+        }
+        return false;
+    }
+
+    @Override
     public List<AccountListDTO> getPendingAccounts() {
 
         List<AccountListDTO> list = new ArrayList<>();

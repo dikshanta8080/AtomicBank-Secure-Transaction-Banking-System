@@ -198,6 +198,11 @@ public class AccountService {
         return accountRepository.getDetailedPendingApproval(userId);
     }
 
+    public boolean freezeAccountByUserId(Long userId) {
+        return accountRepository.freezeAccount(userId);
+    }
+
+    // This can be called to reject the account creation form.
     public boolean deleteAccountByUserId(Long userId) {
         Connection con = null;
         try {

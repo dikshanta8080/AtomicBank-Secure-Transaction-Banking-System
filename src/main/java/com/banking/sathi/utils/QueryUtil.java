@@ -31,6 +31,7 @@ public class QueryUtil {
     public static final String INSERT_ACCOUNT_QUERY = "INSERT INTO accounts (user_id,account_number,transaction_pin,account_type,balance,account_status) VALUES (?,?,?,?,?,?)";
     public static final String DELETE_ACCOUNT_QUERY = "DELETE FROM accounts WHERE id=?";
     public static final String DELETE_ACCOUNT_BY_USERID = "DELETE FROM accounts WHERE user_id=?";
+    public static final String FREEZE_ACCOUNT = "UPDATE accounts SET account_status='FROZEN' WHERE user_id=? ";
     public static final String VERIFY_ACCOUNT_QUERY = "UPDATE accounts SET account_status='ACTIVE' WHERE id=? ";
     public static final String FIND_BY_USERID_QUERY = "SELECT * FROM accounts WHERE user_id=? ";
     public static final String SELECT_PENDING_ACCOUNT_APPROVALS = "SELECT \n" +
