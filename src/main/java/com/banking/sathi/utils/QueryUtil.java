@@ -84,4 +84,7 @@ public class QueryUtil {
             "LEFT JOIN addresses ad ON u.id = ad.user_id\n" +
             "LEFT JOIN family f ON u.id = f.user_id\n" +
             "WHERE u.id = ?;";
+
+    // ===================== CARD =====================
+    public static final String INSERT_CARD_QUERY = "INSERT INTO CARD (account_id,card_number,type,status,credit_limit,expiry_date,cvv) VALUES (?,?,?,?,?,?,?)";
 }

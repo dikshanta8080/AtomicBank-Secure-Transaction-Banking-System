@@ -40,4 +40,6 @@ public interface AccountRepository {
     double getTotalDeposits();
 
     double getBalanceByUserId(Long userId);
+
+    Account findAccountByUserId(Long userId);
 }

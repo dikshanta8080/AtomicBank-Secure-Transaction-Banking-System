@@ -222,6 +222,11 @@ public class AccountDao implements AccountRepository {
     }
 
     @Override
+    public Account findAccountByUserId(Long userId) {
+        return null;
+    }
+
+    @Override
     public List<AccountListDTO> getPendingAccounts() {
 
         List<AccountListDTO> list = new ArrayList<>();
