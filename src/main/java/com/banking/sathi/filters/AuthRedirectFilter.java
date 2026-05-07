@@ -52,7 +52,7 @@ public class AuthRedirectFilter implements Filter {
         User user = (User) session.getAttribute("user");
 
         if (user.getRole() == Role.ADMIN) {
-            if (!path.startsWith("/AdminDashboard")) {
+            if (!path.startsWith("/AdminDashboard") && !path.startsWith("/admin")) {
                 response.sendRedirect(contextPath + "/AdminDashboard");
                 return;
             }
@@ -97,7 +97,7 @@ public class AuthRedirectFilter implements Filter {
             filterChain.doFilter(request, response);
             return;
         }
-        
+
         if (!path.startsWith("/UserDashboard")) {
             response.sendRedirect(contextPath + "/UserDashboard");
             return;

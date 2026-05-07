@@ -71,4 +71,5 @@ public class AuthService {
         existingUser.setPassword(null);
         return existingUser;
     }
+
 }

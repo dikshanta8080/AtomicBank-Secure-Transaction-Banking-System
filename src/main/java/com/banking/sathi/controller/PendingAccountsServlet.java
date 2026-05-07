@@ -27,13 +27,11 @@ public class PendingAccountsServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
-
         List<AccountListDTO> accounts = accountService.getPendingApprovalAccounts();
-
 
         req.setAttribute("accounts", accounts);
 
-        req.getRequestDispatcher("/views/admin/pendingAccounts.jsp")
+        req.getRequestDispatcher("/views/account/pendingAccounts.jsp")
                 .forward(req, resp);
     }
 }
