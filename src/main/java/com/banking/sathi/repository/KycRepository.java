@@ -20,5 +20,7 @@ public interface KycRepository {
 
     boolean deleteByUserId(Long userId, Connection con);
 
+    Double findKycIncomeByAccount(Long accountId);
+
 
 }

@@ -1,4 +1,4 @@
-package com.banking.sathi.model;
+package com.banking.sathi.dto.response;
 
 import com.banking.sathi.enums.CardStatus;
 import com.banking.sathi.enums.CardType;
@@ -6,34 +6,31 @@ import com.banking.sathi.enums.CardType;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-public class Card {
+public class CardResponseDto {
     private Long id;
     private Long accountId;
     private String cardNumber;
     private CardType type;
     private CardStatus status;
     private Double creditLimit;
+    private Double monthlyIncome;
     private LocalDate expiryDate;
-    private String cvv;
-    private String rejectionReason;
-    private LocalDateTime created;
-    private LocalDateTime updated;
+    private LocalDateTime appliedDate;
 
-    public Card() {
+    public CardResponseDto() {
+     
     }
 
-    public Card(Long id, Long accountId, String cardNumber, CardType type, CardStatus status, Double creditLimit, LocalDate expiryDate, String cvv, String rejectionReason, LocalDateTime created, LocalDateTime updated) {
+    public CardResponseDto(Long id, Long accountId, String cardNumber, CardType type, CardStatus status, Double creditLimit, Double monthlyIncome, LocalDate expiryDate, LocalDateTime appliedDate) {
         this.id = id;
         this.accountId = accountId;
         this.cardNumber = cardNumber;
         this.type = type;
         this.status = status;
         this.creditLimit = creditLimit;
+        this.monthlyIncome = monthlyIncome;
         this.expiryDate = expiryDate;
-        this.cvv = cvv;
-        this.rejectionReason = rejectionReason;
-        this.created = created;
-        this.updated = updated;
+        this.appliedDate = appliedDate;
     }
 
     public Long getId() {
@@ -84,6 +81,14 @@ public class Card {
         this.creditLimit = creditLimit;
     }
 
+    public Double getMonthlyIncome() {
+        return monthlyIncome;
+    }
+
+    public void setMonthlyIncome(Double monthlyIncome) {
+        this.monthlyIncome = monthlyIncome;
+    }
+
     public LocalDate getExpiryDate() {
         return expiryDate;
     }
@@ -92,35 +97,11 @@ public class Card {
         this.expiryDate = expiryDate;
     }
 
-    public String getCvv() {
-        return cvv;
+    public LocalDateTime getAppliedDate() {
+        return appliedDate;
     }
 
-    public void setCvv(String cvv) {
-        this.cvv = cvv;
-    }
-
-    public String getRejectionReason() {
-        return rejectionReason;
-    }
-
-    public void setRejectionReason(String rejectionReason) {
-        this.rejectionReason = rejectionReason;
-    }
-
-    public LocalDateTime getCreated() {
-        return created;
-    }
-
-    public void setCreated(LocalDateTime created) {
-        this.created = created;
-    }
-
-    public LocalDateTime getUpdated() {
-        return updated;
-    }
-
-    public void setUpdated(LocalDateTime updated) {
-        this.updated = updated;
+    public void setAppliedDate(LocalDateTime appliedDate) {
+        this.appliedDate = appliedDate;
     }
 }

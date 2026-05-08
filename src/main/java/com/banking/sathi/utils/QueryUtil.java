@@ -34,6 +34,10 @@ public class QueryUtil {
     public static final String FREEZE_ACCOUNT = "UPDATE accounts SET account_status='FROZEN' WHERE user_id=? ";
     public static final String VERIFY_ACCOUNT_QUERY = "UPDATE accounts SET account_status='ACTIVE' WHERE id=? ";
     public static final String FIND_BY_USERID_QUERY = "SELECT * FROM accounts WHERE user_id=? ";
+    public static final String GET_TOTAL_ACCOUNT_COUNT = "SELECT COUNT(*) as accountCounts FROM accounts";
+    public static final String GET_TOTAL_DEPOSITS = "SELECT SUM(a.balance) as totalDeposits FROM accounts a";
+    public static final String FIND_BALANCE_BY_USERID = "SELECT balance FROM accounts WHERE user_id=?";
+    public static final String GET_NUMBER_OF_PENDING_ACCOUNTS = "SELECT count(*) AS pendingApprovals FROM accounts a WHERE a.status='INACTIVE'";
     public static final String SELECT_PENDING_ACCOUNT_APPROVALS = "SELECT \n" +
             "    u.id AS userId,\n" +
             "    u.name AS name,\n" +
@@ -80,4 +84,23 @@ public class QueryUtil {
             "LEFT JOIN addresses ad ON u.id = ad.user_id\n" +
             "LEFT JOIN family f ON u.id = f.user_id\n" +
             "WHERE u.id = ?;";
+
+    // ===================== CARD =====================
+    public static final String INSERT_CARD_QUERY = "INSERT INTO CARD (account_id,card_number,type,status,credit_limit,expiry_date,cvv) VALUES (?,?,?,?,?,?,?)";
+    public static final String DELETE_CARD_QUERY = "DELETE FROM cards WHERE id=?";
+    public static final String FIND_CARD_BY_ID = "SELECT * FROM cards WHERE id=?";
+    public static final String FIND_CARD_BY_ACCOUNT = "SELECT * FROM cards WHERE account_id=?";
+    public static final String FIND_ALL_CARDS = "SELECT * FROM cards";
+    public static final String FIND_PENDING_APPROVAL_CARDS = "SELECT * FROM cards WHERE status='PENDING'";
+    public static final String VERIFY_CARD = "UPDATE cards SET status='APPROVED' WHERE id=?";
+    public static final String REJECT_CARD = "UPDATE cards SET status='REJECTED' WHERE id=?";
+    public static final String FIND_NUMBER_OF_PENDING_CARD_APPROVALS = "SELECT COUNT(*) as numberOfPendingCard FROM cards WHERE status='PENDING'";
+    public static final String FIND_TOTAL_NUMBER_OF_CARDS = "SELECT COUNT(*) as totalCards FROM cards ";
+    public static final String FIND_KYC_INCOME_BY_ACCOUNT = "SELECT income as annualAincome FROM KYC k\n" +
+            "JOIN users u \n" +
+            "ON k.user_id=u.id\n" +
+            "JOIN accounts a\n" +
+            "ON a.user_id=u.id\n" +
+            "WHERE a.id=?;";
+
 }

@@ -154,6 +154,79 @@ public class AccountDao implements AccountRepository {
     }
 
     @Override
+    public int getNumberOfPendingApprovals() {
+        int approvals = 0;
+        try (
+                Connection con = DbConnection.getConnection();
+                PreparedStatement ps = con.prepareStatement(QueryUtil.GET_NUMBER_OF_PENDING_ACCOUNTS);
+                ResultSet rs = ps.executeQuery();
+        ) {
+
+            if (rs.next()) approvals = rs.getInt("pendingApprovals");
+
+            return approvals;
+        } catch (SQLException e) {
+            logger.log(Level.SEVERE, "Failed to get number of pending approvals {e}", e);
+        }
+        return approvals;
+    }
+
+    @Override
+    public int getTotalNumberOfAccounts() {
+        int accounts = 0;
+        try (
+                Connection con = DbConnection.getConnection();
+                PreparedStatement ps = con.prepareStatement(QueryUtil.GET_TOTAL_ACCOUNT_COUNT);
+                ResultSet rs = ps.executeQuery();
+
+        ) {
+
+            if (rs.next()) accounts = rs.getInt("totalAccounts");
+        } catch (SQLException e) {
+            logger.log(Level.SEVERE, "failed to execute query {e}, ", e);
+        }
+        return accounts;
+    }
+
+    @Override
+    public double getTotalDeposits() {
+        double deposits = 0.0d;
+        try (
+                Connection con = DbConnection.getConnection();
+                PreparedStatement ps = con.prepareStatement(QueryUtil.GET_TOTAL_DEPOSITS);
+                ResultSet rs = ps.executeQuery();
+        ) {
+
+            if (rs.next()) deposits = rs.getDouble("deposits");
+
+        } catch (SQLException e) {
+            logger.log(Level.SEVERE, "Failed to get the total number of deposits {e}", e);
+        }
+        return deposits;
+    }
+
+    @Override
+    public double getBalanceByUserId(Long userId) {
+        double balance = 0.0d;
+        try (
+                Connection con = DbConnection.getConnection();
+                PreparedStatement ps = con.prepareStatement(QueryUtil.FIND_BALANCE_BY_USERID);
+        ) {
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) balance = rs.getDouble("balance");
+
+        } catch (SQLException e) {
+            logger.log(Level.SEVERE, "Failed to get the total number of deposits {e}", e);
+        }
+        return balance;
+    }
+
+    @Override
+    public Account findAccountByUserId(Long userId) {
+        return null;
+    }
+
+    @Override
     public List<AccountListDTO> getPendingAccounts() {
 
         List<AccountListDTO> list = new ArrayList<>();

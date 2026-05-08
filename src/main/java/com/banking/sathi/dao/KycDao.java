@@ -3,6 +3,7 @@ package com.banking.sathi.dao;
 import com.banking.sathi.enums.Gender;
 import com.banking.sathi.model.Kyc;
 import com.banking.sathi.repository.KycRepository;
+import com.banking.sathi.utils.DbConnection;
 import com.banking.sathi.utils.QueryUtil;
 
 import java.sql.*;
@@ -120,6 +121,21 @@ public class KycDao implements KycRepository {
 
         }
         return false;
+    }
+
+    @Override
+    public Double findKycIncomeByAccount(Long accountId) {
+        Double annualIncome = 0.0d;
+        try (
+                Connection con = DbConnection.getConnection();
+                PreparedStatement ps = con.prepareStatement(QueryUtil.FIND_KYC_INCOME_BY_ACCOUNT);
+        ) {
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) annualIncome = rs.getDouble("annualAincome");
+        } catch (SQLException e) {
+            logger.log(Level.SEVERE, "Failed to retreve the income");
+        }
+        return annualIncome;
     }
 
     @Override
