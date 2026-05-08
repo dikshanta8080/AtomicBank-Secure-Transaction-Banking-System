@@ -91,6 +91,8 @@ public class QueryUtil {
     public static final String FIND_CARD_BY_ID = "SELECT * FROM cards WHERE id=?";
     public static final String FIND_CARD_BY_ACCOUNT = "SELECT * FROM cards WHERE account_id=?";
     public static final String FIND_ALL_CARDS = "SELECT * FROM cards";
-
+    public static final String FIND_PENDING_APPROVAL_CARDS = "SELECT * FROM cards WHERE status='PENDING'";
+    public static final String FIND_NUMBER_OF_PENDING_CARD_APPROVALS = "SELECT COUNT(*) as numberOfPendingCard FROM cards WHERE status='PENDING'";
+    public static final String FIND_TOTAL_NUMBER_OF_CARDS = "SELECT COUNT(*) as totalCards FROM cards ";
 
 }

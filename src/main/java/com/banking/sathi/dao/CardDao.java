@@ -1,14 +1,14 @@
 package com.banking.sathi.dao;
 
+import com.banking.sathi.dto.response.CardResponseDto;
 import com.banking.sathi.model.Card;
 import com.banking.sathi.repository.CardRepository;
 import com.banking.sathi.utils.DbConnection;
 import com.banking.sathi.utils.QueryUtil;
 
-import java.sql.Connection;
-import java.sql.Date;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import java.sql.*;
+import java.util.List;
+import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -42,7 +42,48 @@ public class CardDao implements CardRepository {
     }
 
     @Override
-    public Card findById(Long cardId) {
-        return null;
+    public Optional<Card> findById(Long cardId) {
+        return Optional.empty();
+    }
+
+    @Override
+    public List<Card> findAllCards() {
+        return List.of();
+    }
+
+    @Override
+    public List<CardResponseDto> getPendingApprovalCards() {
+        return List.of();
+    }
+
+    @Override
+    public Optional<CardResponseDto> findPendingCard(Long cardId) {
+        return Optional.empty();
+    }
+
+    @Override
+    public int findNumberOfPendingApprovals() {
+        int pendingApprovals = 0;
+        try (
+                Connection con = DbConnection.getConnection();
+                PreparedStatement ps = con.prepareStatement(QueryUtil.FIND_NUMBER_OF_PENDING_CARD_APPROVALS)
+        ) {
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) pendingApprovals = rs.getInt("numberOfPendingCard");
+
+        } catch (SQLException e) {
+            logger.log(Level.SEVERE, "Failed to retrive the number of approvals");
+        }
+        return pendingApprovals;
+    }
+
+    @Override
+    public int findTotalNumberIfCards() {
+        return 0;
+    }
+
+    @Override
+    public List<Card> findCardByAccount(Long accountId) {
+        return List.of();
     }
 }
