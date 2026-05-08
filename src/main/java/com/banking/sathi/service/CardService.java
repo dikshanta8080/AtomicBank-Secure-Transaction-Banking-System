@@ -5,6 +5,7 @@ import com.banking.sathi.dao.CardDao;
 import com.banking.sathi.dao.KycDao;
 import com.banking.sathi.dao.UserDao;
 import com.banking.sathi.dto.request.CardRequestDto;
+import com.banking.sathi.dto.response.CardResponseDto;
 import com.banking.sathi.enums.CardStatus;
 import com.banking.sathi.exceptions.AccountDoesNotExistsException;
 import com.banking.sathi.exceptions.KycDoesnotExistsException;
@@ -22,8 +23,11 @@ import com.banking.sathi.utils.DbConnection;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.List;
+import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 public class CardService {
     private static final Logger logger = Logger.getLogger(CardService.class.getName());
@@ -41,6 +45,19 @@ public class CardService {
 
     private boolean checkEligibilityForRequestedLimit(Double annualIncome, Double requestedCreditLimit) {
         return requestedCreditLimit > ((annualIncome) / 12) * 4;
+
+    }
+
+    public List<CardResponseDto> getPendingApprovalCards() {
+        List<CardResponseDto> pendingApprovalCards = cardRepository.getPendingApprovalCards();
+        return pendingApprovalCards.stream().map(
+                pendingApprovalCard -> {
+                    Double annualIncome = kycRepository.findKycIncomeByAccount(pendingApprovalCard.getAccountId());
+                    pendingApprovalCard.setMonthlyIncome(annualIncome != null ? annualIncome / 12 : 0);
+                    return pendingApprovalCard;
+
+                }
+        ).collect(Collectors.toList());
 
     }
 
@@ -88,5 +105,13 @@ public class CardService {
             }
         }
         return false;
+    }
+
+    Optional<CardResponseDto> findPendingCard(Long cardId) {
+        CardResponseDto pendingCard = cardRepository.findPendingCard(cardId).orElseThrow(() ->
+                new RuntimeException("card does not exists"));
+        Double annualIncome = kycRepository.findKycIncomeByAccount(pendingCard.getAccountId());
+        pendingCard.setMonthlyIncome(annualIncome != null ? annualIncome : 0);
+        return Optional.of(pendingCard);
     }
 }

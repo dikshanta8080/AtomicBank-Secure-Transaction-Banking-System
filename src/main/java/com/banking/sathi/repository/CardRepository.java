@@ -21,7 +21,11 @@ public interface CardRepository {
 
     int findNumberOfPendingApprovals();
 
-    int findTotalNumberIfCards();
+    int findTotalNumberOfCards();
 
     List<Card> findCardByAccount(Long accountId);
+
+    boolean verifyCard(Long cardId);
+
+    boolean rejectCard(Long cardId);
 }

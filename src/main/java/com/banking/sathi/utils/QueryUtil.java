@@ -92,7 +92,15 @@ public class QueryUtil {
     public static final String FIND_CARD_BY_ACCOUNT = "SELECT * FROM cards WHERE account_id=?";
     public static final String FIND_ALL_CARDS = "SELECT * FROM cards";
     public static final String FIND_PENDING_APPROVAL_CARDS = "SELECT * FROM cards WHERE status='PENDING'";
+    public static final String VERIFY_CARD = "UPDATE cards SET status='APPROVED' WHERE id=?";
+    public static final String REJECT_CARD = "UPDATE cards SET status='REJECTED' WHERE id=?";
     public static final String FIND_NUMBER_OF_PENDING_CARD_APPROVALS = "SELECT COUNT(*) as numberOfPendingCard FROM cards WHERE status='PENDING'";
     public static final String FIND_TOTAL_NUMBER_OF_CARDS = "SELECT COUNT(*) as totalCards FROM cards ";
+    public static final String FIND_KYC_INCOME_BY_ACCOUNT = "SELECT income as annualAincome FROM KYC k\n" +
+            "JOIN users u \n" +
+            "ON k.user_id=u.id\n" +
+            "JOIN accounts a\n" +
+            "ON a.user_id=u.id\n" +
+            "WHERE a.id=?;";
 
 }
