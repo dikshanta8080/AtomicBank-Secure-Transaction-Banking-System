@@ -87,4 +87,10 @@ public class QueryUtil {
 
     // ===================== CARD =====================
     public static final String INSERT_CARD_QUERY = "INSERT INTO CARD (account_id,card_number,type,status,credit_limit,expiry_date,cvv) VALUES (?,?,?,?,?,?,?)";
+    public static final String DELETE_CARD_QUERY = "DELETE FROM cards WHERE id=?";
+    public static final String FIND_CARD_BY_ID = "SELECT * FROM cards WHERE id=?";
+    public static final String FIND_CARD_BY_ACCOUNT = "SELECT * FROM cards WHERE account_id=?";
+    public static final String FIND_ALL_CARDS = "SELECT * FROM cards";
+
+
 }

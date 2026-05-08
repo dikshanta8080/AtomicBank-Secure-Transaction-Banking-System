@@ -35,4 +35,14 @@ public class CardDao implements CardRepository {
         return 0;
 
     }
+
+    @Override
+    public int deleteCard(Long cardId) {
+        return 0;
+    }
+
+    @Override
+    public Card findById(Long cardId) {
+        return null;
+    }
 }
