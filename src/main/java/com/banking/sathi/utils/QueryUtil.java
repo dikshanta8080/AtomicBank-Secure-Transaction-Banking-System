@@ -34,6 +34,12 @@ public class QueryUtil {
     public static final String FREEZE_ACCOUNT = "UPDATE accounts SET account_status='FROZEN' WHERE user_id=? ";
     public static final String VERIFY_ACCOUNT_QUERY = "UPDATE accounts SET account_status='ACTIVE' WHERE id=? ";
     public static final String FIND_BY_USERID_QUERY = "SELECT * FROM accounts WHERE user_id=? ";
+    public static final String LOCK_ACCOUNT_ROW_FOR_UPDATE = "SELECT id, balance, account_status, transaction_pin " +
+            "FROM accounts " +
+            "WHERE account_id = ? " +
+            "FOR UPDATE";
+    public static final String DEPOSIT_MONEY = "UPDATE accounts SET balance= balance + ? WHERE id=?";
+    public static final String WITHDRAW_MONEY = "UPDATE accounts SET balance= balance - ? WHERE id=?";
     public static final String GET_TOTAL_ACCOUNT_COUNT = "SELECT COUNT(*) as accountCounts FROM accounts";
     public static final String GET_TOTAL_DEPOSITS = "SELECT SUM(a.balance) as totalDeposits FROM accounts a";
     public static final String FIND_BALANCE_BY_USERID = "SELECT balance FROM accounts WHERE user_id=?";

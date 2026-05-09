@@ -42,4 +42,10 @@ public interface AccountRepository {
     double getBalanceByUserId(Long userId);
 
     Account findAccountByUserId(Long userId);
+
+    int deposit(Long accountId, Double balance, Connection con);
+
+    int withdraw(Long accountId, Double balance, Connection con);
+
+    Account lockRowsForUpdate(Connection con, Long accountId);
 }

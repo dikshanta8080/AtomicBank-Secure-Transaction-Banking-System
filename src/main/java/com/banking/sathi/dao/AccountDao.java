@@ -227,6 +227,68 @@ public class AccountDao implements AccountRepository {
     }
 
     @Override
+    public int deposit(Long accountId, Double balance, Connection con) {
+        try (
+                PreparedStatement ps = con.prepareStatement(QueryUtil.DEPOSIT_MONEY);
+        ) {
+            ps.setDouble(1, balance);
+            ps.setLong(2, accountId);
+            return ps.executeUpdate();
+        } catch (SQLException e) {
+            logger.log(Level.SEVERE, "Failed to deposit!");
+        }
+        return 0;
+    }
+
+    @Override
+    public int withdraw(Long accountId, Double balance, Connection con) {
+        try (
+                PreparedStatement ps = con.prepareStatement(QueryUtil.WITHDRAW_MONEY);
+        ) {
+            ps.setDouble(1, balance);
+            ps.setLong(2, accountId);
+            return ps.executeUpdate();
+        } catch (SQLException e) {
+            logger.log(Level.SEVERE, "Failed to deposit!");
+        }
+        return 0;
+    }
+
+    @Override
+    public Account lockRowsForUpdate(Connection con, Long accountId) {
+
+        Account account = null;
+
+        try (PreparedStatement ps =
+                     con.prepareStatement(QueryUtil.LOCK_ACCOUNT_ROW_FOR_UPDATE)) {
+
+            ps.setLong(1, accountId);
+
+            try (ResultSet rs = ps.executeQuery()) {
+
+                if (rs.next()) {
+
+                    account = new Account();
+
+                    account.setId(rs.getLong("id"));
+                    account.setBalance(rs.getDouble("balance"));
+                    account.setStatus(AccountStatus.valueOf(rs.getString("account_status")));
+                    account.setTransactionPin(rs.getString("transaction_pin"));
+                } else {
+                    throw new RuntimeException("Account not found");
+                }
+            }
+
+        } catch (SQLException e) {
+            logger.log(Level.SEVERE,
+                    "Failed to lock account row for update", e);
+            throw new RuntimeException(e);
+        }
+
+        return account;
+    }
+
+    @Override
     public List<AccountListDTO> getPendingAccounts() {
 
         List<AccountListDTO> list = new ArrayList<>();

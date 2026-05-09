@@ -222,4 +222,139 @@ public class AccountService {
         }
         return false;
     }
+
+    public boolean deposit(Long userId, Double amount, String transactionPin) {
+        Connection con = null;
+        try {
+            con = DbConnection.getConnection();
+            con.setAutoCommit(false);
+
+            if (amount == null || amount <= 0) {
+                throw new IllegalArgumentException("Deposit amount must be greater than 0");
+            }
+            Account account = accountRepository
+                    .findByUserId(userId, con)
+                    .orElseThrow(() ->
+                            new AccountDoesNotExistsException(
+                                    "No account linked to user"));
+
+            Account lockedAccount =
+                    accountRepository.lockRowsForUpdate(con, account.getId());
+
+            if (lockedAccount.getStatus() != AccountStatus.ACTIVE) {
+                throw new RuntimeException("Account is inactive, cannot deposit");
+            }
+
+            if (transactionPin == null || transactionPin.isBlank()) {
+                throw new InvalidTransactionPinException("PIN is required");
+            }
+
+            if (!BCrypt.checkpw(transactionPin,
+                    lockedAccount.getTransactionPin())) {
+                throw new InvalidTransactionPinException("Invalid transaction PIN");
+            }
+
+            int rows = accountRepository.deposit(
+                    lockedAccount.getId(),
+                    amount,
+                    con
+            );
+
+            con.commit();
+            return rows > 0;
+
+        } catch (Exception e) {
+
+            if (con != null) {
+                try {
+                    con.rollback();
+                } catch (Exception ex) {
+                    logger.log(Level.SEVERE,
+                            "Rollback failed", ex);
+                }
+            }
+
+            throw new RuntimeException(e);
+
+        } finally {
+
+            if (con != null) {
+                try {
+                    con.close();
+                } catch (Exception e) {
+                    logger.log(Level.SEVERE,
+                            "Connection close failed", e);
+                }
+            }
+        }
+    }
+
+    public boolean withdraw(Long userId, Double amount, String transactionPin) {
+        Connection con = null;
+
+        try {
+            con = DbConnection.getConnection();
+            con.setAutoCommit(false);
+
+            if (amount == null || amount <= 0) {
+                throw new IllegalArgumentException("Withdraw amount must be greater than 0");
+            }
+            Account account = accountRepository
+                    .findByUserId(userId, con)
+                    .orElseThrow(() ->
+                            new AccountDoesNotExistsException(
+                                    "No account linked to user"));
+
+            Account lockedAccount =
+                    accountRepository.lockRowsForUpdate(con, account.getId());
+
+            if (lockedAccount.getStatus() != AccountStatus.ACTIVE) {
+                throw new RuntimeException("Account is inactive, cannot withdraw");
+            }
+
+            if (transactionPin == null || transactionPin.isBlank()) {
+                throw new InvalidTransactionPinException("PIN is required");
+            }
+
+            if (!BCrypt.checkpw(transactionPin,
+                    lockedAccount.getTransactionPin())) {
+                throw new InvalidTransactionPinException("Invalid transaction PIN");
+            }
+
+            if (lockedAccount.getBalance() < amount) {
+                throw new IllegalArgumentException("Insufficient balance");
+            }
+
+            int rows = accountRepository.withdraw(
+                    lockedAccount.getId(),
+                    amount,
+                    con
+            );
+
+            con.commit();
+            return rows > 0;
+
+        } catch (Exception e) {
+
+            if (con != null) {
+                try {
+                    con.rollback();
+                } catch (Exception ex) {
+                    logger.log(Level.SEVERE, "Rollback failed", ex);
+                }
+            }
+
+            throw new RuntimeException(e);
+
+        } finally {
+
+            if (con != null) {
+                try {
+                    con.close();
+                } catch (Exception e) {
+                    logger.log(Level.SEVERE, "Connection close failed", e);
+                }
+            }
+        }
+    }
 }
