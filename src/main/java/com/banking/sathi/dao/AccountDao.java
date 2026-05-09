@@ -50,7 +50,7 @@ public class AccountDao implements AccountRepository {
     @Override
     public boolean existsByUserId(Long userId, Connection con) {
         try (
-                PreparedStatement ps = con.prepareStatement(QueryUtil.SELECT_FAMILY_BY_USERID);
+                PreparedStatement ps = con.prepareStatement(QueryUtil.FIND_BY_USERID_QUERY);
         ) {
             ps.setLong(1, userId);
             return ps.executeQuery().next();
@@ -106,7 +106,7 @@ public class AccountDao implements AccountRepository {
                 account.setTransactionPin(rs.getString("transaction_pin"));
                 account.setBalance(rs.getDouble("balance"));
             }
-            return Optional.of(account);
+            return Optional.ofNullable(account);
         } catch (SQLException e) {
             logger.log(Level.SEVERE, "failed to execute query {e}, ", e);
         }
@@ -212,6 +212,7 @@ public class AccountDao implements AccountRepository {
                 Connection con = DbConnection.getConnection();
                 PreparedStatement ps = con.prepareStatement(QueryUtil.FIND_BALANCE_BY_USERID);
         ) {
+            ps.setLong(1, userId);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) balance = rs.getDouble("balance");
 
@@ -401,7 +402,7 @@ public class AccountDao implements AccountRepository {
     public boolean existsByUserId(Long userId) {
         try (
                 Connection con = DbConnection.getConnection();
-                PreparedStatement ps = con.prepareStatement(QueryUtil.SELECT_FAMILY_BY_USERID);
+                PreparedStatement ps = con.prepareStatement(QueryUtil.FIND_BY_USERID_QUERY);
         ) {
             ps.setLong(1, userId);
             return ps.executeQuery().next();

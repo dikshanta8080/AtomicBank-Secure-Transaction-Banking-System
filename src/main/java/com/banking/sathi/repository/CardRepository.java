@@ -3,11 +3,12 @@ package com.banking.sathi.repository;
 import com.banking.sathi.dto.response.CardResponseDto;
 import com.banking.sathi.model.Card;
 
+import java.sql.Connection;
 import java.util.List;
 import java.util.Optional;
 
 public interface CardRepository {
-    int saveCard(Card card);
+    int saveCard(Card card, Connection con);
 
     int deleteCard(Long cardId);
 

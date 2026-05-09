@@ -21,9 +21,8 @@ public class CardDao implements CardRepository {
     private static final Logger logger = Logger.getLogger(CardDao.class.getName());
 
     @Override
-    public int saveCard(Card card) {
+    public int saveCard(Card card, Connection con) {
         try (
-                Connection con = DbConnection.getConnection();
                 PreparedStatement ps = con.prepareStatement(QueryUtil.INSERT_CARD_QUERY);
         ) {
             ps.setLong(1, card.getAccountId());
@@ -47,6 +46,7 @@ public class CardDao implements CardRepository {
                 Connection con = DbConnection.getConnection();
                 PreparedStatement ps = con.prepareStatement(QueryUtil.DELETE_CARD_QUERY);
         ) {
+            ps.setLong(1, cardId);
             return ps.executeUpdate();
         } catch (SQLException e) {
             logger.log(Level.SEVERE, "Failed to delete the card {e}", e);
@@ -61,6 +61,7 @@ public class CardDao implements CardRepository {
                 Connection con = DbConnection.getConnection();
                 PreparedStatement ps = con.prepareStatement(QueryUtil.FIND_CARD_BY_ID);
         ) {
+            ps.setLong(1, cardId);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
                 card = new Card();
@@ -207,8 +208,9 @@ public class CardDao implements CardRepository {
         try (
                 Connection con = DbConnection.getConnection();
                 PreparedStatement ps = con.prepareStatement(QueryUtil.FIND_CARD_BY_ACCOUNT);
-                ResultSet rs = ps.executeQuery();
         ) {
+            ps.setLong(1, accountId);
+            ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 card = new Card();
                 card.setId(rs.getLong("id"));

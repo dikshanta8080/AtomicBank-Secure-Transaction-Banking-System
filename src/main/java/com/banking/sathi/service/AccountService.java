@@ -214,12 +214,28 @@ public class AccountService {
             boolean isAddressDeleted = addressRepository.deleteByUserId(userId, con);
             boolean isFamilyDeleted = familyRepository.deleteByUserId(userId, con);
             boolean isAccountDeleted = accountRepository.deleteByUserId(userId, con);
-            if (!(isAccountDeleted || isFamilyDeleted || isAddressDeleted || isKycDeleted)) {
+            if (!(isAccountDeleted && isFamilyDeleted && isAddressDeleted && isKycDeleted)) {
                 throw new AccountDeletionFailedException("Failed to delete the Account");
             }
+            con.commit();
             return true;
-        } catch (SQLException e) {
-            logger.log(Level.SEVERE, "Failed to close connection", e);
+        } catch (Exception e) {
+            if (con != null) {
+                try {
+                    con.rollback();
+                } catch (SQLException ex) {
+                    logger.log(Level.SEVERE, "Rollback failed", ex);
+                }
+            }
+            logger.log(Level.SEVERE, "Failed to delete account", e);
+        } finally {
+            if (con != null) {
+                try {
+                    con.close();
+                } catch (SQLException e) {
+                    logger.log(Level.SEVERE, "Failed to close connection", e);
+                }
+            }
         }
         return false;
     }
@@ -303,9 +319,10 @@ public class AccountService {
                     // save failed transaction separately
                     con.setAutoCommit(true);
 
+                    tx.setType(tx.getType() == null ? TransactionType.DEPOSIT : tx.getType());
                     tx.setStatus(TransactionStatus.FAILED);
-                    tx.setRemarks(e.getMessage());
-
+                    tx.setRemarks(resolveErrorMessage(e));
+                    tx.setAmount(tx.getAmount() == null ? (amount == null ? 0d : amount) : tx.getAmount());
                     transactionRepository.saveTransaction(tx, con);
 
                 } catch (Exception ex) {
@@ -415,9 +432,10 @@ public class AccountService {
                     // save failed transaction
                     con.setAutoCommit(true);
 
+                    tx.setType(tx.getType() == null ? TransactionType.WITHDRAWAL : tx.getType());
                     tx.setStatus(TransactionStatus.FAILED);
-                    tx.setRemarks(e.getMessage());
-
+                    tx.setRemarks(resolveErrorMessage(e));
+                    tx.setAmount(tx.getAmount() == null ? (amount == null ? 0d : amount) : tx.getAmount());
                     transactionRepository.saveTransaction(tx, con);
 
                 } catch (Exception ex) {
@@ -439,5 +457,12 @@ public class AccountService {
                 }
             }
         }
+    }
+
+    private String resolveErrorMessage(Exception e) {
+        if (e.getMessage() != null && !e.getMessage().isBlank()) {
+            return e.getMessage();
+        }
+        return "Transaction failed";
     }
 }

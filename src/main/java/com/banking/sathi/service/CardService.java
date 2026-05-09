@@ -23,6 +23,7 @@ import com.banking.sathi.utils.DbConnection;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.logging.Level;
@@ -44,7 +45,10 @@ public class CardService {
     }
 
     private boolean checkEligibilityForRequestedLimit(Double annualIncome, Double requestedCreditLimit) {
-        return requestedCreditLimit > ((annualIncome) / 12) * 4;
+        if (annualIncome == null || annualIncome <= 0 || requestedCreditLimit == null || requestedCreditLimit <= 0) {
+            return false;
+        }
+        return requestedCreditLimit <= ((annualIncome) / 12) * 4;
 
     }
 
@@ -69,6 +73,9 @@ public class CardService {
             if (userId == null) {
                 throw new UserDoesnotExistsException("User does not exists");
             }
+            if (cardRequestDto.getCreditLimit() == null || cardRequestDto.getCreditLimit() <= 0) {
+                throw new IllegalArgumentException("Invalid requested credit limit");
+            }
             Kyc kyc = kycRepository.findByUserId(userId, con).orElseThrow(() -> new KycDoesnotExistsException("Kyc does not exists"));
             Account account = accountRepository.findByUserId(userId, con).orElseThrow(() -> new AccountDoesNotExistsException("Account does not exists"));
             String cardNumber = CardNumberGenerator.generateCardNumber();
@@ -82,12 +89,13 @@ public class CardService {
             card.setCvv(cvv);
             card.setType(cardRequestDto.getType());
             card.setStatus(CardStatus.PENDING);
-            card.setType(cardRequestDto.getType());
-            int rowsInserted = cardRepository.saveCard(card);
+            card.setCreditLimit(cardRequestDto.getCreditLimit());
+            card.setExpiryDate(LocalDate.now().plusYears(5));
+            int rowsInserted = cardRepository.saveCard(card, con);
             con.commit();
             return rowsInserted > 0;
 
-        } catch (SQLException e) {
+        } catch (Exception e) {
             if (con != null) {
                 try {
                     con.rollback();
@@ -95,6 +103,7 @@ public class CardService {
                     logger.log(Level.SEVERE, "Failed to roll back the transaction");
                 }
             }
+            throw new RuntimeException(e);
         } finally {
             if (con != null) {
                 try {
