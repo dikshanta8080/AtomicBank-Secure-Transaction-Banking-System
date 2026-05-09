@@ -109,4 +109,7 @@ public class QueryUtil {
             "ON a.user_id=u.id\n" +
             "WHERE a.id=?;";
 
+    // ===================== TRANSACTION =====================
+    public static final String INSERT_TRANSACTION_QUERY = "INSERT INTO transactions (from_account_id, to_account_id, type, status, amount, remarks) VALUES (?, ?, ?, ?, ?, ?)";
+
 }

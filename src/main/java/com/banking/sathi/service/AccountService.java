@@ -36,6 +36,7 @@ public class AccountService {
     private final KycMapper kycMapper;
     private final AddressMapper addressMapper;
     private final FamilyMapper familyMapper;
+    private final TransactionRepository transactionRepository;
 
     public AccountService() {
         this.kycRepository = new KycDao();
@@ -43,7 +44,7 @@ public class AccountService {
         this.accountRepository = new AccountDao();
         this.addressRepository = new AddressDao();
         this.userRepository = new UserDao();
-
+        this.transactionRepository = new TransactionDao();
         this.kycMapper = new KycMapper();
         this.addressMapper = new AddressMapper();
         this.familyMapper = new FamilyMapper();
@@ -223,15 +224,24 @@ public class AccountService {
         return false;
     }
 
-    public boolean deposit(Long userId, Double amount, String transactionPin) {
+    public boolean deposit(Long userId,
+                           Double amount,
+                           String transactionPin) {
+
         Connection con = null;
+
+        Transaction tx = new Transaction();
+
         try {
+
             con = DbConnection.getConnection();
             con.setAutoCommit(false);
 
             if (amount == null || amount <= 0) {
-                throw new IllegalArgumentException("Deposit amount must be greater than 0");
+                throw new IllegalArgumentException(
+                        "Deposit amount must be greater than 0");
             }
+
             Account account = accountRepository
                     .findByUserId(userId, con)
                     .orElseThrow(() ->
@@ -241,17 +251,26 @@ public class AccountService {
             Account lockedAccount =
                     accountRepository.lockRowsForUpdate(con, account.getId());
 
+            // prepare transaction log
+            tx.setToAccountId(lockedAccount.getId());
+            tx.setAmount(amount);
+            tx.setType(TransactionType.DEPOSIT);
+
             if (lockedAccount.getStatus() != AccountStatus.ACTIVE) {
-                throw new RuntimeException("Account is inactive, cannot deposit");
+                throw new RuntimeException(
+                        "Account is inactive, cannot deposit");
             }
 
             if (transactionPin == null || transactionPin.isBlank()) {
                 throw new InvalidTransactionPinException("PIN is required");
             }
 
-            if (!BCrypt.checkpw(transactionPin,
+            if (!BCrypt.checkpw(
+                    transactionPin,
                     lockedAccount.getTransactionPin())) {
-                throw new InvalidTransactionPinException("Invalid transaction PIN");
+
+                throw new InvalidTransactionPinException(
+                        "Invalid transaction PIN");
             }
 
             int rows = accountRepository.deposit(
@@ -260,14 +279,35 @@ public class AccountService {
                     con
             );
 
+            if (rows <= 0) {
+                throw new RuntimeException("Deposit failed");
+            }
+
+            // success transaction
+            tx.setStatus(TransactionStatus.SUCCESS);
+            tx.setRemarks("Deposit successful");
+
+            transactionRepository.saveTransaction(tx, con);
+
             con.commit();
-            return rows > 0;
+
+            return true;
 
         } catch (Exception e) {
 
             if (con != null) {
                 try {
+                    // rollback main transaction
                     con.rollback();
+
+                    // save failed transaction separately
+                    con.setAutoCommit(true);
+
+                    tx.setStatus(TransactionStatus.FAILED);
+                    tx.setRemarks(e.getMessage());
+
+                    transactionRepository.saveTransaction(tx, con);
+
                 } catch (Exception ex) {
                     logger.log(Level.SEVERE,
                             "Rollback failed", ex);
@@ -289,16 +329,24 @@ public class AccountService {
         }
     }
 
-    public boolean withdraw(Long userId, Double amount, String transactionPin) {
+    public boolean withdraw(Long userId,
+                            Double amount,
+                            String transactionPin) {
+
         Connection con = null;
 
+        Transaction tx = new Transaction();
+
         try {
+
             con = DbConnection.getConnection();
             con.setAutoCommit(false);
 
             if (amount == null || amount <= 0) {
-                throw new IllegalArgumentException("Withdraw amount must be greater than 0");
+                throw new IllegalArgumentException(
+                        "Withdraw amount must be greater than 0");
             }
+
             Account account = accountRepository
                     .findByUserId(userId, con)
                     .orElseThrow(() ->
@@ -308,21 +356,32 @@ public class AccountService {
             Account lockedAccount =
                     accountRepository.lockRowsForUpdate(con, account.getId());
 
+            // prepare transaction log
+            tx.setFromAccountId(lockedAccount.getId());
+            tx.setAmount(amount);
+            tx.setType(TransactionType.WITHDRAWAL);
+
             if (lockedAccount.getStatus() != AccountStatus.ACTIVE) {
-                throw new RuntimeException("Account is inactive, cannot withdraw");
+                throw new RuntimeException(
+                        "Account is inactive, cannot withdraw");
             }
 
             if (transactionPin == null || transactionPin.isBlank()) {
-                throw new InvalidTransactionPinException("PIN is required");
+                throw new InvalidTransactionPinException(
+                        "PIN is required");
             }
 
-            if (!BCrypt.checkpw(transactionPin,
+            if (!BCrypt.checkpw(
+                    transactionPin,
                     lockedAccount.getTransactionPin())) {
-                throw new InvalidTransactionPinException("Invalid transaction PIN");
+
+                throw new InvalidTransactionPinException(
+                        "Invalid transaction PIN");
             }
 
             if (lockedAccount.getBalance() < amount) {
-                throw new IllegalArgumentException("Insufficient balance");
+                throw new IllegalArgumentException(
+                        "Insufficient balance");
             }
 
             int rows = accountRepository.withdraw(
@@ -331,16 +390,39 @@ public class AccountService {
                     con
             );
 
+            if (rows <= 0) {
+                throw new RuntimeException("Withdraw failed");
+            }
+
+            // success transaction
+            tx.setStatus(TransactionStatus.SUCCESS);
+            tx.setRemarks("Withdraw successful");
+
+            transactionRepository.saveTransaction(tx, con);
+
             con.commit();
-            return rows > 0;
+
+            return true;
 
         } catch (Exception e) {
 
             if (con != null) {
+
                 try {
+
                     con.rollback();
+
+                    // save failed transaction
+                    con.setAutoCommit(true);
+
+                    tx.setStatus(TransactionStatus.FAILED);
+                    tx.setRemarks(e.getMessage());
+
+                    transactionRepository.saveTransaction(tx, con);
+
                 } catch (Exception ex) {
-                    logger.log(Level.SEVERE, "Rollback failed", ex);
+                    logger.log(Level.SEVERE,
+                            "Rollback failed", ex);
                 }
             }
 
@@ -352,7 +434,8 @@ public class AccountService {
                 try {
                     con.close();
                 } catch (Exception e) {
-                    logger.log(Level.SEVERE, "Connection close failed", e);
+                    logger.log(Level.SEVERE,
+                            "Connection close failed", e);
                 }
             }
         }
