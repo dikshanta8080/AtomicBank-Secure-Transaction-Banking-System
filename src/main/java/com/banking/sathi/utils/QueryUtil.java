@@ -36,14 +36,14 @@ public class QueryUtil {
     public static final String FIND_BY_USERID_QUERY = "SELECT * FROM accounts WHERE user_id=? ";
     public static final String LOCK_ACCOUNT_ROW_FOR_UPDATE = "SELECT id, balance, account_status, transaction_pin " +
             "FROM accounts " +
-            "WHERE account_id = ? " +
+            "WHERE id = ? " +
             "FOR UPDATE";
     public static final String DEPOSIT_MONEY = "UPDATE accounts SET balance= balance + ? WHERE id=?";
     public static final String WITHDRAW_MONEY = "UPDATE accounts SET balance= balance - ? WHERE id=?";
-    public static final String GET_TOTAL_ACCOUNT_COUNT = "SELECT COUNT(*) as accountCounts FROM accounts";
-    public static final String GET_TOTAL_DEPOSITS = "SELECT SUM(a.balance) as totalDeposits FROM accounts a";
+    public static final String GET_TOTAL_ACCOUNT_COUNT = "SELECT COUNT(*) as totalAccounts FROM accounts";
+    public static final String GET_TOTAL_DEPOSITS = "SELECT SUM(a.balance) as deposits FROM accounts a";
     public static final String FIND_BALANCE_BY_USERID = "SELECT balance FROM accounts WHERE user_id=?";
-    public static final String GET_NUMBER_OF_PENDING_ACCOUNTS = "SELECT count(*) AS pendingApprovals FROM accounts a WHERE a.status='INACTIVE'";
+    public static final String GET_NUMBER_OF_PENDING_ACCOUNTS = "SELECT count(*) AS pendingApprovals FROM accounts a WHERE a.account_status='INACTIVE'";
     public static final String SELECT_PENDING_ACCOUNT_APPROVALS = "SELECT \n" +
             "    u.id AS userId,\n" +
             "    u.name AS name,\n" +
@@ -111,5 +111,6 @@ public class QueryUtil {
 
     // ===================== TRANSACTION =====================
     public static final String INSERT_TRANSACTION_QUERY = "INSERT INTO transactions (from_account_id, to_account_id, type, status, amount, remarks) VALUES (?, ?, ?, ?, ?, ?)";
+    public static final String FIND_BALANCE_BY_ACCOUNT_ID = "SELECT balance FROM accounts WHERE id=?";
 
 }

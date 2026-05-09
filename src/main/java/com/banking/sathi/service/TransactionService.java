@@ -45,6 +45,9 @@ public class TransactionService {
             if (transferAmount == null || transferAmount <= 0) {
                 throw new IllegalArgumentException("Transfer amount must be greater than 0");
             }
+            if (fromUserId == null || toUserId == null || fromUserId.equals(toUserId)) {
+                throw new IllegalArgumentException("Invalid transfer accounts");
+            }
 
             Account fromAccount = accountRepository
                     .findByUserId(fromUserId, con)
@@ -92,11 +95,11 @@ public class TransactionService {
                 throw new IllegalArgumentException("Insufficient balance");
             }
 
-
-            accountRepository.withdraw(lockedFrom.getId(), transferAmount, con);
-
-
-            accountRepository.deposit(lockedTo.getId(), transferAmount, con);
+            int withdrawRows = accountRepository.withdraw(lockedFrom.getId(), transferAmount, con);
+            int depositRows = accountRepository.deposit(lockedTo.getId(), transferAmount, con);
+            if (withdrawRows <= 0 || depositRows <= 0) {
+                throw new RuntimeException("Transfer failed");
+            }
 
             tx.setStatus(TransactionStatus.SUCCESS);
             tx.setRemarks("Transfer successful");
@@ -114,8 +117,10 @@ public class TransactionService {
 
                     con.setAutoCommit(true);
 
+                    tx.setType(tx.getType() == null ? TransactionType.TRANSFER : tx.getType());
                     tx.setStatus(TransactionStatus.FAILED);
-                    tx.setRemarks(e.getMessage());
+                    tx.setRemarks(resolveErrorMessage(e));
+                    tx.setAmount(tx.getAmount() == null ? (transferAmount == null ? 0d : transferAmount) : tx.getAmount());
 
                     transactionRepository.saveTransaction(tx, con);
 
@@ -136,5 +141,12 @@ public class TransactionService {
                 }
             }
         }
+    }
+
+    private String resolveErrorMessage(Exception e) {
+        if (e.getMessage() != null && !e.getMessage().isBlank()) {
+            return e.getMessage();
+        }
+        return "Transaction failed";
     }
 }

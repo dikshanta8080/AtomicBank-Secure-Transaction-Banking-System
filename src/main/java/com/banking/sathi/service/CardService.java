@@ -23,6 +23,7 @@ import com.banking.sathi.utils.DbConnection;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.logging.Level;
@@ -44,74 +45,96 @@ public class CardService {
     }
 
     private boolean checkEligibilityForRequestedLimit(Double annualIncome, Double requestedCreditLimit) {
-        return requestedCreditLimit > ((annualIncome) / 12) * 4;
-
+        if (annualIncome == null || annualIncome <= 0 || requestedCreditLimit == null || requestedCreditLimit <= 0) {
+            return false;
+        }
+        return requestedCreditLimit <= ((annualIncome) / 12) * 4;
     }
 
     public List<CardResponseDto> getPendingApprovalCards() {
         List<CardResponseDto> pendingApprovalCards = cardRepository.getPendingApprovalCards();
-        return pendingApprovalCards.stream().map(
-                pendingApprovalCard -> {
-                    Double annualIncome = kycRepository.findKycIncomeByAccount(pendingApprovalCard.getAccountId());
-                    pendingApprovalCard.setMonthlyIncome(annualIncome != null ? annualIncome / 12 : 0);
-                    return pendingApprovalCard;
 
-                }
-        ).collect(Collectors.toList());
-
+        return pendingApprovalCards.stream().map(pendingApprovalCard -> {
+            Double annualIncome = kycRepository.findKycIncomeByAccount(pendingApprovalCard.getAccountId());
+            pendingApprovalCard.setMonthlyIncome(annualIncome != null ? annualIncome / 12 : 0);
+            return pendingApprovalCard;
+        }).collect(Collectors.toList());
     }
 
     public boolean saveCard(CardRequestDto cardRequestDto, Long userId) {
         Connection con = null;
+
         try {
             con = DbConnection.getConnection();
             con.setAutoCommit(false);
-            if (userId == null) {
+
+            if (userId == null || userId <= 0) {
                 throw new UserDoesnotExistsException("User does not exists");
             }
-            Kyc kyc = kycRepository.findByUserId(userId, con).orElseThrow(() -> new KycDoesnotExistsException("Kyc does not exists"));
-            Account account = accountRepository.findByUserId(userId, con).orElseThrow(() -> new AccountDoesNotExistsException("Account does not exists"));
+
+            if (cardRequestDto.getCreditLimit() == null || cardRequestDto.getCreditLimit() <= 0) {
+                throw new IllegalArgumentException("Invalid requested credit limit");
+            }
+
+            Kyc kyc = kycRepository.findByUserId(userId, con)
+                    .orElseThrow(() -> new KycDoesnotExistsException("Kyc does not exists"));
+
+            Account account = accountRepository.findByUserId(userId, con)
+                    .orElseThrow(() -> new AccountDoesNotExistsException("Account does not exists"));
+
             String cardNumber = CardNumberGenerator.generateCardNumber();
-            String cvv = cardNumber.substring(cardNumber.length() - 3);
+
+            String cvv = (cardNumber != null && cardNumber.length() >= 3)
+                    ? cardNumber.substring(cardNumber.length() - 3)
+                    : "000";
+
             if (!checkEligibilityForRequestedLimit(kyc.getIncome(), cardRequestDto.getCreditLimit())) {
                 throw new NotEligibleException("You are not eligible for the requested credit limit");
             }
+
             Card card = new Card();
             card.setAccountId(account.getId());
             card.setCardNumber(cardNumber);
             card.setCvv(cvv);
             card.setType(cardRequestDto.getType());
             card.setStatus(CardStatus.PENDING);
-            card.setType(cardRequestDto.getType());
-            int rowsInserted = cardRepository.saveCard(card);
+            card.setCreditLimit(cardRequestDto.getCreditLimit());
+            card.setExpiryDate(LocalDate.now().plusYears(5));
+
+            int rowsInserted = cardRepository.saveCard(card, con);
             con.commit();
+
             return rowsInserted > 0;
 
-        } catch (SQLException e) {
+        } catch (Exception e) {
             if (con != null) {
                 try {
                     con.rollback();
                 } catch (Exception ex) {
-                    logger.log(Level.SEVERE, "Failed to roll back the transaction");
+                    logger.log(Level.SEVERE, "Failed to roll back the transaction", ex);
                 }
             }
+            logger.log(Level.SEVERE, "Error while saving card", e);
+            throw new RuntimeException(e);
+
         } finally {
             if (con != null) {
                 try {
                     con.close();
                 } catch (SQLException e) {
-                    logger.log(Level.SEVERE, "Failed to close the connection");
+                    logger.log(Level.SEVERE, "Failed to close the connection", e);
                 }
             }
         }
-        return false;
     }
 
     Optional<CardResponseDto> findPendingCard(Long cardId) {
-        CardResponseDto pendingCard = cardRepository.findPendingCard(cardId).orElseThrow(() ->
-                new RuntimeException("card does not exists"));
+        CardResponseDto pendingCard = cardRepository.findPendingCard(cardId)
+                .orElseThrow(() -> new RuntimeException("card does not exists"));
+
         Double annualIncome = kycRepository.findKycIncomeByAccount(pendingCard.getAccountId());
-        pendingCard.setMonthlyIncome(annualIncome != null ? annualIncome : 0);
+        pendingCard.setMonthlyIncome(annualIncome != null ? annualIncome / 12 : 0);
+
         return Optional.of(pendingCard);
     }
 }

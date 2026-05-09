@@ -64,8 +64,6 @@ public class AuthService {
         if (existingUser.getUserStatus() == UserStatus.BLOCKED)
             throw new AuthenticationFailedException("Account is blocked");
 
-
-        logger.log(Level.WARNING, existingUser.getName());
         boolean isValid = BCrypt.checkpw(password, existingUser.getPassword());
         if (!isValid) throw new AuthenticationFailedException("Invalid credentials provided");
         existingUser.setPassword(null);

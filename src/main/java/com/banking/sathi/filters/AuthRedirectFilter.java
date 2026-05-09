@@ -98,7 +98,7 @@ public class AuthRedirectFilter implements Filter {
             return;
         }
 
-        if (!path.startsWith("/UserDashboard")) {
+        if (!path.startsWith("/UserDashboard") && !path.startsWith("/interest/")) {
             response.sendRedirect(contextPath + "/UserDashboard");
             return;
         }
