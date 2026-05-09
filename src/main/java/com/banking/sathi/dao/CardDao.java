@@ -244,6 +244,15 @@ public class CardDao implements CardRepository {
 
     @Override
     public boolean rejectCard(Long cardId) {
+        try (
+                Connection con = DbConnection.getConnection();
+                PreparedStatement ps = con.prepareStatement(QueryUtil.REJECT_CARD);
+        ) {
+            ps.setLong(1, cardId);
+            return ps.executeUpdate() > 0;
+        } catch (SQLException e) {
+            logger.log(Level.SEVERE, "Failed to reject the card");
+        }
         return false;
     }
 }
