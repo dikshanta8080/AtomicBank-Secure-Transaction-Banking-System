@@ -1,0 +1,55 @@
+package com.banking.sathi.controller;
+
+import com.banking.sathi.model.User;
+import com.banking.sathi.service.PortalService;
+import com.banking.sathi.service.TransactionService;
+import com.banking.sathi.utils.ServletUtil;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+
+import java.io.IOException;
+
+@WebServlet("/transfer")
+public class TransferServlet extends HttpServlet {
+    private TransactionService transactionService;
+    private PortalService portalService;
+
+    @Override
+    public void init() {
+        this.transactionService = new TransactionService();
+        this.portalService = new PortalService();
+    }
+
+    @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        User user = ServletUtil.getLoggedInUser(req);
+        req.setAttribute("account", portalService.getAccountByUserId(user.getId()).orElse(null));
+        req.setAttribute("targets", portalService.getTransferTargets(user.getId()));
+        req.setAttribute("success", ServletUtil.consumeFlash(req, "success"));
+        req.setAttribute("error", ServletUtil.consumeFlash(req, "error"));
+        req.getRequestDispatcher("/views/user/transfer.jsp").forward(req, resp);
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        User user = ServletUtil.getLoggedInUser(req);
+        try {
+            Long toUserId = Long.parseLong(req.getParameter("toUserId"));
+            Double amount = Double.parseDouble(req.getParameter("amount"));
+            String pin = req.getParameter("transactionPin");
+            transactionService.transfer(user.getId(), toUserId, amount, pin);
+            ServletUtil.putFlash(req, "success", "Transfer completed successfully.");
+        } catch (Exception e) {
+            ServletUtil.putFlash(req, "error", resolveMessage(e));
+        }
+        resp.sendRedirect(req.getContextPath() + "/transfer");
+    }
+
+    private String resolveMessage(Exception e) {
+        Throwable cause = e.getCause();
+        return cause != null && cause.getMessage() != null ? cause.getMessage() : e.getMessage();
+    }
+}

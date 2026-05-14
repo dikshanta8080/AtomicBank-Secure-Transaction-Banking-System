@@ -14,7 +14,7 @@ public class KycMapper implements Function<AccountCreationRequest, Kyc> {
                 Gender.valueOf(accountCreationRequest.getGender().toUpperCase()),
                 accountCreationRequest.getCitizenship(),
                 accountCreationRequest.getCitizenshipIssueDate(),
-                accountCreationRequest.getDistrict(),
+                accountCreationRequest.getCitizenshipDistrict(),
                 accountCreationRequest.getPhone(),
                 accountCreationRequest.getOccupation(),
                 accountCreationRequest.getIncome());

@@ -29,4 +29,6 @@ public interface CardRepository {
     boolean verifyCard(Long cardId);
 
     boolean rejectCard(Long cardId);
+
+    boolean issueCard(Long cardId, Double creditLimit, java.time.LocalDate expiryDate);
 }

@@ -1,0 +1,73 @@
+.card-apps-table td {
+    vertical-align: top;
+}
+
+.issue-form-inline {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.issue-form-inputs {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.issue-input {
+    padding: 8px 12px;
+    border: 1.5px solid #d6e3f5;
+    border-radius: 9px;
+    font-size: 13.5px;
+    font-family: inherit;
+    background: #fff;
+    color: #0f1d2e;
+    transition: border-color 0.14s, box-shadow 0.14s;
+}
+
+.issue-input:focus {
+    outline: none;
+    border-color: #2563eb;
+    box-shadow: 0 0 0 3px rgba(37,99,235,0.1);
+}
+
+.issue-input-limit {
+    width: 120px;
+}
+
+.issue-input-date {
+    width: 148px;
+}
+
+.action-row {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.action-row form {
+    display: inline;
+}
+
+.card-number-mono {
+    font-family: "Courier New", monospace;
+    font-size: 12.5px;
+    background: #f0f4fb;
+    padding: 3px 8px;
+    border-radius: 6px;
+    color: #3d5a80;
+    letter-spacing: 0.04em;
+}
+
+.no-pending-cards {
+    text-align: center;
+    padding: 48px 20px;
+    color: #5a6e8a;
+}
+
+.no-pending-cards .check-icon {
+    font-size: 40px;
+    margin-bottom: 12px;
+}

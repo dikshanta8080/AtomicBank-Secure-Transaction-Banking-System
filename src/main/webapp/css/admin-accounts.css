@@ -1,0 +1,51 @@
+.accounts-pending-section {
+    margin-bottom: 28px;
+}
+
+.accounts-pending-section .section-header h3 {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.all-accounts-section {
+    margin-top: 0;
+}
+
+.review-link {
+    font-size: 13px;
+    font-weight: 600;
+    color: #2563eb;
+    text-decoration: underline;
+    white-space: nowrap;
+}
+
+.inline-action-row {
+    display: flex;
+    gap: 7px;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.inline-action-row form {
+    display: inline;
+}
+
+.account-name-cell {
+    font-weight: 600;
+    color: #0f1d2e;
+}
+
+.account-number-code {
+    font-family: "Courier New", monospace;
+    font-size: 13px;
+    background: #f0f4fb;
+    padding: 3px 8px;
+    border-radius: 6px;
+    color: #3d5a80;
+}
+
+.balance-cell {
+    font-weight: 600;
+    color: #0f1d2e;
+}

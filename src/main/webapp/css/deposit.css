@@ -1,0 +1,56 @@
+.deposit-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    max-width: 860px;
+}
+
+.deposit-form-card {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.amount-input-wrap {
+    position: relative;
+}
+
+.amount-prefix {
+    position: absolute;
+    left: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-weight: 700;
+    color: #5a6e8a;
+    font-size: 14px;
+    pointer-events: none;
+}
+
+.amount-input-wrap input {
+    padding-left: 48px;
+}
+
+.balance-display {
+    font-size: 26px;
+    font-weight: 800;
+    color: #059669;
+    letter-spacing: -0.02em;
+    margin: 8px 0 4px;
+}
+
+.balance-note {
+    font-size: 12.5px;
+    color: #5a6e8a;
+}
+
+.submit-full {
+    width: 100%;
+    padding: 13px;
+    font-size: 15px;
+}
+
+@media (max-width: 860px) {
+    .deposit-layout {
+        grid-template-columns: 1fr;
+    }
+}
