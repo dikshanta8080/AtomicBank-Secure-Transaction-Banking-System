@@ -16,5 +16,7 @@ public class AuthFilter implements Filter {
         HttpSession session = request.getSession(false);
         String uri = request.getRequestURI();
         String contextPath = request.getContextPath();
+
+        filterChain.doFilter(request, response);
     }
 }

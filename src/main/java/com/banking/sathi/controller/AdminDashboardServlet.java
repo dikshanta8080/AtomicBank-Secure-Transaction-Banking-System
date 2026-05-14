@@ -1,45 +1,42 @@
 package com.banking.sathi.controller;
 
-import com.banking.sathi.dto.response.AccountListDTO;
-import com.banking.sathi.enums.Role;
-import com.banking.sathi.model.User;
 import com.banking.sathi.service.AccountService;
+import com.banking.sathi.service.PortalService;
+import com.banking.sathi.utils.ServletUtil;
 import jakarta.servlet.ServletConfig;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
-import java.util.List;
 
 @WebServlet(name = "AdminDashboardServlet", value = "/AdminDashboard")
 public class AdminDashboardServlet extends HttpServlet {
     private AccountService accountService;
+    private PortalService portalService;
 
     @Override
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
         this.accountService = new AccountService();
+        this.portalService = new PortalService();
     }
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        HttpSession session = req.getSession(false);
-        if (session == null) {
-            resp.sendRedirect(req.getContextPath() + "/login");
-            return;
-        }
-        User loggedInUser = (User) session.getAttribute("user");
-        if (loggedInUser == null || loggedInUser.getRole() != Role.ADMIN) {
-            resp.sendRedirect(req.getContextPath() + "/login");
-            return;
-
-        }
-        List<AccountListDTO> pendingApprovalAccounts = accountService.getPendingApprovalAccounts();
-
+        req.setAttribute("pendingAccounts", accountService.getPendingApprovalAccounts());
+        req.setAttribute("pendingCards", portalService.getPendingCards());
+        req.setAttribute("totalAccounts", portalService.getTotalAccounts());
+        req.setAttribute("pendingApprovals", portalService.getPendingAccountsCount());
+        req.setAttribute("totalDeposits", portalService.getTotalDeposits());
+        req.setAttribute("totalCards", portalService.getTotalCards());
+        req.setAttribute("pendingCardCount", portalService.getPendingCardsCount());
+        req.setAttribute("rolledBackCount", portalService.countTransactionsByStatus(com.banking.sathi.enums.TransactionStatus.ROLLED_BACK));
+        req.setAttribute("success", ServletUtil.consumeFlash(req, "success"));
+        req.setAttribute("error", ServletUtil.consumeFlash(req, "error"));
+        req.getRequestDispatcher("/views/admin/dashboard.jsp").forward(req, resp);
     }
 
     @Override

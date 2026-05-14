@@ -16,6 +16,9 @@ public class CardResponseDto {
     private Double monthlyIncome;
     private LocalDate expiryDate;
     private LocalDateTime appliedDate;
+    private String rejectionReason;
+    private String userName;
+    private String accountNumber;
 
     public CardResponseDto() {
      
@@ -103,5 +106,29 @@ public class CardResponseDto {
 
     public void setAppliedDate(LocalDateTime appliedDate) {
         this.appliedDate = appliedDate;
+    }
+
+    public String getRejectionReason() {
+        return rejectionReason;
+    }
+
+    public void setRejectionReason(String rejectionReason) {
+        this.rejectionReason = rejectionReason;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public String getAccountNumber() {
+        return accountNumber;
+    }
+
+    public void setAccountNumber(String accountNumber) {
+        this.accountNumber = accountNumber;
     }
 }

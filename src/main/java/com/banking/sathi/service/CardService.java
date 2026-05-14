@@ -137,4 +137,24 @@ public class CardService {
 
         return Optional.of(pendingCard);
     }
+
+    public boolean issueCard(Long cardId, Double creditLimit, LocalDate expiryDate) {
+        if (cardId == null || cardId <= 0) {
+            throw new IllegalArgumentException("Invalid card id");
+        }
+        if (creditLimit == null || creditLimit <= 0) {
+            throw new IllegalArgumentException("Invalid credit limit");
+        }
+        if (expiryDate == null) {
+            throw new IllegalArgumentException("Expiry date is required");
+        }
+        return cardRepository.issueCard(cardId, creditLimit, expiryDate);
+    }
+
+    public boolean rejectCard(Long cardId) {
+        if (cardId == null || cardId <= 0) {
+            throw new IllegalArgumentException("Invalid card id");
+        }
+        return cardRepository.rejectCard(cardId);
+    }
 }

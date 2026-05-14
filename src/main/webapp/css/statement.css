@@ -1,0 +1,95 @@
+.statement-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding-bottom: 22px;
+    margin-bottom: 24px;
+    border-bottom: 2px solid #d6e3f5;
+}
+
+.statement-bank-name {
+    font-size: 24px;
+    font-weight: 800;
+    color: #0f1d2e;
+    letter-spacing: -0.01em;
+}
+
+.statement-sub {
+    font-size: 13px;
+    color: #5a6e8a;
+    margin-top: 4px;
+}
+
+.statement-customer-info {
+    text-align: right;
+}
+
+.statement-customer-name {
+    font-size: 17px;
+    font-weight: 700;
+    color: #0f1d2e;
+}
+
+.statement-account-meta {
+    font-size: 13px;
+    color: #5a6e8a;
+    margin-top: 4px;
+}
+
+.statement-generated {
+    font-size: 12px;
+    color: #9aafc7;
+    margin-top: 16px;
+    text-align: right;
+}
+
+.statement-filter-bar {
+    display: flex;
+    gap: 14px;
+    align-items: flex-end;
+    flex-wrap: wrap;
+    padding: 16px 18px;
+    background: #f7faff;
+    border: 1px solid #d6e3f5;
+    border-radius: 12px;
+    margin-bottom: 20px;
+}
+
+.statement-filter-bar .field {
+    flex: 1;
+    min-width: 150px;
+}
+
+@media print {
+    .sidebar,
+    .topbar-actions,
+    .statement-filter-bar,
+    .no-print {
+        display: none !important;
+    }
+
+    .app-shell {
+        display: block;
+    }
+
+    .workspace {
+        padding: 20px;
+    }
+
+    .card {
+        box-shadow: none;
+        border: none;
+    }
+
+    .table-wrap {
+        border: none;
+    }
+
+    table {
+        font-size: 12px;
+    }
+
+    th, td {
+        padding: 8px 10px;
+    }
+}

@@ -1,6 +1,7 @@
 package com.banking.sathi.controller;
 
 import com.banking.sathi.dao.UserDao;
+import com.banking.sathi.enums.Role;
 import com.banking.sathi.exceptions.AuthenticationFailedException;
 import com.banking.sathi.exceptions.UserDoesnotExistsException;
 import com.banking.sathi.model.User;
@@ -59,9 +60,11 @@ public class LoginServlet extends HttpServlet {
 
             HttpSession newSession = req.getSession(true);
             newSession.setAttribute("user", user);
-
-
-            resp.sendRedirect(req.getContextPath() + "/UserDashboard");
+            if (user.getRole() == Role.ADMIN) {
+                resp.sendRedirect(req.getContextPath() + "/AdminDashboard");
+            } else {
+                resp.sendRedirect(req.getContextPath() + "/UserDashboard");
+            }
 
         } catch (IllegalArgumentException |
                  UserDoesnotExistsException |

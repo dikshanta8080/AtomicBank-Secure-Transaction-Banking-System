@@ -320,7 +320,7 @@ public class AccountService {
                     con.setAutoCommit(true);
 
                     tx.setType(tx.getType() == null ? TransactionType.DEPOSIT : tx.getType());
-                    tx.setStatus(TransactionStatus.FAILED);
+                    tx.setStatus(TransactionStatus.ROLLED_BACK);
                     tx.setRemarks(resolveErrorMessage(e));
                     tx.setAmount(tx.getAmount() == null ? (amount == null ? 0d : amount) : tx.getAmount());
                     transactionRepository.saveTransaction(tx, con);
@@ -433,7 +433,7 @@ public class AccountService {
                     con.setAutoCommit(true);
 
                     tx.setType(tx.getType() == null ? TransactionType.WITHDRAWAL : tx.getType());
-                    tx.setStatus(TransactionStatus.FAILED);
+                    tx.setStatus(TransactionStatus.ROLLED_BACK);
                     tx.setRemarks(resolveErrorMessage(e));
                     tx.setAmount(tx.getAmount() == null ? (amount == null ? 0d : amount) : tx.getAmount());
                     transactionRepository.saveTransaction(tx, con);

@@ -118,7 +118,7 @@ public class TransactionService {
                     con.setAutoCommit(true);
 
                     tx.setType(tx.getType() == null ? TransactionType.TRANSFER : tx.getType());
-                    tx.setStatus(TransactionStatus.FAILED);
+                    tx.setStatus(TransactionStatus.ROLLED_BACK);
                     tx.setRemarks(resolveErrorMessage(e));
                     tx.setAmount(tx.getAmount() == null ? (transferAmount == null ? 0d : transferAmount) : tx.getAmount());
 

@@ -45,9 +45,8 @@ public class KycDao implements KycRepository {
 
     @Override
     public boolean existsByCitizenship(String citizenshipNumber, Connection con) {
-        Kyc kyc;
         try (
-                PreparedStatement ps = con.prepareStatement(QueryUtil.SELECT_KYC_QUERY);
+                PreparedStatement ps = con.prepareStatement("SELECT 1 FROM kyc WHERE citizenship=?");
         ) {
             ps.setString(1, citizenshipNumber);
             ResultSet rs = ps.executeQuery();
@@ -130,6 +129,7 @@ public class KycDao implements KycRepository {
                 Connection con = DbConnection.getConnection();
                 PreparedStatement ps = con.prepareStatement(QueryUtil.FIND_KYC_INCOME_BY_ACCOUNT);
         ) {
+            ps.setLong(1, accountId);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) annualIncome = rs.getDouble("annualAincome");
         } catch (SQLException e) {

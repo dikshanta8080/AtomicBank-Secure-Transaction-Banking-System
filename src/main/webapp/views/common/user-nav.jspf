@@ -1,0 +1,44 @@
+<%@ page contentType="text/html;charset=UTF-8" %>
+<%
+    String currentPath = request.getRequestURI().substring(request.getContextPath().length());
+%>
+<aside class="sidebar">
+    <div class="brand">
+        <div class="brand-mark">A</div>
+        <div class="brand-copy">
+            <h1>AtomicBank</h1>
+            <p>Customer portal</p>
+        </div>
+    </div>
+
+    <div class="nav-group">
+        <div class="nav-label">Overview</div>
+        <a class="nav-link <%= currentPath.equals("/UserDashboard") ? "active" : "" %>" href="<%= request.getContextPath() %>/UserDashboard">Dashboard</a>
+        <a class="nav-link <%= currentPath.equals("/transactions") ? "active" : "" %>" href="<%= request.getContextPath() %>/transactions">Transactions</a>
+        <a class="nav-link <%= currentPath.equals("/statement") ? "active" : "" %>" href="<%= request.getContextPath() %>/statement">Statement</a>
+    </div>
+
+    <div class="nav-group">
+        <div class="nav-label">Payments</div>
+        <a class="nav-link <%= currentPath.equals("/deposit") ? "active" : "" %>" href="<%= request.getContextPath() %>/deposit">Deposit</a>
+        <a class="nav-link <%= currentPath.equals("/withdraw") ? "active" : "" %>" href="<%= request.getContextPath() %>/withdraw">Withdraw</a>
+        <a class="nav-link <%= currentPath.equals("/transfer") ? "active" : "" %>" href="<%= request.getContextPath() %>/transfer">Transfer</a>
+    </div>
+
+    <div class="nav-group">
+        <div class="nav-label">Cards & Savings</div>
+        <a class="nav-link <%= currentPath.equals("/cards") ? "active" : "" %>" href="<%= request.getContextPath() %>/cards">My Cards</a>
+        <a class="nav-link <%= currentPath.equals("/cards/apply") ? "active" : "" %>" href="<%= request.getContextPath() %>/cards/apply">Apply for Card</a>
+        <a class="nav-link <%= currentPath.equals("/interest-summary") ? "active" : "" %>" href="<%= request.getContextPath() %>/interest-summary">Interest Summary</a>
+    </div>
+
+    <div class="nav-group">
+        <div class="nav-label">Account</div>
+        <a class="nav-link <%= currentPath.equals("/account") ? "active" : "" %>" href="<%= request.getContextPath() %>/account">Setup Account</a>
+    </div>
+
+    <div class="sidebar-footer">
+        <strong><%= session.getAttribute("user") != null ? ((com.banking.sathi.model.User) session.getAttribute("user")).getName() : "Customer" %></strong>
+        <span><a href="<%= request.getContextPath() %>/logout">Sign out</a></span>
+    </div>
+</aside>

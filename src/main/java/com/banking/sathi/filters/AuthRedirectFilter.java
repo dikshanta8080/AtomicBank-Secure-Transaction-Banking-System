@@ -34,9 +34,12 @@ public class AuthRedirectFilter implements Filter {
 
         if (path.startsWith("/login") ||
                 path.startsWith("/register") ||
+                path.startsWith("/logout") ||
                 path.startsWith("/assets/") ||
                 path.startsWith("/css/") ||
-                path.startsWith("/js/")) {
+                path.startsWith("/js/") ||
+                path.equals("/") ||
+                path.equals("/index.jsp")) {
 
             filterChain.doFilter(request, response);
             return;
@@ -98,7 +101,18 @@ public class AuthRedirectFilter implements Filter {
             return;
         }
 
-        if (!path.startsWith("/UserDashboard") && !path.startsWith("/interest/")) {
+        if (!path.startsWith("/UserDashboard") &&
+                !path.startsWith("/account") &&
+                !path.startsWith("/PendingApproval") &&
+                !path.startsWith("/AccountFrozen") &&
+                !path.startsWith("/deposit") &&
+                !path.startsWith("/withdraw") &&
+                !path.startsWith("/transfer") &&
+                !path.startsWith("/transactions") &&
+                !path.startsWith("/statement") &&
+                !path.startsWith("/cards") &&
+                !path.startsWith("/interest/") &&
+                !path.startsWith("/interest-summary")) {
             response.sendRedirect(contextPath + "/UserDashboard");
             return;
         }
