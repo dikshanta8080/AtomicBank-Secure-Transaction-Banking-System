@@ -1,13 +1,15 @@
 :root {
-    --bg: #f0f4fb;
+    --bg: #f0fdf4;
     --surface: #ffffff;
-    --surface-2: #f7faff;
-    --border: #d6e3f5;
-    --sidebar: #0b1628;
+    --surface-2: #f7fef9;
+    --border: #bbf7d0;
+    --sidebar: #0a1f14;
     --sidebar-hover: rgba(255,255,255,0.08);
-    --primary: #2563eb;
-    --primary-dark: #1d4ed8;
-    --primary-light: #eff6ff;
+    --primary: #059669;
+    --primary-dark: #047857;
+    --primary-light: #ecfdf5;
+    --primary-accent: #6ee7b7;
+    --primary-rgb: 5, 150, 105;
     --success: #059669;
     --success-bg: #ecfdf5;
     --success-border: #a7f3d0;
@@ -17,8 +19,8 @@
     --danger: #dc2626;
     --danger-bg: #fef2f2;
     --danger-border: #fecaca;
-    --text: #0f1d2e;
-    --text-soft: #5a6e8a;
+    --text: #0f1f17;
+    --text-soft: #4b6b5a;
     --text-inv: #f5f9ff;
     --radius: 16px;
     --radius-sm: 10px;
@@ -56,7 +58,7 @@ button {
 }
 
 .sidebar {
-    background: linear-gradient(175deg, var(--sidebar) 0%, #102040 100%);
+    background: linear-gradient(175deg, var(--sidebar) 0%, #14532d 100%);
     color: var(--text-inv);
     display: flex;
     flex-direction: column;
@@ -88,7 +90,7 @@ button {
     font-weight: 800;
     font-size: 17px;
     flex-shrink: 0;
-    box-shadow: 0 4px 12px rgba(37,99,235,0.45);
+    box-shadow: 0 4px 12px rgba(var(--primary-rgb), 0.45);
 }
 
 .brand-copy h1 {
@@ -137,8 +139,8 @@ button {
 }
 
 .nav-link.active {
-    background: rgba(37,99,235,0.22);
-    color: #93c5fd;
+    background: rgba(var(--primary-rgb), 0.22);
+    color: var(--primary-accent);
     font-weight: 600;
 }
 
@@ -262,7 +264,7 @@ button {
 }
 
 .hero-card {
-    background: linear-gradient(135deg, #0f2748 0%, #1a3a6e 50%, #2563eb 100%);
+    background: linear-gradient(135deg, #052e16 0%, #14532d 50%, var(--primary) 100%);
     color: var(--text-inv);
     position: relative;
     overflow: hidden;
@@ -362,23 +364,23 @@ button {
 .btn-primary {
     background: var(--primary);
     color: #fff;
-    box-shadow: 0 2px 10px rgba(37,99,235,0.28);
+    box-shadow: 0 2px 10px rgba(var(--primary-rgb), 0.28);
 }
 
 .btn-primary:hover {
     background: var(--primary-dark);
-    box-shadow: 0 4px 16px rgba(37,99,235,0.38);
+    box-shadow: 0 4px 16px rgba(var(--primary-rgb), 0.38);
     transform: translateY(-1px);
 }
 
 .btn-secondary {
-    background: #eff6ff;
+    background: var(--primary-light);
     color: var(--primary-dark);
-    border: 1px solid #bfdbfe;
+    border: 1px solid #a7f3d0;
 }
 
 .btn-secondary:hover {
-    background: #dbeafe;
+    background: #d1fae5;
 }
 
 .btn-success {
@@ -437,8 +439,8 @@ button {
 .badge-success { background: var(--success-bg); color: var(--success); }
 .badge-warning { background: var(--warning-bg); color: var(--warning); }
 .badge-danger { background: var(--danger-bg); color: var(--danger); }
-.badge-neutral { background: #e8eef7; color: #3d5a80; }
-.badge-info { background: #eff6ff; color: var(--primary-dark); }
+.badge-neutral { background: #e8f5ee; color: #3d6b52; }
+.badge-info { background: var(--primary-light); color: var(--primary-dark); }
 
 .alert {
     padding: 14px 18px;
@@ -455,7 +457,7 @@ button {
 .alert-success { background: var(--success-bg); border-color: var(--success-border); color: var(--success); }
 .alert-danger { background: var(--danger-bg); border-color: var(--danger-border); color: var(--danger); }
 .alert-warning { background: var(--warning-bg); border-color: var(--warning-border); color: var(--warning); }
-.alert-info { background: #eff6ff; border-color: #bfdbfe; color: var(--primary-dark); }
+.alert-info { background: var(--primary-light); border-color: #a7f3d0; color: var(--primary-dark); }
 
 .table-wrap {
     overflow-x: auto;
@@ -473,7 +475,7 @@ table {
 th {
     padding: 12px 16px;
     text-align: left;
-    background: #f7faff;
+    background: var(--surface-2);
     color: var(--text-soft);
     font-size: 11.5px;
     font-weight: 700;
@@ -485,7 +487,7 @@ th {
 
 td {
     padding: 13px 16px;
-    border-bottom: 1px solid #edf3fb;
+    border-bottom: 1px solid #e8f5ee;
     color: var(--text);
     vertical-align: middle;
 }
@@ -495,7 +497,7 @@ tr:last-child td {
 }
 
 tr:hover td {
-    background: #f7faff;
+    background: var(--surface-2);
 }
 
 .amount-credit { color: var(--success); font-weight: 700; }
@@ -549,7 +551,7 @@ form {
 .field textarea:focus {
     outline: none;
     border-color: var(--primary);
-    box-shadow: 0 0 0 3px rgba(37,99,235,0.12);
+    box-shadow: 0 0 0 3px rgba(var(--primary-rgb), 0.12);
 }
 
 .field textarea {
@@ -595,7 +597,7 @@ form {
     justify-content: space-between;
     gap: 12px;
     padding: 13px 0;
-    border-bottom: 1px solid #edf3fb;
+    border-bottom: 1px solid #e8f5ee;
     font-size: 14px;
     align-items: center;
 }
@@ -637,14 +639,14 @@ form {
 }
 
 .credit-card-widget {
-    background: linear-gradient(135deg, #0f2748, #1a3a6e 60%, #2563eb);
+    background: linear-gradient(135deg, #052e16, #14532d 60%, var(--primary));
     color: #fff;
     border-radius: 20px;
     padding: 28px;
     position: relative;
     overflow: hidden;
     min-height: 190px;
-    box-shadow: 0 12px 40px rgba(37,99,235,0.35);
+    box-shadow: 0 12px 40px rgba(var(--primary-rgb), 0.35);
     margin-bottom: 20px;
 }
 

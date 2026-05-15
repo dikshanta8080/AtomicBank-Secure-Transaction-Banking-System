@@ -17,8 +17,7 @@
             <div class="status-icon">⏳</div>
             <h2 class="status-title">Account Under Review</h2>
             <p class="status-description">
-                Your account request has been submitted. Our team is reviewing your KYC details
-                and will activate your account shortly.
+                Your account is pending admin approval.
             </p>
 
             <div class="status-info-box">

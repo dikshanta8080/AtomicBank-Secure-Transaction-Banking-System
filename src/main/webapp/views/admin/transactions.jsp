@@ -18,7 +18,6 @@
         <div class="topbar">
             <div>
                 <h2>All Transactions</h2>
-                <p>Complete audit trail of every transaction across all accounts.</p>
             </div>
             <div class="topbar-actions">
                 <a class="btn btn-warning" href="${pageContext.request.contextPath}/admin/failed-operations">View Failed Ops</a>

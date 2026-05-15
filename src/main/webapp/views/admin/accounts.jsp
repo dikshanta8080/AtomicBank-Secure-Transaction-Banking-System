@@ -18,7 +18,6 @@
         <div class="topbar">
             <div>
                 <h2>Manage Accounts</h2>
-                <p>Review KYC applications, approve, reject, or freeze customer accounts.</p>
             </div>
         </div>
 

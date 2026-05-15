@@ -62,6 +62,9 @@ public class RegisterServlet extends HttpServlet {
         } catch (IllegalArgumentException | UserAlreadyExistsException e) {
             req.setAttribute("error", e.getMessage());
             req.getRequestDispatcher("views/auth/register.jsp").forward(req, resp);
+        } catch (RuntimeException e) {
+            req.setAttribute("error", e.getMessage() != null ? e.getMessage() : "Registration failed. Please try again.");
+            req.getRequestDispatcher("views/auth/register.jsp").forward(req, resp);
         }
     }
 }

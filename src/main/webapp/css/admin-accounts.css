@@ -15,7 +15,7 @@
 .review-link {
     font-size: 13px;
     font-weight: 600;
-    color: #2563eb;
+    color: #059669;
     text-decoration: underline;
     white-space: nowrap;
 }
@@ -39,7 +39,7 @@
 .account-number-code {
     font-family: "Courier New", monospace;
     font-size: 13px;
-    background: #f0f4fb;
+    background: #f0fdf4;
     padding: 3px 8px;
     border-radius: 6px;
     color: #3d5a80;

@@ -18,7 +18,6 @@
         <div class="topbar">
             <div>
                 <h2>Admin Dashboard</h2>
-                <p>System overview — approvals, balances, and transaction integrity.</p>
             </div>
         </div>
 
@@ -29,22 +28,18 @@
             <div class="stat">
                 <div class="stat-label">Total Accounts</div>
                 <div class="stat-value">${totalAccounts}</div>
-                <div class="stat-sub">Registered bank accounts</div>
             </div>
             <div class="stat">
                 <div class="stat-label">Pending Approvals</div>
                 <div class="stat-value">${pendingApprovals}</div>
-                <div class="stat-sub">Awaiting KYC review</div>
             </div>
             <div class="stat">
                 <div class="stat-label">Total Deposits</div>
                 <div class="stat-value">NPR <fmt:formatNumber value="${totalDeposits}" pattern="#,##0"/></div>
-                <div class="stat-sub">Across all accounts</div>
             </div>
             <div class="stat">
                 <div class="stat-label">Rolled Back</div>
                 <div class="stat-value">${rolledBackCount}</div>
-                <div class="stat-sub">Failed operations logged</div>
             </div>
         </div>
 

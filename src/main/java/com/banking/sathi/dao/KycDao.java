@@ -32,10 +32,9 @@ public class KycDao implements KycRepository {
             ps.setString(10, kyc.getStatus().name().toUpperCase());
             return ps.executeUpdate();
         } catch (SQLException e) {
-            logger.log(Level.SEVERE, "Failed to save the user {e} ", e);
-            e.printStackTrace();
+            logger.log(Level.SEVERE, "Failed to save kyc", e);
+            throw new RuntimeException(e);
         }
-        return 0;
     }
 
     @Override
@@ -49,12 +48,13 @@ public class KycDao implements KycRepository {
                 PreparedStatement ps = con.prepareStatement("SELECT 1 FROM kyc WHERE citizenship=?");
         ) {
             ps.setString(1, citizenshipNumber);
-            ResultSet rs = ps.executeQuery();
-            return rs.next();
+            try (ResultSet rs = ps.executeQuery()) {
+                return rs.next();
+            }
         } catch (SQLException e) {
-            logger.log(Level.SEVERE, "Failed to retrieve the kyc {e} ", e.getMessage());
+            logger.log(Level.SEVERE, "Failed to check citizenship", e);
+            throw new RuntimeException(e);
         }
-        return false;
     }
 
     @Override
@@ -63,11 +63,13 @@ public class KycDao implements KycRepository {
                 PreparedStatement ps = con.prepareStatement(QueryUtil.SELECT_KYC_BY_USERID);
         ) {
             ps.setLong(1, userId);
-            return ps.executeQuery().next();
+            try (ResultSet rs = ps.executeQuery()) {
+                return rs.next();
+            }
         } catch (SQLException e) {
-            logger.log(Level.SEVERE, "failed to execute query {e}, ", e);
+            logger.log(Level.SEVERE, "Failed to check kyc by user id", e);
+            throw new RuntimeException(e);
         }
-        return false;
     }
 
     public Optional<Kyc> findByUserId(Long userId, Connection con) {

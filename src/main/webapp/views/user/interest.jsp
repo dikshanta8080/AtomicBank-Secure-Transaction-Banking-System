@@ -18,7 +18,6 @@
         <div class="topbar">
             <div>
                 <h2>Interest Summary</h2>
-                <p>Estimated interest accrued on your savings account balance.</p>
             </div>
         </div>
 
@@ -33,8 +32,8 @@
             </div>
             <div class="card">
                 <div class="section-header"><h3>Apply Interest to Account</h3></div>
-                <p style="color:#5a6e8a;font-size:14px;margin-bottom:20px;">
-                    Click below to apply the calculated interest to your current balance. This operation is irreversible.
+                <p style="color:#4b6b5a;font-size:14px;margin-bottom:20px;">
+                    Applies calculated interest to your balance. This cannot be undone.
                 </p>
                 <form action="${pageContext.request.contextPath}/interest" method="post">
                     <button type="submit" class="btn btn-primary">Apply Interest Now</button>

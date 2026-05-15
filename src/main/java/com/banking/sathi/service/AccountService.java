@@ -106,8 +106,9 @@ public class AccountService {
             int saveAccount = accountRepository.saveAccount(account, con);
 
             if (saveFamily <= 0 || saveAddress <= 0 || saveKyc <= 0 || saveAccount <= 0) {
+                rollbackQuietly(con);
                 throw new AccountCreationFailedException(
-                        "Failed to create account due to database error"
+                        "Failed to save account details. Please try again."
                 );
             }
             con.commit();
@@ -120,20 +121,22 @@ public class AccountService {
             );
 
         } catch (SQLException e) {
-            logger.log(Level.SEVERE, "Exception occurred", e);
-            if (con != null) {
-                try {
-                    con.rollback();
-                    logger.info("Transaction rolled back");
-                } catch (SQLException ex) {
-                    logger.log(Level.SEVERE, "Rollback failed", ex);
-                }
-            }
+            rollbackQuietly(con);
+            logger.log(Level.SEVERE, "Account creation failed", e);
             throw new AccountCreationFailedException(
-                    "Database error occurred!"
-
+                    "Failed to create an account",
+                    e
             );
-
+        } catch (RuntimeException e) {
+            rollbackQuietly(con);
+            if (e.getCause() instanceof SQLException sqlEx) {
+                logger.log(Level.SEVERE, "Account creation failed", sqlEx);
+                throw new AccountCreationFailedException(
+                        "Failed to create an account",
+                        sqlEx
+                );
+            }
+            throw e;
         } finally {
             if (con != null) {
                 try {
@@ -464,5 +467,16 @@ public class AccountService {
             return e.getMessage();
         }
         return "Transaction failed";
+    }
+
+    private void rollbackQuietly(Connection con) {
+        if (con == null) {
+            return;
+        }
+        try {
+            con.rollback();
+        } catch (SQLException ex) {
+            logger.log(Level.SEVERE, "Rollback failed", ex);
+        }
     }
 }

@@ -17,7 +17,6 @@
         <div class="topbar">
             <div>
                 <h2>Open a Bank Account</h2>
-                <p>Fill in your KYC details to submit an account creation request.</p>
             </div>
         </div>
 

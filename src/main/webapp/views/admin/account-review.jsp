@@ -18,7 +18,6 @@
         <div class="topbar">
             <div>
                 <h2>KYC Review</h2>
-                <p>Full account and KYC details for this customer.</p>
             </div>
             <div class="topbar-actions">
                 <a class="btn btn-ghost" href="${pageContext.request.contextPath}/admin/accounts">← Back to Accounts</a>

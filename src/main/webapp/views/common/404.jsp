@@ -8,13 +8,13 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { font-family: Inter, sans-serif; background: #f0f4fb; color: #0f1d2e; display: flex; align-items: center; justify-content: center; min-height: 100vh; }
-        .error-box { text-align: center; padding: 48px 40px; background: #fff; border-radius: 20px; box-shadow: 0 4px 32px rgba(15,29,46,0.10); max-width: 480px; width: 90%; }
-        .error-code { font-size: 96px; font-weight: 800; color: #2563eb; letter-spacing: -0.04em; line-height: 1; }
+        body { font-family: Inter, sans-serif; background: #f0fdf4; color: #0f1f17; display: flex; align-items: center; justify-content: center; min-height: 100vh; }
+        .error-box { text-align: center; padding: 48px 40px; background: #fff; border-radius: 20px; box-shadow: 0 4px 32px rgba(15,31,23,0.10); max-width: 480px; width: 90%; }
+        .error-code { font-size: 96px; font-weight: 800; color: #059669; letter-spacing: -0.04em; line-height: 1; }
         .error-title { font-size: 24px; font-weight: 700; margin: 16px 0 10px; }
-        .error-desc { color: #5a6e8a; font-size: 15px; line-height: 1.7; margin-bottom: 28px; }
-        .btn { display: inline-block; padding: 12px 28px; background: #2563eb; color: #fff; border-radius: 10px; font-weight: 700; font-size: 14px; text-decoration: none; }
-        .btn:hover { background: #1d4ed8; }
+        .error-desc { color: #4b6b5a; font-size: 15px; line-height: 1.7; margin-bottom: 28px; }
+        .btn { display: inline-block; padding: 12px 28px; background: #059669; color: #fff; border-radius: 10px; font-weight: 700; font-size: 14px; text-decoration: none; }
+        .btn:hover { background: #047857; }
     </style>
 </head>
 <body>

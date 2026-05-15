@@ -18,7 +18,6 @@
         <div class="topbar">
             <div>
                 <h2>Apply for a Card</h2>
-                <p>Submit a credit or debit card application for admin review.</p>
             </div>
         </div>
 

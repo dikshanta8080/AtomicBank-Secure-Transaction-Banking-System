@@ -36,9 +36,9 @@ public class UserDao implements UserRepository {
 
 
         } catch (SQLException e) {
-            logger.log(Level.SEVERE, "Failed to save the user {e} ", e);
+            logger.log(Level.SEVERE, "Failed to save the user", e);
+            throw new RuntimeException(e);
         }
-        return 0;
     }
 
     @Override

@@ -8,12 +8,12 @@
 .review-section-title {
     font-size: 14px;
     font-weight: 700;
-    color: #1d4ed8;
+    color: #047857;
     text-transform: uppercase;
     letter-spacing: 0.05em;
     margin-bottom: 16px;
     padding-bottom: 10px;
-    border-bottom: 2px solid #eff6ff;
+    border-bottom: 2px solid #ecfdf5;
 }
 
 .review-decision-card {

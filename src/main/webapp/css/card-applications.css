@@ -28,8 +28,8 @@
 
 .issue-input:focus {
     outline: none;
-    border-color: #2563eb;
-    box-shadow: 0 0 0 3px rgba(37,99,235,0.1);
+    border-color: #059669;
+    box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.1);
 }
 
 .issue-input-limit {
@@ -54,7 +54,7 @@
 .card-number-mono {
     font-family: "Courier New", monospace;
     font-size: 12.5px;
-    background: #f0f4fb;
+    background: #f0fdf4;
     padding: 3px 8px;
     border-radius: 6px;
     color: #3d5a80;

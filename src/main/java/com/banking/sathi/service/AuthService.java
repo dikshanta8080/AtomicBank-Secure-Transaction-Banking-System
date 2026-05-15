@@ -41,11 +41,23 @@ public class AuthService {
                 try {
                     con.rollback();
                 } catch (SQLException ex) {
-                    logger.log(Level.SEVERE, "Exception {ex}, ", ex);
+                    logger.log(Level.SEVERE, "Rollback failed", ex);
                 }
-
             }
-            throw new RuntimeException(e);
+            logger.log(Level.SEVERE, "Registration failed", e);
+            throw new RuntimeException(
+                    e.getMessage() != null ? "Registration failed: " + e.getMessage() : "Registration failed due to database error",
+                    e
+            );
+        } catch (RuntimeException e) {
+            if (con != null) {
+                try {
+                    con.rollback();
+                } catch (SQLException ex) {
+                    logger.log(Level.SEVERE, "Rollback failed", ex);
+                }
+            }
+            throw e;
         } finally {
             if (con != null) {
                 try {

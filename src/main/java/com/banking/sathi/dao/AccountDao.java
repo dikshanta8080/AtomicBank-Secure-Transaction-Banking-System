@@ -36,10 +36,10 @@ public class AccountDao implements AccountRepository {
             ps.setDouble(5, account.getBalance());
             ps.setString(6, account.getStatus().name());
             return ps.executeUpdate();
-        } catch (Exception e) {
-            logger.log(Level.SEVERE, "Failed to execute the query {e}", e);
+        } catch (SQLException e) {
+            logger.log(Level.SEVERE, "Failed to save account", e);
+            throw new RuntimeException(e);
         }
-        return 0;
     }
 
     @Override
@@ -53,11 +53,13 @@ public class AccountDao implements AccountRepository {
                 PreparedStatement ps = con.prepareStatement(QueryUtil.FIND_BY_USERID_QUERY);
         ) {
             ps.setLong(1, userId);
-            return ps.executeQuery().next();
+            try (ResultSet rs = ps.executeQuery()) {
+                return rs.next();
+            }
         } catch (SQLException e) {
-            logger.log(Level.SEVERE, "failed to execute query {e}, ", e);
+            logger.log(Level.SEVERE, "Failed to check account by user id", e);
+            throw new RuntimeException(e);
         }
-        return false;
     }
 
     @Override

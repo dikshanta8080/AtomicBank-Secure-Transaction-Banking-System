@@ -18,7 +18,6 @@
         <div class="topbar">
             <div>
                 <h2>Deposit Funds</h2>
-                <p>Add money to your account securely.</p>
             </div>
         </div>
 

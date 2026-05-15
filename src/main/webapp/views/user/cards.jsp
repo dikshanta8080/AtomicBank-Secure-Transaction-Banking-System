@@ -18,7 +18,6 @@
         <div class="topbar">
             <div>
                 <h2>My Cards</h2>
-                <p>View your issued and pending credit/debit cards.</p>
             </div>
             <div class="topbar-actions">
                 <a class="btn btn-primary" href="${pageContext.request.contextPath}/cards/apply">Apply for New Card</a>
@@ -33,7 +32,7 @@
                 <div class="card no-cards-state">
                     <div class="no-cards-icon">💳</div>
                     <h3>No Cards Yet</h3>
-                    <p>You haven't applied for any cards. Apply now to get started.</p>
+                    <p>No cards on file.</p>
                     <a class="btn btn-primary" href="${pageContext.request.contextPath}/cards/apply">Apply for a Card</a>
                 </div>
             </c:when>
