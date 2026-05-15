@@ -270,7 +270,6 @@ public class AccountService {
             Account lockedAccount =
                     accountRepository.lockRowsForUpdate(con, account.getId());
 
-            // prepare transaction log
             tx.setToAccountId(lockedAccount.getId());
             tx.setAmount(amount);
             tx.setType(TransactionType.DEPOSIT);
