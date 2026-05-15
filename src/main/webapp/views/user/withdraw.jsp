@@ -18,7 +18,6 @@
         <div class="topbar">
             <div>
                 <h2>Withdraw Funds</h2>
-                <p>Withdraw cash from your bank account.</p>
             </div>
         </div>
 

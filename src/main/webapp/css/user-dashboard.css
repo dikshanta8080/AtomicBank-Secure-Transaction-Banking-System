@@ -6,13 +6,13 @@
 }
 
 .hero-card {
-    background: linear-gradient(135deg, #0f2748 0%, #1a3a6e 50%, #2563eb 100%);
+    background: linear-gradient(135deg, #052e16 0%, #14532d 50%, #059669 100%);
     color: #f5f9ff;
     border-radius: 18px;
     padding: 28px;
     position: relative;
     overflow: hidden;
-    box-shadow: 0 8px 32px rgba(37,99,235,0.22);
+    box-shadow: 0 8px 32px rgba(5, 150, 105, 0.22);
 }
 
 .hero-card::before {
@@ -88,7 +88,7 @@
 }
 
 .no-account-cta p {
-    color: #5a6e8a;
+    color: #4b6b5a;
     margin-bottom: 24px;
     font-size: 15px;
 }
@@ -102,5 +102,5 @@
 .recent-tx-empty {
     text-align: center;
     padding: 32px;
-    color: #5a6e8a;
+    color: #4b6b5a;
 }

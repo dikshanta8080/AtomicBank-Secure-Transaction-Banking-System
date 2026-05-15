@@ -18,7 +18,6 @@
         <div class="topbar">
             <div>
                 <h2>Card Applications</h2>
-                <p>Review pending credit card applications. Set the limit and expiry date before issuing.</p>
             </div>
         </div>
 

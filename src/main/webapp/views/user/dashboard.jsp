@@ -17,8 +17,7 @@
     <main class="workspace">
         <div class="topbar">
             <div>
-                <h2>Welcome back, ${sessionScope.user.name}</h2>
-                <p>Here's an overview of your account activity.</p>
+                <h2>${sessionScope.user.name}</h2>
             </div>
             <div class="topbar-actions">
                 <a class="btn btn-secondary" href="${pageContext.request.contextPath}/deposit">Deposit</a>
@@ -34,7 +33,7 @@
                 <div class="card" style="text-align:center;padding:48px;">
                     <div style="font-size:48px;margin-bottom:16px;">🏦</div>
                     <h3 style="margin-bottom:10px;">No Account Yet</h3>
-                    <p style="color:#5a6e8a;margin-bottom:20px;">Set up your bank account to start transacting.</p>
+                    <p style="color:#4b6b5a;margin-bottom:20px;">No account on file.</p>
                     <a class="btn btn-primary" href="${pageContext.request.contextPath}/account">Open an Account</a>
                 </div>
             </c:when>
@@ -66,22 +65,18 @@
                     <div class="stat">
                         <div class="stat-label">Total Transactions</div>
                         <div class="stat-value">${transactionCount}</div>
-                        <div class="stat-sub">All recorded operations</div>
                     </div>
                     <div class="stat">
                         <div class="stat-label">Interest Earned</div>
                         <div class="stat-value">NPR <fmt:formatNumber value="${interestAmount}" pattern="#,##0.00"/></div>
-                        <div class="stat-sub">Current savings estimate</div>
                     </div>
                     <div class="stat">
                         <div class="stat-label">Issued Cards</div>
                         <div class="stat-value">${issuedCards}</div>
-                        <div class="stat-sub">Active issued cards</div>
                     </div>
                     <div class="stat">
                         <div class="stat-label">Pending Cards</div>
                         <div class="stat-value">${pendingCards}</div>
-                        <div class="stat-sub">Awaiting admin review</div>
                     </div>
                 </div>
 
@@ -93,7 +88,7 @@
                     <c:choose>
                         <c:when test="${empty transactions}">
                             <div class="empty-state">
-                                <p>No transactions yet. Start by making a deposit.</p>
+                                <p>No transactions.</p>
                             </div>
                         </c:when>
                         <c:otherwise>

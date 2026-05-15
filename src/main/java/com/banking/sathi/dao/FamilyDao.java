@@ -6,6 +6,7 @@ import com.banking.sathi.utils.QueryUtil;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -24,9 +25,9 @@ public class FamilyDao implements FamilyRepository {
             return ps.executeUpdate();
 
         } catch (SQLException e) {
-            logger.log(Level.SEVERE, "failed to execute query {e}, ", e);
+            logger.log(Level.SEVERE, "Failed to save family", e);
+            throw new RuntimeException(e);
         }
-        return 0;
     }
 
     @Override
@@ -40,11 +41,13 @@ public class FamilyDao implements FamilyRepository {
                 PreparedStatement ps = con.prepareStatement(QueryUtil.SELECT_FAMILY_BY_USERID);
         ) {
             ps.setLong(1, userId);
-            return ps.executeQuery().next();
+            try (ResultSet rs = ps.executeQuery()) {
+                return rs.next();
+            }
         } catch (SQLException e) {
-            logger.log(Level.SEVERE, "failed to execute query {e}, ", e);
+            logger.log(Level.SEVERE, "Failed to check family by user id", e);
+            throw new RuntimeException(e);
         }
-        return false;
     }
 
     @Override

@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=DM+Serif+Display:ital@0;1&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=DM+Serif+Display:ital@0;1&display=swap');
 
 * {
     box-sizing: border-box;
@@ -7,9 +7,9 @@
 }
 
 body {
-    font-family: "Inter", Arial, sans-serif;
-    background: #f0f4fb;
-    color: #0f1d2e;
+    font-family: "Inter", system-ui, sans-serif;
+    background: #fff;
+    color: #111;
     min-height: 100vh;
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -17,40 +17,46 @@ body {
 
 a {
     text-decoration: none;
-    color: inherit;
+    color: #1da050;
 }
 
+a:hover {
+    text-decoration: underline;
+}
+
+/* Left panel */
 .left-panel {
-    background: linear-gradient(160deg, #0b1628 0%, #102040 55%, #1a3a6e 100%);
-    color: #f5f9ff;
-    padding: 56px 52px;
+    background: #062016;
+    color: #fff;
+    padding: 48px 44px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     position: relative;
     overflow: hidden;
+    min-height: 100vh;
 }
 
 .left-panel::before {
     content: "";
     position: absolute;
-    top: -80px;
-    left: -80px;
-    width: 380px;
-    height: 380px;
+    top: -100px;
+    left: -100px;
+    width: 360px;
+    height: 360px;
     border-radius: 50%;
-    background: rgba(37,99,235,0.15);
+    background: rgba(29, 160, 80, 0.14);
 }
 
 .left-panel::after {
     content: "";
     position: absolute;
-    bottom: -100px;
-    right: -60px;
-    width: 300px;
-    height: 300px;
+    bottom: -120px;
+    right: -80px;
+    width: 320px;
+    height: 320px;
     border-radius: 50%;
-    background: rgba(37,99,235,0.1);
+    background: rgba(29, 160, 80, 0.1);
 }
 
 .left-panel > * {
@@ -61,56 +67,55 @@ a {
 .logo {
     display: flex;
     align-items: center;
-    gap: 14px;
-    margin-bottom: 48px;
+    gap: 12px;
 }
 
 .logo-mark {
-    width: 48px;
-    height: 48px;
-    border-radius: 14px;
-    background: #2563eb;
+    width: 42px;
+    height: 42px;
+    border-radius: 10px;
+    background: #1da050;
+    color: #fff;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 20px;
-    font-weight: 800;
-    box-shadow: 0 6px 20px rgba(37,99,235,0.45);
+    font-size: 18px;
+    font-weight: 700;
+    flex-shrink: 0;
 }
 
 .logo-name {
-    font-size: 22px;
+    font-size: 18px;
     font-weight: 700;
-}
-
-.logo-name span {
-    color: #93c5fd;
+    color: #fff;
 }
 
 .brand-headline {
     font-family: "DM Serif Display", Georgia, serif;
-    font-size: clamp(36px, 4vw, 54px);
+    font-size: clamp(36px, 4vw, 52px);
     font-weight: 400;
-    line-height: 1.1;
-    margin-bottom: 20px;
+    line-height: 1.08;
+    margin: 48px 0 18px;
 }
 
 .brand-headline em {
     font-style: italic;
-    color: #93c5fd;
+    color: #6ee7a0;
 }
 
 .brand-sub {
-    color: rgba(245,249,255,0.68);
+    color: rgba(255, 255, 255, 0.72);
     font-size: 15px;
-    line-height: 1.75;
-    max-width: 360px;
+    line-height: 1.7;
+    max-width: 340px;
 }
 
 .features {
     display: flex;
     flex-direction: column;
-    gap: 18px;
+    gap: 16px;
+    margin-top: auto;
+    padding-top: 40px;
 }
 
 .feature-item {
@@ -120,10 +125,11 @@ a {
 }
 
 .feature-icon {
-    width: 40px;
-    height: 40px;
-    border-radius: 12px;
-    background: rgba(255,255,255,0.1);
+    width: 38px;
+    height: 38px;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    background: rgba(0, 0, 0, 0.2);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -133,7 +139,7 @@ a {
 .feature-icon svg {
     width: 18px;
     height: 18px;
-    stroke: #93c5fd;
+    stroke: #6ee7a0;
     fill: none;
     stroke-width: 2;
     stroke-linecap: round;
@@ -142,64 +148,57 @@ a {
 
 .feature-text {
     font-size: 13.5px;
-    color: rgba(245,249,255,0.72);
+    color: rgba(255, 255, 255, 0.75);
 }
 
+/* Right panel */
 .right-panel {
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 48px 32px;
-    background: #f0f4fb;
+    padding: 48px 40px;
+    background: #fff;
+    min-height: 100vh;
 }
 
 .form-container {
     width: 100%;
-    max-width: 420px;
+    max-width: 440px;
 }
 
 .form-eyebrow {
-    font-size: 12px;
+    font-size: 11px;
     font-weight: 700;
     text-transform: uppercase;
-    letter-spacing: 0.1em;
-    color: #2563eb;
+    letter-spacing: 0.12em;
+    color: #1da050;
     margin-bottom: 10px;
 }
 
 .form-title {
     font-size: 28px;
-    font-weight: 800;
+    font-weight: 700;
     letter-spacing: -0.02em;
-    color: #0f1d2e;
+    color: #111;
     margin-bottom: 8px;
 }
 
 .form-subtitle {
-    color: #5a6e8a;
+    color: #666;
     font-size: 14px;
     margin-bottom: 28px;
 }
 
 .form-subtitle a {
-    color: #2563eb;
     font-weight: 600;
 }
 
-.form-subtitle a:hover {
-    text-decoration: underline;
-}
-
 .alert {
-    padding: 13px 16px;
-    border-radius: 10px;
-    border: 1.5px solid transparent;
+    padding: 12px 14px;
+    border-radius: 8px;
+    border: 1px solid;
     font-size: 14px;
-    font-weight: 500;
-    margin-bottom: 20px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
+    margin-bottom: 18px;
 }
 
 .alert-error {
@@ -209,9 +208,9 @@ a {
 }
 
 .alert-success {
-    background: #ecfdf5;
-    border-color: #a7f3d0;
-    color: #059669;
+    background: #f0fdf4;
+    border-color: #bbf7d0;
+    color: #1da050;
 }
 
 form {
@@ -219,15 +218,9 @@ form {
     gap: 16px;
 }
 
-.form-grid-2 {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 14px;
-}
-
 .field {
     display: grid;
-    gap: 7px;
+    gap: 6px;
 }
 
 .field-header {
@@ -237,103 +230,79 @@ form {
 }
 
 .field label {
-    font-size: 13.5px;
+    font-size: 13px;
     font-weight: 600;
-    color: #0f1d2e;
+    color: #111;
 }
 
-.field input,
-.field select {
+.field input {
     width: 100%;
-    border: 1.5px solid #d6e3f5;
-    border-radius: 10px;
-    padding: 12px 15px;
+    border: 1px solid #d4d4d4;
+    border-radius: 8px;
+    padding: 11px 13px;
     font: inherit;
-    font-size: 14.5px;
+    font-size: 14px;
     background: #fff;
-    color: #0f1d2e;
-    transition: border-color 0.15s, box-shadow 0.15s;
+    color: #111;
 }
 
-.field input:focus,
-.field select:focus {
+.field input:focus {
     outline: none;
-    border-color: #2563eb;
-    box-shadow: 0 0 0 3px rgba(37,99,235,0.12);
-}
-
-.field input::placeholder {
-    color: #9aafc7;
+    border-color: #1da050;
+    box-shadow: 0 0 0 2px rgba(29, 160, 80, 0.2);
 }
 
 .forgot-link {
-    font-size: 12.5px;
-    color: #2563eb;
+    font-size: 12px;
     font-weight: 500;
-}
-
-.forgot-link:hover {
-    text-decoration: underline;
 }
 
 .submit-btn {
     width: 100%;
     padding: 13px;
-    background: #2563eb;
+    background: #1da050;
     color: #fff;
     border: none;
-    border-radius: 11px;
+    border-radius: 8px;
     font: inherit;
     font-size: 15px;
     font-weight: 700;
     cursor: pointer;
-    transition: background 0.15s, transform 0.12s, box-shadow 0.15s;
     margin-top: 4px;
-    box-shadow: 0 3px 14px rgba(37,99,235,0.3);
 }
 
 .submit-btn:hover {
-    background: #1d4ed8;
-    transform: translateY(-1px);
-    box-shadow: 0 6px 20px rgba(37,99,235,0.38);
-}
-
-.submit-btn:active {
-    transform: translateY(0);
+    background: #178a42;
 }
 
 .footer-note {
     font-size: 12px;
-    color: #9aafc7;
+    color: #888;
     text-align: center;
-    margin-top: 24px;
-}
-
-.divider {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    color: #9aafc7;
-    font-size: 13px;
-    margin: 4px 0;
-}
-
-.divider::before,
-.divider::after {
-    content: "";
-    flex: 1;
-    height: 1px;
-    background: #d6e3f5;
+    margin-top: 22px;
+    line-height: 1.6;
 }
 
 @media (max-width: 900px) {
     body {
         grid-template-columns: 1fr;
     }
+
     .left-panel {
+        min-height: auto;
+        padding: 36px 28px;
+    }
+
+    .brand-headline {
+        margin: 28px 0 14px;
+    }
+
+    .features {
         display: none;
     }
+
     .right-panel {
-        padding: 40px 24px;
+        min-height: auto;
+        padding: 36px 24px;
     }
 }

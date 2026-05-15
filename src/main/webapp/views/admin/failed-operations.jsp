@@ -18,7 +18,6 @@
         <div class="topbar">
             <div>
                 <h2>Failed Operations</h2>
-                <p>All rolled-back and failed transactions. Use this to investigate system issues.</p>
             </div>
             <div class="topbar-actions">
                 <a class="btn btn-ghost" href="${pageContext.request.contextPath}/admin/transactions">All Transactions</a>
@@ -36,7 +35,7 @@
                 <c:when test="${empty failedTransactions}">
                     <div class="all-clear-state">
                         <div class="check">✅</div>
-                        <p>No failed operations found. System is running smoothly.</p>
+                        <p>No failed operations.</p>
                     </div>
                 </c:when>
                 <c:otherwise>

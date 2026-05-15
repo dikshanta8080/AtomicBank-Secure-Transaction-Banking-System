@@ -18,7 +18,6 @@
         <div class="topbar">
             <div>
                 <h2>My Transactions</h2>
-                <p>Complete history of all your account activity.</p>
             </div>
         </div>
 

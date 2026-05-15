@@ -13,7 +13,7 @@
     <div>
         <div class="logo">
             <div class="logo-mark">A</div>
-            <div class="logo-name">Atomic <span>Bank</span></div>
+            <div class="logo-name">Atomic Bank</div>
         </div>
         <h1 class="brand-headline">Join<br>Atomic<br><em>Bank.</em></h1>
         <p class="brand-sub">Open your account in minutes. Secure transactions, credit cards, and interest savings — all in one place.</p>

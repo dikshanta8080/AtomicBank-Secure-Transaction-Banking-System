@@ -18,7 +18,6 @@
         <div class="topbar">
             <div>
                 <h2>Transfer Funds</h2>
-                <p>Send money to another Atomic Bank account instantly.</p>
             </div>
         </div>
 

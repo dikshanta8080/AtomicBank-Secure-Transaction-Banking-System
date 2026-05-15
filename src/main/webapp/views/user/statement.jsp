@@ -18,7 +18,6 @@
         <div class="topbar">
             <div>
                 <h2>Account Statement</h2>
-                <p>Your transaction history for a selected date range.</p>
             </div>
             <div class="topbar-actions no-print">
                 <button onclick="window.print()" class="btn btn-secondary">Print / Export PDF</button>

@@ -39,12 +39,17 @@ public class AdminInjector implements ServletContextListener {
 
                 user.setPassword(encodedPassword);
 
-                int saveUser = userRepository.saveUser(
-                        user,
-                        DbConnection.getConnection()
-                );
-
-                System.out.println("Admin created: " + saveUser);
+                try (var con = DbConnection.getConnection()) {
+                    con.setAutoCommit(false);
+                    int saveUser = userRepository.saveUser(user, con);
+                    if (saveUser > 0) {
+                        con.commit();
+                        System.out.println("Admin created: " + saveUser);
+                    } else {
+                        con.rollback();
+                        logger.warning("Admin user was not saved");
+                    }
+                }
             }
 
         } catch (Exception e) {
