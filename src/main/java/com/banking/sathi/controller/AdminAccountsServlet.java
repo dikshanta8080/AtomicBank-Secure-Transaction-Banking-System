@@ -11,17 +11,21 @@ import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 
+// admin servlet for managing user accounts
 @WebServlet("/admin/accounts")
 public class AdminAccountsServlet extends HttpServlet {
     private PortalService portalService;
     private AccountService accountService;
 
+
+    // spin up services on load
     @Override
     public void init() {
         this.portalService = new PortalService();
         this.accountService = new AccountService();
     }
 
+    // load accounts page with pending + all accounts
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         req.setAttribute("pendingAccounts", accountService.getPendingApprovalAccounts());
@@ -31,6 +35,7 @@ public class AdminAccountsServlet extends HttpServlet {
         req.getRequestDispatcher("/views/admin/accounts.jsp").forward(req, resp);
     }
 
+     // handle approve / freeze / reject actions
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         String action = req.getParameter("action");

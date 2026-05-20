@@ -12,17 +12,20 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.time.LocalDate;
 
+// handles admin side card application approvals
 @WebServlet("/admin/cards")
 public class AdminCardApplicationsServlet extends HttpServlet {
     private PortalService portalService;
     private CardService cardService;
 
+    // init both services on startup
     @Override
     public void init() {
         this.portalService = new PortalService();
         this.cardService = new CardService();
     }
 
+    // load pending card applications into the view
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         req.setAttribute("pendingCards", portalService.getPendingCards());
@@ -31,6 +34,7 @@ public class AdminCardApplicationsServlet extends HttpServlet {
         req.getRequestDispatcher("/views/admin/card-applications.jsp").forward(req, resp);
     }
 
+    // process issue or reject action on a card application
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         String action = req.getParameter("action");
