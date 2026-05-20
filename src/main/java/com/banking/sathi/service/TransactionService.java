@@ -12,7 +12,7 @@ import com.banking.sathi.model.Transaction;
 import com.banking.sathi.repository.AccountRepository;
 import com.banking.sathi.repository.TransactionRepository;
 import com.banking.sathi.utils.DbConnection;
-import org.mindrot.jbcrypt.BCrypt;
+import com.banking.sathi.utils.HashUtil;
 
 import java.sql.Connection;
 import java.util.logging.Level;
@@ -86,7 +86,7 @@ public class TransactionService {
                 throw new InvalidTransactionPinException("PIN is required");
             }
 
-            if (!BCrypt.checkpw(transactionPin, lockedFrom.getTransactionPin())) {
+            if (!HashUtil.check(transactionPin, lockedFrom.getTransactionPin())) {
                 throw new InvalidTransactionPinException("Invalid transaction PIN");
             }
 

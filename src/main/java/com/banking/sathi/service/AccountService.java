@@ -14,8 +14,8 @@ import com.banking.sathi.model.*;
 import com.banking.sathi.repository.*;
 import com.banking.sathi.utils.AccountNumberGenerator;
 import com.banking.sathi.utils.DbConnection;
+import com.banking.sathi.utils.HashUtil;
 import com.banking.sathi.utils.TransactionPinGenerator;
-import org.mindrot.jbcrypt.BCrypt;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -24,7 +24,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class AccountService {
-
     private static final Double SAVINGS_OPENING_BALANCE = 2000d;
     private static final Double CURRENT_OPENING_BALANCE = 1000d;
     private static final Logger logger = Logger.getLogger(AccountService.class.getName());
@@ -86,7 +85,7 @@ public class AccountService {
 
             String transactionPin = TransactionPinGenerator.generateTransactionPin();
             String accountNumber = AccountNumberGenerator.generateUniqueAccountNumber();
-            String hashedTransactionPin = BCrypt.hashpw(transactionPin, BCrypt.gensalt(11));
+            String hashedTransactionPin = HashUtil.hash(transactionPin);
             Double openingBalance = request.getAccountType().equals(AccountType.SAVINGS) ? SAVINGS_OPENING_BALANCE : CURRENT_OPENING_BALANCE;
             Account account = new Account();
             account.setAccountNumber(accountNumber);
@@ -283,9 +282,7 @@ public class AccountService {
                 throw new InvalidTransactionPinException("PIN is required");
             }
 
-            if (!BCrypt.checkpw(
-                    transactionPin,
-                    lockedAccount.getTransactionPin())) {
+            if (!HashUtil.check(transactionPin, lockedAccount.getTransactionPin())) {
 
                 throw new InvalidTransactionPinException(
                         "Invalid transaction PIN");
@@ -390,9 +387,7 @@ public class AccountService {
                         "PIN is required");
             }
 
-            if (!BCrypt.checkpw(
-                    transactionPin,
-                    lockedAccount.getTransactionPin())) {
+            if (!HashUtil.check(transactionPin, lockedAccount.getTransactionPin())) {
 
                 throw new InvalidTransactionPinException(
                         "Invalid transaction PIN");

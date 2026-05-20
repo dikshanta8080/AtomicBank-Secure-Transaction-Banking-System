@@ -9,7 +9,7 @@ import com.banking.sathi.service.AuthService;
 import jakarta.servlet.ServletContextEvent;
 import jakarta.servlet.ServletContextListener;
 import jakarta.servlet.annotation.WebListener;
-import org.mindrot.jbcrypt.BCrypt;
+import com.banking.sathi.utils.HashUtil;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -31,11 +31,7 @@ public class AdminInjector implements ServletContextListener {
                 user.setRole(Role.ADMIN);
                 user.setUserStatus(UserStatus.ACTIVE);
 
-                String encodedPassword =
-                        BCrypt.hashpw(
-                                "@Dikshyant9898",
-                                BCrypt.gensalt(11)
-                        );
+                String encodedPassword = HashUtil.hash("@Dikshyant9898");
 
                 user.setPassword(encodedPassword);
 

@@ -8,7 +8,7 @@ import com.banking.sathi.exceptions.UserAlreadyExistsException;
 import com.banking.sathi.exceptions.UserDoesnotExistsException;
 import com.banking.sathi.model.User;
 import com.banking.sathi.utils.DbConnection;
-import org.mindrot.jbcrypt.BCrypt;
+import com.banking.sathi.utils.HashUtil;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -28,7 +28,7 @@ public class AuthService {
             if (userDao.existsByEmail(user.getEmail(), con)) {
                 throw new UserAlreadyExistsException("User with this email already exists");
             }
-            String encodedPassword = BCrypt.hashpw(user.getPassword(), BCrypt.gensalt(11));
+            String encodedPassword = HashUtil.hash(user.getPassword());
             user.setPassword(encodedPassword);
             user.setRole(Role.USER);
             user.setUserStatus(UserStatus.ACTIVE);
@@ -76,7 +76,7 @@ public class AuthService {
         if (existingUser.getUserStatus() == UserStatus.BLOCKED)
             throw new AuthenticationFailedException("Account is blocked");
 
-        boolean isValid = BCrypt.checkpw(password, existingUser.getPassword());
+        boolean isValid = HashUtil.check(password, existingUser.getPassword());
         if (!isValid) throw new AuthenticationFailedException("Invalid credentials provided");
         existingUser.setPassword(null);
         return existingUser;

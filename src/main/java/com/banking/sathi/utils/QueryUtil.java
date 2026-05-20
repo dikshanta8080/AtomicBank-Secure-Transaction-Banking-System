@@ -35,6 +35,9 @@ public interface QueryUtil {
     String VERIFY_ACCOUNT_QUERY = "UPDATE accounts SET account_status='ACTIVE' WHERE id=?";
     String FIND_BY_USERID_QUERY = "SELECT * FROM accounts WHERE user_id=?";
 
+    // ===================== INTEREST =====================
+    String INSERT_INTEREST_QUERY = "INSERT INTO interest (account_id, rate, amount) VALUES (?, ?, ?)";
+
     String LOCK_ACCOUNT_ROW_FOR_UPDATE =
             "SELECT id, balance, account_status, transaction_pin FROM accounts WHERE id = ? FOR UPDATE";
 

@@ -259,20 +259,13 @@ public class AccountDao implements AccountRepository {
 
     @Override
     public Account lockRowsForUpdate(Connection con, Long accountId) {
-
         Account account = null;
-
         try (PreparedStatement ps =
                      con.prepareStatement(QueryUtil.LOCK_ACCOUNT_ROW_FOR_UPDATE)) {
-
             ps.setLong(1, accountId);
-
             try (ResultSet rs = ps.executeQuery()) {
-
                 if (rs.next()) {
-
                     account = new Account();
-
                     account.setId(rs.getLong("id"));
                     account.setBalance(rs.getDouble("balance"));
                     account.setStatus(AccountStatus.valueOf(rs.getString("account_status")));
@@ -281,13 +274,11 @@ public class AccountDao implements AccountRepository {
                     throw new RuntimeException("Account not found");
                 }
             }
-
         } catch (SQLException e) {
             logger.log(Level.SEVERE,
                     "Failed to lock account row for update", e);
             throw new RuntimeException(e);
         }
-
         return account;
     }
 

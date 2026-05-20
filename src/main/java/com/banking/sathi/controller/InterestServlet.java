@@ -40,4 +40,31 @@ public class InterestServlet extends HttpServlet {
             resp.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
         }
     }
+
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        try {
+            com.banking.sathi.model.User user = com.banking.sathi.utils.ServletUtil.getLoggedInUser(req);
+            if (user == null) {
+                resp.sendRedirect(req.getContextPath() + "/login");
+                return;
+            }
+            com.banking.sathi.service.PortalService portalService = new com.banking.sathi.service.PortalService();
+            com.banking.sathi.model.Account account = portalService.getAccountByUserId(user.getId())
+                    .orElseThrow(() -> new AccountDoesNotExistsException("Account not found"));
+            interestService.applyInterest(account.getId());
+            com.banking.sathi.utils.ServletUtil.putFlash(req, "success", "Interest applied successfully");
+            resp.sendRedirect(req.getContextPath() + "/interest-summary");
+        } catch (AccountDoesNotExistsException e) {
+            com.banking.sathi.utils.ServletUtil.putFlash(req, "error",
+                    e.getMessage() != null ? e.getMessage() : "Account not found");
+            resp.sendRedirect(req.getContextPath() + "/interest-summary");
+        } catch (Exception e) {
+            String msg = e.getMessage() != null ? e.getMessage()
+                    : (e.getCause() != null && e.getCause().getMessage() != null
+                       ? e.getCause().getMessage() : "An unexpected error occurred");
+            com.banking.sathi.utils.ServletUtil.putFlash(req, "error", msg);
+            resp.sendRedirect(req.getContextPath() + "/interest-summary");
+        }
+    }
 }

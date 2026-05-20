@@ -6,8 +6,5 @@ public class AccountNumberGenerator {
         return "ACC" + timeMillis;
     }
 
-    public static void main(String[] args) {
-        System.out.println(generateUniqueAccountNumber());
 
-    }
 }
